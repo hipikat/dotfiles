@@ -19,24 +19,33 @@ base_dir="$this_dir/.."
 # Should define arrays: cfg_ignore cfg_first_child and cfg_dest_dir
 . "$base_dir/CONFIG"
 
-DEBUG=0
 
 echo_usage() {
-    echo "usage: $(basename "$0") [-h|--help | --noop|--dry-run]"
+    echo "usage: $(basename "$0") [-h|--help] [-d|--dry-run] [-f|--force]"
     echo
     echo "    Create the symlinks to these dotfiles according to the configuration"
-    echo "    (present in '../CONFIG')."
-    echo "    Note that it never replaces existing files."
+    echo "    (present in '../CONFIG'). Using --force will overwrite existing files."
 }
 
-if [[ $# -ge 1 ]]; then
-    if [[ $1 =~ ^-h|--help$ ]]; then
-        echo_usage
-        exit 0
-    elif [[ $1 =~ ^--dry-run|--noop$ ]]; then
-        DEBUG=1
-    fi
-fi
+DEBUG=0
+FORCE=0
+while [[ $# > 0 ]]; do
+    key="$1"
+    shift
+    case $key in
+        -h|--help)
+            echo_usage
+            exit 0
+	        ;;
+        --dry-run)
+            DEBUG=1 ;;
+        --force)
+            FORCE=1 ;;
+        *)
+            echo_usage
+            exit 1 ;;
+    esac
+done
 
 element_in() {
     local i
@@ -56,12 +65,22 @@ do_symlink() {
     local dest="$2"
     local prepend_target="${3:-}"
     if [[ -L $dest ]]; then
-        echo "${YLW}Warning${CRESET}: '$dest' is already a link. Skipping." 1>&2
-        return 0
+        if [[ $FORCE == 0 ]]; then
+            echo "${YLW}Warning${CRESET}: '$dest' is already a link. Skipping." 1>&2
+            return 0
+        else
+            echo "${YLW}Warning${CRESET}: '$dest' is already a link. Overwriting." 1>&2
+            rm -Rf "$dest"
+        fi
     fi
     if [[ -e $dest ]]; then
-        echo "${RED}Warning${CRESET}: '$dest' is a file. Skipping." 1>&2
-        return 0
+        if [[ $FORCE == 0 ]]; then
+            echo "${RED}Warning${CRESET}: '$dest' is a file. Skipping." 1>&2
+            return 0
+        else
+            echo "${RED}Warning${CRESET}: '$dest' is a file. Overwriting." 1>&2
+            rm -Rf "$dest"
+        fi
     fi
     
     # Use absolute or relative depending on cfg_dotfiles_relative_path
