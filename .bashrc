@@ -4,10 +4,14 @@
 # Do nothing if not running interactively
 [ -z "$PS1" ] && return
 
+### Aliases
+##########################################
 
-###
-# Utility functions
-###
+
+
+
+### Utility functions
+##########################################
 # Usage: `array_contains needle "${haystack[@]}"`
 in_array() { 
     local hay needle=$1
@@ -19,10 +23,8 @@ in_array() {
 }
 export -f in_array
 
-
-###
-# Shell options - The Shopt Builtin
-###
+### Shell options - The Shopt Builtin
+##########################################
 # http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin
 #
 # checkwinsize   Check the window size after each command and update LINES and COLUMNS
@@ -49,11 +51,10 @@ if in_array 'extdebug' "${shopts[@]}"; then
     shopt -s extdebug > /dev/null 2>&1
 fi
 
-###
-# Path
-###
+### The shell PATH
+##########################################
 declare -a paths
-# Added to the front of $PATH if not already included, in order
+# Added to the front of $PATH, if not already included, in order
 paths+=( ~/.bin ~/bin ~/Dropbox/bin )
 paths+=( /usr/local/sbin /usr/local/bin )
 paths+=( /usr/local/mysql/bin )
@@ -85,9 +86,15 @@ echo_paths () {
 }
 export -f echo_paths
 
+### Install pyenv shims
+##########################################
+eval "$(pyenv init - 2>/dev/null)"
 
-
-
+# Local configuration
+##########################################
+if [ -f ~/.bash_local ]; then
+    source ~/.bash_local
+fi
 
 
 
@@ -96,13 +103,6 @@ export -f echo_paths
 
 ########## unclean.........
 
-
-export PYENV_ROOT=/usr/local/opt/pyenv
-eval "$(pyenv init -)"
-#pyenv virtualenvwrapper
-
-
-# Python path setup
 #export PYTHONPATH="$HOME/lib/python:."
 
 # ALIASES (AND FUNCTIONS ACTING AS ALIASES)
@@ -273,10 +273,6 @@ if [ -f ~/.django_bash_completion.sh ]; then
     source ~/.django_bash_completion.sh
 fi
 
-# LOCAL COMMANDS
-if [ -f ~/.bash_local ]; then
-    source ~/.bash_local
-fi
 
 
 #PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -284,4 +280,4 @@ fi
 
 
 #source virtualenvwrapper.sh
-pyenv virtualenvwrapper
+pyenv virtualenvwrapper 2>/dev/null
