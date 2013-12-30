@@ -1,43 +1,46 @@
 ""
 " .vimrc - Adam Wright <adam@hipikat.org>
 " 
+" TODO: Finish exploring suggested bundles from:
 " http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
-set nocompatible
+""""""""""""""""""""""""""""""""""""""""""
 
-
-" Mapleader sets a namespace for custom bindings, defined below.
+" Mapleader sets a namespace for custom bindings, defined below
 let mapleader=","
-" Remap , (repeat last f, t, F or T in opposite direction) to default leader.
-noremap \ ,
-" Remap <C-a> (add [count] to number after cursor), which GNU Screen steals.
-noremap <leader>a <C-A> 
 
-
-""" Vundle configuration - https://github.com/gmarik/vundle
-filetype off
-"set runtimepath+=~/.vim/bundle/vundle/
-"all vundle#rc()
+""" Vundle configuration
+""" https://github.com/gmarik/vundle
+"""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible        " Be iMproved
+filetype off            " Required for vundle setup
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
 " Let Vundle manage Vundle
-"Bundle 'gmarik/vundle'
-"Bundle 'The-NERD-tree'
-"Bundle 'Tagbar'
-"autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
-"Bundle 'vim-flake8'
+Bundle 'gmarik/vundle'
+
+" Installed bundles
+Bundle 'The-NERD-tree'
+Bundle 'Tagbar'
+Bundle 'vim-flake8'
 
 "  End Vundle config
-syntax on
 filetype plugin indent on
 
 
 
 
 
+"""""" unclean .....
+
+
+"autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
+syntax on
 
 
 
-"set rtp+=~/.vim/bundle/vundle/
-"call vundle#rc()
+
+
 
 " let Vundle manage Vundle
 " required! 
@@ -63,6 +66,13 @@ syntax on                     " Syntax highlighting
 
 " Don't let Pyflakes use the Quickfix window
 let g:pyflakes_use_quickfix = 1 
+
+
+" Remap , (repeat f, t, F or T in opposite direction) to default leader
+noremap \ ,
+" Remap <C-a> (add [count] to number after cursor), which GNU Screen steals.
+noremap <leader>a <C-A> 50
+
 
 " Check for pep8 compliance
 "let g:pep8_map='<leader>8'
