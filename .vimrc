@@ -284,5 +284,6 @@ set statusline+=\ %P    "percent through file
 
 
 au BufNewFile,BufRead *.less set filetype=less
+au BufNewFile,BufRead *.sls set filetype=yaml
 
 
