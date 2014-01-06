@@ -90,7 +90,7 @@ export -f echo_paths
 ##########################################
 eval "$(pyenv init - 2>/dev/null)"
 
-# Local configuration
+### Local configuration
 ##########################################
 if [ -f ~/.bash_local ]; then
     source ~/.bash_local

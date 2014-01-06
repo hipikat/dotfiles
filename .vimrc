@@ -34,7 +34,7 @@ filetype plugin indent on
 """""" unclean .....
 
 
-"autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
+autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
 syntax on
 
 
