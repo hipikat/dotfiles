@@ -284,7 +284,10 @@ set statusline+=\ %P    "percent through file
 
 
 au BufNewFile,BufRead *.less set filetype=less
+au BufNewFile,BufRead *.yaml,*.yml,*.sls set filetype=yaml
 au BufNewFile,BufRead *.yaml,*.yml,*.sls so ~/.vim/yaml.vim
+autocmd FileType yaml setlocal tabstop=2
+autocmd FileType yaml setlocal sw=2
 "au BufNewFile,BufRead *.sls set filetype=yaml
 
 

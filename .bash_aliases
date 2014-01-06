@@ -20,6 +20,14 @@ alias lad='ls -lad ./.[^.]*'
 alias sv='sudo supervisorctl'
 
 # l == ls -l ... (but filtering out junk files)
+l() {
+    if [ "$1" = "s-al" ]; then
+        ls -al ${*:2}
+    else
+        ls -l "$@" | grep -v '\(\.swp\|\.pyc\)$';
+    fi  
+}
+export -f l
 
 # d == django-admin.py ...
 function d() { django-admin.py "$@" ;}
