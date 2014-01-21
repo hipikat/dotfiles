@@ -1,3 +1,5 @@
+export UNAME=`uname`
+
 # Enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
     if [ -f /usr/bin/dircolors ]; then
@@ -23,8 +25,10 @@ alias sv='sudo supervisorctl'
 l() {
     if [ "$1" = "s-al" ]; then
         ls -al ${*:2}
-    else
+    elif [ "$UNAME" = "Darwin" ]; then
         ls -l "$@" | grep -v '\(\.swp\|\.pyc\)$';
+    else
+        ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
     fi  
 }
 export -f l
