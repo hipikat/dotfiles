@@ -16,7 +16,7 @@ cfg_ignore=("CONFIG" "README.md" "bin" "todo"	# This repo
 	"tags" "TAGS")				# CTags
 
 # As explained above, link what's inside
-cfg_first_child=(".config")
+cfg_first_child=(".config", ".irssi")
 
 # Destination: home directory
 cfg_dest_dir=/home/hipikat
