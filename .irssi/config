@@ -39,6 +39,22 @@ servers = (
     use_ssl = "no";
     ssl_verify = "no";
     autoconnect = "yes";
+  },
+  {
+    address = "irc.gimp.org";
+    chatnet = "Gimp";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  },
+  {
+    address = "irc.ucc.asn.au";
+    chatnet = "UCC";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
   }
 );
 
@@ -111,14 +127,26 @@ chatnets = {
     nick = "Hipikat";
     username = "hipikat";
     realname = "Adam Wright";
-    autosendcmd = "/msg NickServ identify PASSWORD";
+    autosendcmd = "/msg NickServ identify YOUR_PASSWORD";
   };
   Furnet = {
     type = "IRC";
     nick = "Hipikat";
     username = "hipikat";
     realname = "Adam Wright";
-    autosendcmd = "/msg NickServ identify PASSWORD; wait 3000";
+    autosendcmd = "/msg NickServ identify YOUR_PASSWORD";
+  };
+  Gimp = {
+    type = "IRC";
+    nick = "Hipikat";
+    username = "hipikat";
+    realname = "Adam Wright";
+  };
+  UCC = {
+    type = "IRC";
+    nick = "Hipikat";
+    username = "hipikat";
+    realname = "Adam Wright";
   };
 };
 
@@ -296,7 +324,12 @@ settings = {
   };
   "fe-text" = { actlist_sort = "refnum"; };
   proxy = {
-    irssiproxy_password = "PASSWORD";
-    irssiproxy_ports = "Freenode=5001 Furnet=5002";
+    irssiproxy_password = "YOUR_PASSWORD";
+    irssiproxy_ports = "Freenode=5001 Furnet=5002 Gimp=5003 UCC=5004";
+  };
+  "fe-common/core" = {
+    autolog = "yes";
+    autolog_path = "~/irclogs/$tag/${0}-%Y-%m-%d.log";
   };
 };
+logs = { };
