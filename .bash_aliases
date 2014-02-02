@@ -33,6 +33,10 @@ l() {
 }
 export -f l
 
+ll() {
+    l "$@" | less
+}
+
 # d == django-admin.py ...
 function d() { django-admin.py "$@" ;}
 export -f d

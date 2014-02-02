@@ -1,0 +1,3 @@
+script exec $ENV{'TZ'}='UTC-08';
+set timestamp_format %H:%M:%S
+load proxy
