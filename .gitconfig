@@ -1,8 +1,6 @@
 [user]
 	name = Adam Wright
 	email = adam@hipikat.org
-[push]
-	default = simple
 [core]
 	excludesfile = ~/.gitignore_global
 [color]
