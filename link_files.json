@@ -1,0 +1,9 @@
+{
+    "ignore": [
+        ".git"
+    ],
+    "copy": [
+        ".bash_local",
+        ".irssi"
+    ]
+}
