@@ -1,0 +1,12 @@
+{
+    "default": "link",
+    "copy": [
+        ".bash_local"
+    ],
+    "ignore": [
+        "*.swp*",
+        ".git/",
+        "CONFIG",
+        "plumb_files.*"
+    ]
+}
