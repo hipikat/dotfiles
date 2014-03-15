@@ -231,7 +231,11 @@ class FilePlumber(object):
 
     @_get_abs_paths
     def _log_run(self, action, rel_path, from_path, to_path):
-        """Print a human-friendly description of an operation and its operands."""
+        """
+        Print a human-friendly description of an operation and its operands.
+        (This is separate from the runners so we can print operations during a
+        dry run and only bail-out right before the operation itself.)
+        """
         action_str = self._action_gerunds[action] + " " + from_path
         if action != 'ignore':
             action_str += " to " + to_path
@@ -262,7 +266,8 @@ class FilePlumber(object):
 def get_options_from_args(**kwargs):
     """
     Return an options dictionary suitable for initialisation of a `FilePlumber`
-    object by parsing command line arguments (i.e. `arg_parser.parse_args()`).
+    object by parsing command line arguments (i.e. call `arg_parser.parse_args()`,
+    then process and return the results).
     """
     args = arg_parser.parse_args()
     opts = dict()
