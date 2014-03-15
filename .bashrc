@@ -129,8 +129,8 @@ function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
 function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 
 # .bash_aliases
-if [ -f .bash_aliases ]; then
-    source .bash_aliases
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
 fi
 
 # Common typos

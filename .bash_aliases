@@ -84,3 +84,8 @@ export -f cover
 
 #
 alias pdt='TZ=America/Los_Angeles date'
+
+
+alias such=git
+alias very=git
+alias wow='git status' 
