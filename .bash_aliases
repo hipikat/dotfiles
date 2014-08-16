@@ -89,3 +89,18 @@ alias pdt='TZ=America/Los_Angeles date'
 alias such=git
 alias very=git
 alias wow='git status' 
+
+
+
+alias irssi2='irssi --config=~/.irssi/config2'
+
+
+alias sush='sudo -E bash'
+
+alias gits='git status'
+alias gitc='git commit'
+alias gitcl='git clone'
+alias gitch='git checkout'
+alias gitd='git diff'
+alias gitf='git fetch'
+alias gitl='git log'

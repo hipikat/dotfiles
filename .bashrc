@@ -279,5 +279,11 @@ fi
 [[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
 
 
-#source virtualenvwrapper.sh
-pyenv virtualenvwrapper 2>/dev/null
+# Activate Virtualenvwrapper
+
+. /usr/local/bin/set_chippery_env.sh 2>/dev/null
+
+if ! pyenv virtualenvwrapper 2>/dev/null
+    then . /usr/local/bin/virtualenvwrapper.sh
+fi
+#. /usr/local/bin/virtualenvwrapper.sh
