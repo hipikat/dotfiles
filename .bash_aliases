@@ -116,7 +116,16 @@ alias myip="curl -s icanhazip.com"
 alias slt='salt --force-color'
 
 alias scr='screen -D -R'    # Attach here and now
-alias sudoe='sudo -E'
+#alias sudoe='sudo -E'
+function sudoe() {
+    if [[ $# -eq 0 ]]; then
+        sudo -E bash
+    else
+        sudo -E "$@"
+    fi
+}
+export -f sudoe
+
 
 function dosls() {
     salt "$1" state.sls "${@:2}"

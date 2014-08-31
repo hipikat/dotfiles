@@ -73,6 +73,8 @@ noremap \ ,
 " Remap <C-a> (add [count] to number after cursor), which GNU Screen steals.
 noremap <leader>a <C-A> 50
 
+" Fix syntax
+map <leader>F :syntax sync fromstart<CR>
 
 " Check for pep8 compliance
 "let g:pep8_map='<leader>8'
