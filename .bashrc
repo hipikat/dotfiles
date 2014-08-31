@@ -308,8 +308,8 @@ function prepare_command() {
 trap 'prepare_command' DEBUG
 
 
-### The prompt. Though it took me about 17 years to get clean, so it's a bit of a misnomer.
-PS1="$Green\$PS1_SCREEN$Green\$PS1_USERNAME\$PS1_HOST"
+### The prompt. Though it took me about 17 years to get clean, so it's a bit of a misnomer
+PS1="$Green\$PS1_SCREEN$Green\$PS1_USERNAME$BIGreen\$PS1_HOST"
 PS1+="$White:$Blue\w$Cyan\$PS1_BRANCH"
 PS1+="$White\$(if [[ $EUID == 0 ]]; then echo \"$Red\"; fi) "
 PS1+=`echo -e "\xC2\xA7"`
