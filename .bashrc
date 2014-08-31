@@ -1,6 +1,8 @@
 ###
 # .bashrc for Adam Wright <adam@hipikat.org>
+# 
 ###
+
 # Do nothing if not running interactively
 [ -z "$PS1" ] && return
 
@@ -118,7 +120,7 @@ set_screen_title () {
 # nocaseglob     Pathname expansion matches in a case-insensitive way 
 # histappend     Append to the history file instead of overwriting it
 # autocd         Change to a directory if a directory's given as a command
-# extdebug       Enable behavior intended for debuggers (for trap 'prepare_execute' DEBUG)
+# extdebug       Enable behavior intended for debuggers (for trap 'prepare_command' DEBUG)
 
 # Get an array of shell options supported by this version of bash
 shopts=( $(shopt | cut -f1) )
@@ -173,13 +175,6 @@ export -f echo_paths
 ##########################################
 eval "$(pyenv init - 2>/dev/null)"
 
-### Local configuration
-##########################################
-if [ -f ~/.bash_local ]; then
-    source ~/.bash_local
-fi
-
-
 ### Environment
 ##########################################
 export PAGER='less'
@@ -214,140 +209,70 @@ if [ "$TERM" != "dumb" ]; then
     fi
 fi
 
+### Machine-local configuration
+##########################################
+if [ -f ~/.bash_local ]; then
+    source ~/.bash_local
+fi
 
+### Bash hooks and settings
+##########################################
 
+bash_interactive_mode=""
 
+function set_ps1_strings() {
 
-
-
-
-########## unclean.........
-
-
-
-function set_env_variables() {
-    # Replace home directories in $PWD with a ~
-    #local pwd_short=`echo -n $PWD | sed -e "s:\(^$HOME\):~:" | sed -e "s:\(^/home/\):~:" | sed -e "s:\(^/Users/\):~:"`
-    # Truncate all but first and last three directories
-    #pwd_short=`echo -n $pwd_short | sed -e "s|^\(\~\?/[^/]*/[^/]*/[^/]*/\)[^/]*/.*\(/[^/]*/[^/]*/[^/]*/\?\)$|\1···\2|"`
-    # Truncate any directories longer than 18 character down to 15
-    #pwd_short=`echo -n $pwd_short | sed -e "s|/\([^/]\{15\}\)\([^/]\{3\}\)[^/]\+|/\1···|g"`
-    #PWD_SHORT=$pwd_short
-    #unset pwd_short
-
-    if [[ $EUID -ne 0 ]]; then
-        PROMPT_COLOUR=`echo -ne "1;37m"`  # White
-    else
-        PROMPT_COLOUR=`echo -ne "1;31m"`  # Red
-    fi
-
-    if [[ -n $WINDOW ]]; then
-        WINDOW_NUMBER="$WINDOW) "
-    else
-        WINDOW_NUMBER=""
-    fi
-
-    VCS_BRANCH=`git branch --no-color 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/ \*\1/'`
-
-
-
-
-
-
-    # Go to green and print window number
+    # Window number with Unicode 'right curly bracket middle piece',
+    # when running under GNU Screen
     if [[ -n $WINDOW ]]; then
         PS1_SCREEN="$WINDOW"
-        PS1_SCREEN+=`echo -e "\xE2\x8E\xAC "`
+        #PS1_SCREEN+=`echo -e "\xE2\x8E\xAC "`      # Middle of close braces
+        #PS1_SCREEN+=`echo -e "\xE1\x81\x8A"`       # Myanmar sign little section
+        PS1_SCREEN+=`echo -e "\xE2\x8E\xB0 "`       # Upper-left curly bracket section
     else
         PS1_SCREEN=""
     fi
 
-    # Print exit status of last command if it failed
-    if [[ $Last_Command != 0 ]]; then
-        PS1_EXIT_STATUS="$Last_Command "
-    else
-        PS1_EXIT_STATUS=" "
-    fi
-
-    # If not root, print username and an '@' symbol
+    # Set username if we aren't running as root
     if [[ $EUID != 0 ]]; then
         PS1_USERNAME="$USER@"
     else
         PS1_USERNAME=""
     fi
 
-    # Print hostname
+    # Hostname (or an alias, typically provided in .bash_local)
     if [[ -n $HOST_ALIAS ]]; then
         PS1_HOST=$HOST_ALIAS 
     else
         PS1_HOST=$HOSTNAME
     fi
-    #PS1_HOST="${HOST_ALIAS:$HOSTNAME}:"
 
-    # Print the working directory and prompt marker in blue, and reset
-    # the text color to the default.
-    PS1_CWD="$Blue\\w"
-
-    # Print CVS branch
+    # Current Git branch
     PS1_BRANCH=`git branch --no-color 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/ \xE2\x98\x86 \1/'`
 
-    # Print a red (if root) or white (otherwise) hash for a prompt
-    if [[ $EUID == 0 ]]; then
-        PS1_PROMPT="$Red #$Reset "
-    else
-        PS1_PROMPT="$White #$Reset "
-    fi
-
-
-
-
-
+    # Replace home directories in $PWD with a ~
+    SHORT_PWD=`echo -n $PWD | sed -e "s:\(^$HOME\):~:" | sed -e "s:\(^/home/\):~:" | sed -e "s:\(^/Users/\):~:"`
+    # Truncate any directories longer than 18 character down to 15
+    SHORT_PWD=`echo -n $SHORT_PWD | sed -e "s|/\([^/]\{15\}\)\([^/]\{3\}\)[^/]\+|/\1\xE2\x8B\xAF|g"`
 }
 
-
-# PROMPTS AND WINDOW TITLES
-
-# 'N) '             GNU Screen window number
-#PS1="$Green$WINDOW_NUMBER"
-#PS1+=
-#PS1+='$WINDOW_NUMBER\[\033[0;32m\]\u@${HOST_ALIAS:-\h}\[\033[0m\]:\[\033[0;34m\]$PWD_SHORT\[\033[0;36m\]$VCS_BRANCH \[\033[${PROMPT_COLOUR}\]# \[\033[m\]'
-
-#$PS1+="$Color_Off"
-
-#PS1="$PS1_SCREEN$PS1_EXIT_STATUS$PS1_USERNAME$PS1_HOST$PS1_CWD$PS1_BRANCH$PS1_PROMPT"
-
-#PS1="$Green\$PS1_SCREEN$Red\$PS1_EXIT_STATUS$Green\$PS1_USERNAME\$PS1_HOST"
-PS1="$Green\$PS1_SCREEN$Green\$PS1_USERNAME\$PS1_HOST"
-PS1+="$White:$Blue\w$Cyan\$PS1_BRANCH"
-PS1+="$White\$(if [[ $EUID == 0 ]]; then echo \"$Red\"; fi) #$Color_Off "
-
-PS2='\[\033[01;32m\] >\[\033[0;37m\] '
-
-bash_interactive_mode=""
-
+# Run before the prompt is displayed
 function prepare_prompt() {
-    Last_Command=$? # Must come first!
+    Last_Command=$?     # Must come first!
 
-
-
-    set_env_variables
-
-    set_xterm_title "$USER@$HOST_ALIAS"
-    set_screen_title "$HOST_ALIAS $PWD #"
+    set_ps1_strings
+    screen_title="$SHORT_PWD"
+    screen_title+=`echo -ne " \xC2\xA7 "`
+    set_screen_title "$screen_title"
+    set_xterm_title "$HOST_ALIAS"
 
     bash_interactive_mode="yes"
-
-
 }
-PROMPT_COMMAND=prepare_prompt       # Installs prepare_prompt to run before the prompt is displayed
+PROMPT_COMMAND=prepare_prompt
 
-
-
-
-# Executed before each command; returns early if not being run interactively
-function prepare_execute() {
-
-    export just_another_prompt=""
+# Run before every command (returns early if not being run interactively
+# (i.e. from a user hitting enter on an idle shell prompt)).
+function prepare_command() {
 
     if [[ -n "$COMP_LINE" ]]; then
         # We're inside a completer so we can't be running interactively
@@ -364,56 +289,35 @@ function prepare_execute() {
     fi
     if [[ "$BASH_COMMAND" == "prepare_prompt" ]]; then
         # Consecutive prompts; switch out of interactive and don't trace commands in prepare_prompt
-        just_another_prompt="true"
         bash_interactive_mode=""
         return
-    else
-        just_another_prompt=""
     fi
 
     # If we get this far, the command should be interactive
     # We use history instead of BASH_COMMAND so we can get a full command including pipes
-    set_env_variables
-    local this_command=`history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`;
+    set_ps1_strings
 
-    set_screen_title "$HOST_ALIAS $PWD \$ $this_command"
+    screen_title="$SHORT_PWD"
+    screen_title+=`echo -ne " \xC2\xA7 "`
+    screen_title+=`history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`
+    set_screen_title "$screen_title"
 
     # Return the terminal to its default colour; the prompt may have changed it
     echo -en "\033[00m"
 }
-trap 'prepare_execute' DEBUG
-
-# Django bash completion
-if [ -f ~/.django_bash_completion.sh ]; then
-    source ~/.django_bash_completion.sh
-fi
+trap 'prepare_command' DEBUG
 
 
+### The prompt. Though it took me about 17 years to get clean, so it's a bit of a misnomer.
+PS1="$Green\$PS1_SCREEN$Green\$PS1_USERNAME\$PS1_HOST"
+PS1+="$White:$Blue\w$Cyan\$PS1_BRANCH"
+PS1+="$White\$(if [[ $EUID == 0 ]]; then echo \"$Red\"; fi) "
+PS1+=`echo -e "\xC2\xA7"`
+PS1+="$Color_Off "
 
-#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
-
-
-# Activate Virtualenvwrapper
-
-. /usr/local/bin/set_chippery_env.sh 2>/dev/null
-
-if ! pyenv virtualenvwrapper 2>/dev/null
-    then . /usr/local/bin/virtualenvwrapper.sh
-fi
-#. /usr/local/bin/virtualenvwrapper.sh
-
-
-
-
-
-
-
-
-
-
-
-############ clean tail.........
+PS2="$Green"
+PS2+=`echo -e " \xE2\x8E\xB1"`       # Upper-right curly bracket section
+PS2+="$Color_Off "
 
 
 ### Command-line aliases
@@ -424,8 +328,28 @@ fi
 
 ### Command-line auto-completers
 ##########################################
+
+# Bash
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     source /etc/bash_completion
 fi
 
+# Django bash completion
+if [ -f ~/.django_bash_completion.sh ]; then
+    source ~/.django_bash_completion.sh
+fi
 
+# Ruby Version Manager
+[[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
+
+
+### Environment manipulators
+##########################################
+
+# Chippery shared-environments
+. /usr/local/bin/set_chippery_env.sh 2>/dev/null
+
+# Virtualenvwrapper
+if ! pyenv virtualenvwrapper 2>/dev/null
+    then . /usr/local/bin/virtualenvwrapper.sh
+fi
