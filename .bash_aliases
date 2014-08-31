@@ -100,14 +100,15 @@ alias irssi2='irssi --config=~/.irssi/config2'
 
 alias sush='sudo -E bash'
 
-alias gitst='git status'
 alias gitbr='git branch'
-alias gitco='git commit'
-alias gitcl='git clone'
 alias gitch='git checkout'
+alias gitcl='git clone'
+alias gitco='git commit'
 alias gitdi='git diff'
 alias gitfe='git fetch'
 alias gitlo='git log'
+alias gitre='git remote'
+alias gitst='git status'
 
 alias grp='grep --color=always'
 
