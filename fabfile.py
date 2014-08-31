@@ -3,18 +3,17 @@ from glob import glob
 from itertools import chain
 from os import path
 
-#from fabric.api import env, run, sudo, prefix
+# from fabric.api import env, run, sudo, prefix
 from fabric.api import run
 from fabric.operations import put
-
-from pprint import pprint
-
 
 
 def _exclude_substrings(string_list):
     """
     Takes a list of strings and returns a list in which any strings that
     are substrings of longer strings, matching from the start, are excluded.
+    (Created to get the shortest list of longest directory names one needs
+    to create (with mkdir --parents), to create all directories in a list.)
     """
     leftovers = []
 

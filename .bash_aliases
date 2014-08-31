@@ -1,4 +1,4 @@
-export UNAME=`uname`
+
 
 # Enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
@@ -17,6 +17,9 @@ alias lvs='ls -l | less'    # (again, but piped through less)
 alias la='ls -Al'           # List All, with details
 alias las='ls -Al | less'   # (and again, also piped through less)
 alias lad='ls -lad ./.[^.]*'
+function lvl() { ls $COLOR_ALWAYS -l "$@" | less ;}
+function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
+function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 
 # supervisor
 alias sv='sudo supervisorctl'
@@ -25,7 +28,7 @@ alias sv='sudo supervisorctl'
 l() {
     if [ "$1" = "s-al" ]; then
         ls -al ${*:2}
-    elif [ "$UNAME" = "Darwin" ]; then
+    elif [ `uname` = "Darwin" ]; then
         ls -l "$@" | grep -v '\(\.swp\|\.pyc\)$';
     else
         ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
@@ -97,10 +100,32 @@ alias irssi2='irssi --config=~/.irssi/config2'
 
 alias sush='sudo -E bash'
 
-alias gits='git status'
-alias gitc='git commit'
+alias gitst='git status'
+alias gitbr='git branch'
+alias gitco='git commit'
 alias gitcl='git clone'
 alias gitch='git checkout'
-alias gitd='git diff'
-alias gitf='git fetch'
-alias gitl='git log'
+alias gitdi='git diff'
+alias gitfe='git fetch'
+alias gitlo='git log'
+
+alias grp='grep --color=always'
+
+alias myip="curl -s icanhazip.com"
+
+alias slt='salt --force-color'
+
+alias scr='screen -D -R'    # Attach here and now
+alias sudoe='sudo -E'
+
+function dosls() {
+    salt "$1" state.sls "${@:2}"
+}
+function dosass() {
+    cd "src/styles"
+    eval "bundle exec compass watch &"
+    cd "../.."
+}
+function runsrv() {
+    eval "django-admin.py runserver "$@" --traceback"
+}
