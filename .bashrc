@@ -154,6 +154,9 @@ add_missing_paths () {
         # If next path isn't in $PATH and it exists, append to $new_paths
         if [[ ! $PATH =~ ":${next_path}:" && -d $next_path ]]; then
             new_paths="$new_paths:$next_path"
+        elif [[ -d $next_path ]]; then
+            new_paths="$new_paths:$next_path"
+            PATH=${PATH/$next_path:/}
         fi
     done
     PATH="$new_paths$PATH"
