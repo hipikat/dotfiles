@@ -7,7 +7,7 @@
         "*.swp*",
         ".git",
         "CONFIG",
-        "plumb_files.*"
+        "plumb_files.*",
         "LICENSE.rst"
     ]
 }
