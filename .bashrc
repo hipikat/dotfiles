@@ -355,5 +355,5 @@ fi
 
 # Virtualenvwrapper
 if ! pyenv virtualenvwrapper 2>/dev/null
-    then . /usr/local/bin/virtualenvwrapper.sh
+    then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
