@@ -11,6 +11,7 @@
 ._*
 .coverage
 .idea
+.project
 .vs
 build/
 dist/
@@ -20,3 +21,4 @@ Icon?
 Thumbs.db
 ehthumbs.db
 htmlcov/
+tmp/

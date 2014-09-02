@@ -230,9 +230,9 @@ function set_ps1_strings() {
     # when running under GNU Screen
     if [[ -n $WINDOW ]]; then
         PS1_SCREEN="$WINDOW"
-        #PS1_SCREEN+=`echo -e "\xE2\x8E\xAC "`      # Middle of close braces
         #PS1_SCREEN+=`echo -e "\xE1\x81\x8A"`       # Myanmar sign little section
-        PS1_SCREEN+=`echo -e "\xE2\x8E\xB0 "`       # Upper-left curly bracket section
+        #PS1_SCREEN+=`echo -e "\xE2\x8E\xB0 "`      # Upper-left curly bracket section
+        PS1_SCREEN+=`echo -e "\xE2\x8E\xAC "`       # Right curly bracket middle piece
     else
         PS1_SCREEN=""
     fi
