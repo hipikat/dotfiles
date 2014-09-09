@@ -127,7 +127,17 @@ function sudoe() {
 }
 export -f sudoe
 
+#
+function sudoeu() {
+    if [[ $# -eq 1 ]]; then
+        sudo -Eu "$1" bash
+    else
+        sudo -Eu "$@"
+    fi
+}
+export -f sudoeu
 
+#
 function dosls() {
     salt "$1" state.sls "${@:2}"
 }
