@@ -239,7 +239,7 @@ function set_ps1_strings() {
 
     # Set username if we aren't running as root
     if [[ $EUID != 0 ]]; then
-        PS1_USERNAME="$USER@"
+        PS1_USERNAME="$USER"
     else
         PS1_USERNAME=""
     fi
@@ -313,12 +313,32 @@ trap 'prepare_command' DEBUG
 
 
 ### The prompt. Though it took me about 17 years to get clean, so it's a bit of a misnomer
-PS1="$Green\$PS1_SCREEN$Green\$PS1_USERNAME$BIGreen\$PS1_HOST"
+
+# GNU Screen window number and Unicode 'right curly bracket middle piece'
+PS1="$Green\$PS1_SCREEN"
+
+# (User name in green if one of my regulars, yellow otherwise and missing if root.)
+# (Don't worry... root gets a high-vis, uniquely red symbol at the end of the prompt.)
+PS1+="\$(if [[ $USER == hipikat || $USER == zeno ]]; then echo \"$Green\"; else echo \"$Yellow\"; fi)"
+PS1+="\$PS1_USERNAME"
+
+# Green '@' symbol, if not root
+PS1+="\$(if [[ $EUID != 0 ]]; then echo \"$Green@\"; fi)"
+
+# Hostname in bright, bold green
+PS1+="$BIGreen\$PS1_HOST"
+
+# Empty star symbol and git branch
 PS1+="$White:$Blue\w$Cyan\$PS1_BRANCH"
+
+# Red section symbol for root, white section symbol otherwise
 PS1+="$White\$(if [[ $EUID == 0 ]]; then echo \"$Red\"; fi) "
 PS1+=`echo -e "\xC2\xA7"`
+
+# End prompt
 PS1+="$Color_Off "
 
+### Continuation prompt
 PS2="$Green"
 PS2+=`echo -e " \xE2\x8E\xB1"`       # Upper-right curly bracket section
 PS2+="$Color_Off "
