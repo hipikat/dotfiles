@@ -100,6 +100,7 @@ alias irssi2='irssi --config=~/.irssi/config2'
 
 alias sush='sudo -E bash'
 
+alias gitad='git add'
 alias gitbr='git branch'
 alias gitch='git checkout'
 alias gitcl='git clone'
@@ -139,3 +140,5 @@ function dosass() {
 function runsrv() {
     eval "django-admin.py runserver "$@" --traceback"
 }
+
+alias fuck='sudo $(history -p \!\!)'
