@@ -70,6 +70,7 @@ alias poing='ping'
 alias tial='tail'
 alias sssh='ssh'
 alias pign='ping'
+alias whomai='whoami'
 
 
 # Common command line options
