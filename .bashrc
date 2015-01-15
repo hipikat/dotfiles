@@ -140,7 +140,7 @@ fi
 ##########################################
 declare -a paths
 # Added to the front of $PATH, if not already included, in order
-paths+=( ~/.bin ~/bin ~/Dropbox/bin )
+paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
 paths+=( /usr/local/opt/gnu-sed/libexec/gnubin )
 paths+=( /usr/local/sbin /usr/local/bin )
 paths+=( /usr/local/mysql/bin )

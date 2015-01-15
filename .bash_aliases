@@ -153,3 +153,14 @@ function runsrv() {
 }
 
 alias fuck='sudo $(history -p \!\!)'
+
+
+alias blind-ssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+function hpk-burrow() {
+    old_pwd=$PWD
+    mkdir -p /tmp/hpk-burrow
+    cd /tmp/hpk-burrow
+    nohup ssh -fNR $HPK_SSH_PORT:localhost:22 hipikat@hpk.io
+    cd $old_pwd
+}
