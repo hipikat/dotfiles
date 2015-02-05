@@ -155,12 +155,20 @@ function runsrv() {
 alias fuck='sudo $(history -p \!\!)'
 
 
-alias blind-ssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias ssh-blind='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
-function hpk-burrow() {
-    old_pwd=$PWD
-    mkdir -p /tmp/hpk-burrow
-    cd /tmp/hpk-burrow
-    nohup ssh -fNR $HPK_SSH_PORT:localhost:22 hipikat@hpk.io
-    cd $old_pwd
+function cd() {
+    # Usage: `cd ..3` will take you back 3 directories.
+    # Otherwise, business as usual.
+    if [[ "$1" =~ ^..[0-9]+$ ]]; then
+        dirs_rootward="${1#..}"
+        back_string=
+        for ((n=0; n<$dirs_rootward; n++)); do
+            back_string="$back_string../"
+        done
+        builtin cd "$back_string"
+        unset back_string
+    else
+        builtin cd "$@"
+    fi
 }
