@@ -4,11 +4,11 @@
 Deep-copy, move or symlink files and directories from one location to
 another. By default directories are created recursively, and if a
 destination file already exists, a warning is given and no action is taken.
-
 """
-# NB: Designed to run without requiring any 3rd-party Python libraries.
-# TODO: readthedocs link in the module docstring.
-
+# "Awkardly designed to run without requiring any 3rd-party libraries."
+#
+# TODO: More docs. Then a ReadTheDocs link in the module docstring.
+#
 # Copyright © 2014, Adam Wright <adam@hipikat.org>
 # All rights reserved. But here's the BSD 2-Clause License:
 #
@@ -234,7 +234,7 @@ class FilePlumber(object):
         """
         Print a human-friendly description of an operation and its operands.
         (This is separate from the runners so we can print operations during a
-        dry run and only bail-out right before the operation itself.)
+        dry run and only bail out right before the operation itself.)
         """
         action_str = self._action_gerunds[action] + " " + from_path
         if action != 'ignore':
