@@ -57,7 +57,7 @@ if [ "$sourced_activate" != "true" ]; then
         if [ -f "$current_dir/bin/activate" ]; then
             echo "Sourcing $current_dir/bin/activate"
             . "$current_dir/bin/activate"
-            sourced_activate=true
+            sourced_activate="true"
             break
         else
             current_dir="${current_dir%/*}"
@@ -69,9 +69,13 @@ fi
 if [ -f "/bin/activate" ] && [ "$sourced_activate" != "true" ]; then
     echo "Sourcing /bin/activate"
     . /bin/activate
+    sourced_activate="true"
 fi
 
 # Warn if we didn't source anything. Don't exit, because we're sourced.
 if [ "$sourced_activate" != "true" ]; then 
     echo "Failed to locate an activate script"
+else
+    unset sourced_activate
 fi
+
