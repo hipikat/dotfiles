@@ -28,10 +28,15 @@ Bundle 'vim-flake8'
 filetype plugin indent on
 
 
+""" Display
+""""""""""""""""""""""""""""""""""""""""
+set t_Co=256
+colorscheme peachpuff
 
 
 
 """""" unclean .....
+
 
 
 autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>

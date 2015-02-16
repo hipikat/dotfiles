@@ -29,6 +29,10 @@ defscrollback 2048
 # ------------------------------------------------------------------------------
 # TERMINAL SETTINGS
 # ------------------------------------------------------------------------------
+
+#term screen-256color
+#term xterm-256color
+
 termcapinfo xterm* ti@:te@
 
 # The vt100 description does not mention "dl". *sigh*
@@ -60,6 +64,18 @@ termcapinfo xterm* ti@:te@
 #termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'   # tell screen how to set colors. AB = background, AF=foreground
 
 
+# Allow bold colors - necessary for some reason
+attrcolor b ".I"
+# Tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# Use current bg color for erased chars
+defbce "on"
+# Set TERM
+term screen-256color
+#term screen-256color-bce
+#term xterm-256color
+
+
 # Turn the welcome message off
 startup_message off
 
@@ -70,8 +86,11 @@ encoding UTF-8
 
 
 
+# — Command: backtick id lifespan autorefresh command [args]
+#backtick 1 5 5 echo -n "foo-$WINDOW-"
+
 #windowlist title 'Num) Directory [Command]%=Flags'
-windowlist title '     %H%=[%l]'
-windowlist string "%3n) %t%=%f"
+windowlist title '     %{G}%H %{d}: %{C}%S%{d}%=CPU averages [1m 5m 15m] [%l]'
+windowlist string "%{b}%3n)%{d} %t%=%f"
 #windowlist string '%?%F%{.R.}%?%3n %`%t`%? [%h]%?'
 

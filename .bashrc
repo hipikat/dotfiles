@@ -1,10 +1,26 @@
 ###
-# .bashrc for Adam Wright <adam@hipikat.org>
-# 
+# .bashrc
+#
+# Originally packaged under the BSD 2-Clause License at
+# https://github.com/hipikat/dotfiles by
+# Adam Wright <adam@hipikat.org>
 ###
 
-# Do nothing if not running interactively
+
+# Do nothing if we're not running interactively
 [ -z "$PS1" ] && return
+
+
+### Machine information
+##########################################
+if [ "$(uname)" == "Darwin" ]; then
+    export BASIC_MACHINE_TYPE="Mac"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    export BASIC_MACHINE_TYPE="Linux"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    export BASIC_MACHINE_TYPE="Windows"
+fi
+
 
 ### Constants
 ##########################################
@@ -84,6 +100,31 @@ On_ICyan='\[\e[0;106m\]'    # Cyan
 On_IWhite='\[\e[0;107m\]'   # White
 
 
+### Environment
+##########################################
+export PAGER='less'
+export EDITOR='vim'
+export VISUAL="${EDITOR}"
+export FCEDIT="${EDITOR}"
+export CVSEDITOR="${EDITOR}"
+
+# Stop problems with ghost '._' files on OS X
+export COPYFILE_DISABLE=true
+# Ignore case when pattern is all lowercase & print raw control characters
+export LESS="-iR"
+# Ignore duplicate history entries
+export HISTCONTROL=ignoredups
+# Maximum number of lines contained in the history file
+export HISTFILESIZE=131071
+# Maximum number of commands to remember in the command history
+export HISTSIZE=8191
+# Time prefix between line number and command, for the `history` command
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
+
+# I think this was in a tar alias and should be re-rolled into one?!
+#export TAR_OPTIONS="--exclude *.DS_Store*"
+
+
 ### Utility functions
 ##########################################
 
@@ -103,7 +144,7 @@ set_xterm_title () {
 }
 
 set_screen_title () {
-    if [[ $TERM == screen ]]; then
+    if [[ $TERM =~ screen ]]; then
         echo -ne "\033k$1\033\\"
     fi
 }
@@ -114,7 +155,7 @@ set_screen_title () {
 #
 # checkwinsize   Check the window size after each command and update LINES and COLUMNS
 # cdspell        Correct minor directory spelling mistakes for cd
-# cmdhist        Save multi-line commands to the history as a single line
+#-cmdhist        Save multi-line commands to the history as a single line
 # dotglob        Includes hidden files in pathname expansion
 # extglob        Enables [?*+@!](pattern|pattern|...) matching
 # nocaseglob     Pathname expansion matches in a case-insensitive way 
@@ -126,7 +167,7 @@ set_screen_title () {
 shopts=( $(shopt | cut -f1) )
 # Enabled the following shell options - copy this block but use `shopt -u` to
 # unset any of the shell options which are set by default.
-for opt in "checkwinsize cdspell cmdhist dotglob extglob nocaseglob
+for opt in "checkwinsize cdspell dotglob extglob nocaseglob
             histappend autocd"; do
     if in_array $opt "${shopts[@]}"; then
         shopt -s $opt
@@ -178,19 +219,6 @@ export -f echo_paths
 ### Install pyenv shims
 ##########################################
 eval "$(pyenv init - 2>/dev/null)"
-
-### Environment
-##########################################
-export PAGER='less'
-export EDITOR='vim'
-export VISUAL="${EDITOR}"
-export FCEDIT="${EDITOR}"
-export CVSEDITOR="${EDITOR}"
-
-export COPYFILE_DISABLE=true        # Stop problems with ghost ._ files on OS X
-export LESS="-iR"                   # Ignore case when pattern is all lowercase & print raw control characters
-export HISTCONTROL=ignoredups       # Ignore duplicate history entries
-export TAR_OPTIONS="--exclude *.DS_Store*"
 
 ### I don't even
 ##########################################
@@ -262,11 +290,14 @@ function set_ps1_strings() {
 
 # Run before the prompt is displayed
 function prepare_prompt() {
-    Last_Command=$?     # Must come first!
+    #last_command=$?     # Must come first!
+
+    # Flush buffered command-line history items to ~/.bash_history
+    history -a
 
     set_ps1_strings
     screen_title="$SHORT_PWD"
-    screen_title+=`echo -ne " \xC2\xA7 "`
+    screen_title+=`echo -ne " \xC2\xA7 "`   # Section sign
     set_screen_title "$screen_title"
     set_xterm_title "$HOST_ALIAS"
 
@@ -303,7 +334,7 @@ function prepare_command() {
 
     screen_title="$SHORT_PWD"
     screen_title+=`echo -ne " \xC2\xA7 "`
-    screen_title+=`history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`
+    screen_title+=`HISTTIMEFORMAT= history 1 | sed -e "s/^[0-9 ]*//g"`
     set_screen_title "$screen_title"
 
     # Return the terminal to its default colour; the prompt may have changed it
@@ -312,7 +343,7 @@ function prepare_command() {
 trap 'prepare_command' DEBUG
 
 
-### The prompt. Though it took me about 17 years to get clean, so it's a bit of a misnomer
+### The 'prompt'. Ironically, it took me about 17 years to get this clean.
 
 # GNU Screen window number and Unicode 'right curly bracket middle piece'
 PS1="$Green\$PS1_SCREEN"

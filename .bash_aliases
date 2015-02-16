@@ -1,4 +1,56 @@
+###
+# .bash_aliases
+#
+# Originally packaged under the BSD 2-Clause License at
+# https://github.com/hipikat/dotfiles by
+# Adam Wright <adam@hipikat.org>
+###
 
+
+### Convenience alises
+##########################################
+
+# Re-execute the last command with 'sudo' appended
+alias fuck='sudo $(history -p \!\!)'
+
+
+### Shell Builtins
+##########################################
+
+function cd() {
+    # Usage: `cd ..3` will take you back 3 directories.
+    # Otherwise, it's business as usual.
+    if [[ "$1" =~ ^..[0-9]+$ ]]; then
+        dirs_rootward="${1#..}"
+        back_string=
+        for ((n=0; n<$dirs_rootward; n++)); do
+            back_string="$back_string../"
+        done
+        builtin cd "$back_string"
+        unset back_string
+    else
+        builtin cd "$@"
+    fi
+}
+
+
+### POSIX
+##########################################
+
+function tar() {
+    extra_options=
+    # Exclude localisation and Desktop Services Store files on Macs
+    if [ "$BASIC_MACHINE_TYPE" = "Mac" ]; then
+        extra_options+=" --exclude .DS_Store --exclude .localized "
+    fi
+    command -p tar $extra_options "$@"
+}
+
+
+
+
+##########################################
+### unclean...
 
 # Enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
@@ -152,23 +204,7 @@ function runsrv() {
     eval "django-admin.py runserver "$@" --traceback"
 }
 
-alias fuck='sudo $(history -p \!\!)'
 
 
 alias ssh-blind='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
-function cd() {
-    # Usage: `cd ..3` will take you back 3 directories.
-    # Otherwise, business as usual.
-    if [[ "$1" =~ ^..[0-9]+$ ]]; then
-        dirs_rootward="${1#..}"
-        back_string=
-        for ((n=0; n<$dirs_rootward; n++)); do
-            back_string="$back_string../"
-        done
-        builtin cd "$back_string"
-        unset back_string
-    else
-        builtin cd "$@"
-    fi
-}
