@@ -4,8 +4,7 @@
 # current directory, and then each of its parent directories, and try
 # to find a matching Virtualenv to activate. Failing that, look for a
 # bin/activate file off the current directory and then each of its
-# parents, and source the first one found. If no bin/activate script
-# can be found to source, exit with status code 1.
+# parents, and source the first one found.
 # 
 # This is a convenience command intended to compliment the `workon`
 # command that comes with Virtualenvwrapper.
@@ -43,7 +42,8 @@ if [ -n "$WORKON_HOME" ]; then
         if [ -f "$WORKON_HOME/$(basename $current_dir)/bin/activate" ]; then
             echo "Sourcing $WORKON_HOME/$(basename $current_dir)/bin/activate"
             . "$WORKON_HOME/$(basename $current_dir)/bin/activate"
-            exit 0
+            sourced_activate="true"
+            break
         else
             current_dir="${current_dir%/*}"
         fi
@@ -52,23 +52,26 @@ fi
 
 # Check up through parent directories, to see if we're buried in a Virtualenv
 current_dir="$PWD"
-while [ -n "$current_dir" ]; do
-    echo "Checking $current_dir/bin/activate"
-    if [ -f "$current_dir/bin/activate" ]; then
-        echo "Sourcing $current_dir/bin/activate"
-        . "$current_dir/bin/activate"
-        exit 0
-    else
-        current_dir="${current_dir%/*}"
-    fi
-done
+if [ "$sourced_activate" != "true" ]; then
+    while [ -n "$current_dir" ]; do
+        if [ -f "$current_dir/bin/activate" ]; then
+            echo "Sourcing $current_dir/bin/activate"
+            . "$current_dir/bin/activate"
+            sourced_activate=true
+            break
+        else
+            current_dir="${current_dir%/*}"
+        fi
+    done
+fi
 
 # Check for a system-wide Virtualenv
-if [ -f "/bin/activate" ]; then
+if [ -f "/bin/activate" ] && [ "$sourced_activate" != "true" ]; then
     echo "Sourcing /bin/activate"
     . /bin/activate
-    exit 0
 fi
-    
-echo "Failed to locate an activate script"
-exit 1
+
+# Warn if we didn't source anything. Don't exit, because we're sourced.
+if [ "$sourced_activate" != "true" ]; then 
+    echo "Failed to locate an activate script"
+fi
