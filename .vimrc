@@ -243,19 +243,14 @@ map! <F10> <ESC>:tabn 10<CR>
 " #########################
    " Ctrl-u 1:    underline Parts w/ #'s
    noremap  <leader>1 yyPVr#yyjp
-   inoremap <leader>1 <esc>yyPVr#yyjpA
    " Ctrl-u 2:    underline Chapters w/ *'s
    noremap  <leader>2 yyPVr*yyjp
-   inoremap <leader>2 <esc>yyPVr*yyjpA
    " Ctrl-u 3:    underline Section Level 1 w/ ='s
    noremap  <leader>3 yypVr=
-   inoremap <leader>3 <esc>yypVr=A
    " Ctrl-u 4:    underline Section Level 2 w/ -'s
    noremap  <leader>4 yypVr-
-   inoremap <leader>4 <esc>yypVr-A
    " Ctrl-u 5:    underline Section Level 3 w/ ^'s
    noremap  <leader>5 yypVr^
-   inoremap <leader>5 <esc>yypVr^A
 
 
 
