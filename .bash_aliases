@@ -13,6 +13,19 @@
 # Re-execute the last command with 'sudo' appended
 alias fuck='sudo $(history -p \!\!)'
 
+# Add common grep shortcuts, and default search to ./ if none specified
+function _grep() {
+    if [ "$#" -eq "2" ]; then
+        grep --color=always "$@" ./
+    else
+        grep --color=always "$@"
+    fi
+}
+alias g='_grep -Is'
+alias gi='_grep -Iis'
+alias gr='_grep -Irs'
+alias gir='_grep -Iris'
+
 
 ### Shell Builtins
 ##########################################
@@ -45,6 +58,8 @@ function tar() {
     fi
     command -p tar $extra_options "$@"
 }
+
+
 
 
 
@@ -108,10 +123,10 @@ export -f f
 
 # g == grep -Iris ... ./
 # gh == grep -Iis ... ./ (grep here)
-function g() { grep -Iris "$@" ./ ;}
-export -f g
-function gh() { grep -Iis "$@" ./* ;}
-export -f gh
+#function g() { grep -Iris "$@" ./ ;}
+#export -f g
+#function gh() { grep -Iis "$@" ./* ;}
+#export -f gh
 
 function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
 

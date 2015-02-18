@@ -118,21 +118,17 @@ export HISTCONTROL=ignoredups
 export HISTFILESIZE=131071
 # Maximum number of commands to remember in the command history
 export HISTSIZE=8191
-# Time prefix between line number and command, for the `history` command
+# Time specifier, between line number and command, in the `history` command
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
-
-# I think this was in a tar alias and should be re-rolled into one?!
-#export TAR_OPTIONS="--exclude *.DS_Store*"
 
 
 ### Utility functions
 ##########################################
 
-# Usage: `array_contains needle "${haystack[@]}"`
+# Usage: `in_array needle "${haystack[@]}"`
 in_array() { 
-    local hay needle=$1
-    shift
-    for hay; do
+    local needle=$1 hay
+    for hay in "${2-}"; do
         [[ $hay == $needle ]] && return 0
     done
     return 1
