@@ -13,18 +13,20 @@
 # Re-execute the last command with 'sudo' appended
 alias fuck='sudo $(history -p \!\!)'
 
-# Add common grep shortcuts, and default search to ./ if none specified
+# Common grep call shortcuts
 function _grep() {
-    if [ "$#" -eq "2" ]; then
+    # If recursive and just a search term is given, defualt to ./
+    if [[ "$#" -eq "2" && $1 == *"r"* ]]; then
         grep --color=always "$@" ./
     else
         grep --color=always "$@"
     fi
 }
-alias g='_grep -Is'
-alias gi='_grep -Iis'
-alias gr='_grep -Irs'
-alias gir='_grep -Iris'
+# -I ignores binary files.
+alias g='_grep -I'
+alias gi='_grep -Ii'
+alias gr='_grep -Ir'
+alias gir='_grep -Iri'
 
 
 ### Shell Builtins
