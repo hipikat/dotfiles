@@ -1,0 +1,18 @@
+
+# Source default screen settings
+source .screenrc
+
+# Create shell screens
+screen      # 0
+screen      # 1
+screen      # 2
+screen      # 3
+screen 9    # 9
+
+# Set up screens
+at 2 stuff "cd ~/Desktop^Mclear^M"
+at 3 stuff "cd ~/Desktop^Mclear^M"
+at 9 stuff "cd /etc^M"
+
+# Return to the first screen
+select 0

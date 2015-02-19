@@ -22,11 +22,33 @@ function _grep() {
         grep --color=always "$@"
     fi
 }
-# -I ignores binary files.
-alias g='_grep -I'
+alias g='_grep -I'          # -I ignores binary files
 alias gi='_grep -Ii'
 alias gr='_grep -Ir'
 alias gir='_grep -Iri'
+
+# Etcetera
+
+alias gitad='git add'
+alias gitbr='git branch'
+alias gitch='git checkout'
+alias gitcl='git clone'
+alias gitco='git commit'
+alias gitdi='git diff'
+alias gitfe='git fetch'
+alias gitlo='git log'
+alias gitre='git remote'
+alias gitst='git status'
+
+alias irssi2='irssi --config=~/.irssi/config2'
+
+alias sush='sudo -E bash'
+
+
+### Aliases affecting default program behaviour
+
+alias vim='vim -p'      # Open files in tabs
+
 
 
 ### Shell Builtins
@@ -62,6 +84,16 @@ function tar() {
 }
 
 
+### Typos
+##########################################
+alias al='la'
+alias vl='lv'
+alias poing='ping'
+alias tial='tail'
+alias sssh='ssh'
+alias pign='ping'
+alias ivm='vim'
+alias whomai='whoami'
 
 
 
@@ -132,18 +164,8 @@ export -f f
 
 function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
 
-# Typos
-alias al='la'
-alias vl='lv'
-alias poing='ping'
-alias tial='tail'
-alias sssh='ssh'
-alias pign='ping'
-alias whomai='whoami'
 
 
-# Common command line options
-alias grep='grep -I'                      # Ignore binaries, suppress errors
 
 # Shortcuts
 alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
@@ -155,40 +177,17 @@ function cover() {
 }
 export -f cover
 
-#
-alias pdt='TZ=America/Los_Angeles date'
-
-
-alias such=git
-alias very=git
-alias wow='git status' 
 
 
 
-alias irssi2='irssi --config=~/.irssi/config2'
 
 
-alias sush='sudo -E bash'
 
-alias gitad='git add'
-alias gitbr='git branch'
-alias gitch='git checkout'
-alias gitcl='git clone'
-alias gitco='git commit'
-alias gitdi='git diff'
-alias gitfe='git fetch'
-alias gitlo='git log'
-alias gitre='git remote'
-alias gitst='git status'
-
-alias grp='grep --color=always'
 
 alias myip="curl -s icanhazip.com"
 
 alias slt='salt --force-color'
 
-alias scr='screen -D -R'    # Attach here and now
-#alias sudoe='sudo -E'
 function sudoe() {
     if [[ $# -eq 0 ]]; then
         sudo -E bash

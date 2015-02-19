@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Usage: `scr [session_name]`
+#
+# If a screen_name is provided and a session with that name exists,
+# attach to it. If no such session exists, start a new session with
+# that name, using the configuration file ~/.screen/[session_name],
+# if such a file exists. Calling without parameters is equivalent to
+# calling `scr home`. The search for sessions is case-insensitive.
+
+
+session_name=${1:-home}
+screen_list="$(screen -list)"
+command_options=
+
+# If the named screen exists, attach to it
+found_screen=$(echo "$screen_list" | grep -im1 ".$session_name " | awk '{print $1;}')
+if [ -n "$found_screen" ]; then
+    screen -x "$found_screen"
+    exit 0
+fi
+
+# It doesn't exist; see if a matching configuration file exists
+if [ -f ~/.screen/"$session_name" ]; then
+    command_options="-c ~/.screen/$session_name"
+fi
+
+screen $command_options -S "$session_name"
+
+
+####
+#if [ ! $(echo "$screen_list" | grep -i 'no sockets') ]; then
+#    echo "No screens"
+#else
+#    echo "Some screens!"
+#fi
