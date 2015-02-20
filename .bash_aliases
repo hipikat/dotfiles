@@ -49,6 +49,9 @@ alias sush='sudo -E bash'
 
 alias vim='vim -p'      # Open files in tabs
 
+# Mostly, short 'hand-typed' alises just force colour, for piping to less
+alias slt='salt --force-color'
+alias sltssh='salt-ssh --force-color'
 
 
 ### Shell Builtins
@@ -186,7 +189,6 @@ export -f cover
 
 alias myip="curl -s icanhazip.com"
 
-alias slt='salt --force-color'
 
 function sudoe() {
     if [[ $# -eq 0 ]]; then
@@ -208,9 +210,6 @@ function sudoeu() {
 export -f sudoeu
 
 #
-function dosls() {
-    salt "$1" state.sls "${@:2}"
-}
 function dosass() {
     cd "src/styles"
     eval "bundle exec compass watch &"
