@@ -38,6 +38,7 @@ import os
 from os import path
 import fnmatch
 import json
+import logging
 import sys
 import shutil
 
@@ -73,6 +74,8 @@ arg_parser.add_argument('-p', '--policy_file', type=str,
                         help="Policy config file associating patterns with actions.")
 arg_parser.add_argument('-f', '--force', default=False, action='store_true',
                         help="Overwrite existing files and links.")
+arg_parser.add_argument('-V', '--verbose', default=False, action='store_true',
+                        help="Print info when existing files are deleted or prevent actions.")
 
 
 class FilePlumber(object):
@@ -189,11 +192,11 @@ class FilePlumber(object):
         """
         if dest_exists:
             if not force:
-                print("Warning: Skipping {} of {} because destination exists.".format(
+                logging.info("Skipping {} of {} because destination exists.".format(
                     action, rel_path))
                 return
             else:
-                print("Warning: Deleting existing {} before {} operation.".format(
+                logging.info("Deleting existing {} before {} operation.".format(
                     rel_path, action))
                 if not dry_run:
                     self._remove_item(path.join(self.dest, rel_path))
@@ -237,9 +240,10 @@ class FilePlumber(object):
         dry run and only bail out right before the operation itself.)
         """
         action_str = self._action_gerunds[action] + " " + from_path
-        if action != 'ignore':
-            action_str += " to " + to_path
-        print(action_str)
+        if action == 'ignore':
+            logging.info(action_str)
+        else:
+            print(action_str + " to " + to_path)
 
     @_get_abs_paths
     def _run_copy(self, from_path, to_path, **kwargs):
@@ -287,7 +291,7 @@ def get_options_from_args(**kwargs):
         opts['policy_file'] = DEFAULT_POLICY_FILE
 
     # Get options which are correctly set by argparse
-    for opt in ('source', 'force'):
+    for opt in ('source', 'force', 'verbose'):
         opts[opt] = getattr(args, opt)
 
     return opts
@@ -296,6 +300,9 @@ def get_options_from_args(**kwargs):
 # Entry-point for command-line invocation of this module
 def main(*argv, **kwargs):
     opts = get_options_from_args()
+
+    if opts['verbose']:
+        logging.getLogger().setLevel(logging.INFO)
     plumber = FilePlumber(**opts)
     plumber.plumb()
 
