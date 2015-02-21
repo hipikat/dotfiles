@@ -117,7 +117,7 @@ export HISTCONTROL=ignoredups
 # Maximum number of lines contained in the history file
 export HISTFILESIZE=131071
 # Maximum number of commands to remember in the command history
-export HISTSIZE=8191
+export HISTSIZE=255
 # Time specifier, between line number and command, in the `history` command
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 
