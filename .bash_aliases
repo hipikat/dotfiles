@@ -1,13 +1,34 @@
 ###
 # .bash_aliases
 #
+# 1.    Emulate missing Gnu Coreutils
+# 2.    Convenience aliases
+# 2.1.  Aliases affecting default program behaviour
+# 3.    Shell Builtin overrides 
+# 4.    POSIX command overrides
+# 5.    Typos
+#
 # Originally packaged under the BSD 2-Clause License at
-# https://github.com/hipikat/dotfiles by
-# Adam Wright <adam@hipikat.org>
+# https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
 ###
 
 
-### Convenience alises
+### 1. Emulate missing Gnu Coreutils
+##########################################
+
+# Tacocat is a palindrome. Tac is cat, reversed.
+if ! type tac >/dev/null 2>&1; then
+    # Happens under Homebrew
+    if type gtac >/dev/null 2>&1; then
+        function tac() { gtac "$@"; }
+    else
+        function tac() { awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -; }
+    fi
+    export -f tac
+fi
+    
+
+### 2. Convenience alises
 ##########################################
 
 # Re-execute the last command with 'sudo' appended
@@ -45,13 +66,13 @@ alias irssi2='irssi --config=~/.irssi/config2'
 alias sush='sudo -E bash'
 
 
-### Aliases affecting default program behaviour
+### 2.1. Aliases affecting default program behaviour
 
 alias vim='vim -p'      # Open files in tabs
 
 
 
-### Shell Builtins
+### 3. Shell Builtin overrides
 ##########################################
 
 function cd() {
@@ -71,7 +92,7 @@ function cd() {
 }
 
 
-### POSIX
+### 4. POSIX command overrides
 ##########################################
 
 function tar() {
@@ -84,7 +105,7 @@ function tar() {
 }
 
 
-### Typos
+### 5. Typos
 ##########################################
 alias al='la'
 alias vl='lv'
