@@ -14,5 +14,5 @@ at 2 stuff "cd ~/Desktop^Mclear^M"
 at 3 stuff "cd ~/Desktop^Mclear^M"
 at 9 stuff "cd /etc^M"
 
-# Return to the first screen
+# Return to first screen and start in the screens menu
 select 0

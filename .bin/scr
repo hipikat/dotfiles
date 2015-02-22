@@ -25,13 +25,15 @@ if [ $# -ge 2 ] || [ "${1:0:1}" == '-' ]; then
    exit $?
 fi
 
-screen_list="$(screen -list)"
-
 # If the named screen exists, attach to it
-found_screen=$(echo "$screen_list" | grep -im1 "\.$session_name[^ ]* " | awk '{print $1;}')
+screen_list="$(screen -list)"
+found_screen="$(echo "$screen_list" |\
+                grep -im1 "\.$session_name[^ ]" |\
+                awk '{print $1;}')"
+
 if [ -n "$found_screen" ]; then
-    screen -x "$found_screen"
-    exit 0
+    screen -x "$found_screen" -p '='
+    exit $?
 fi
 
 # It doesn't exist; see if a matching configuration file exists
@@ -39,13 +41,4 @@ if [ -f ~/.screen/"$session_name" ]; then
     command_options="-c ~/.screen/$session_name"
 fi
 
-screen $command_options -S "$session_name"
-exit 0
-
-####
-#if [ ! $(echo "$screen_list" | grep -i 'no sockets') ]; then
-#    echo "No screens"
-#else
-#    echo "Some screens!"
-#fi
-
+screen $command_options -S "$session_name" -p '='
