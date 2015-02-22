@@ -2,9 +2,9 @@
 #
 # Usage: scr [session_name]
 #
-# If a screen_name is provided and a session with that name exists,
-# attach to it. If no such session exists, start a new session with
-# that name, using the configuration file ~/.screen/[session_name],
+# If a screen_name is provided and a session starting with that name
+# exists, attach to it. If no such session exists, start a new session
+# with that name, using the configuration file ~/.screen/[session_name],
 # if such a file exists. Calling without parameters is equivalent to
 # calling `scr home`. The search for sessions is case-insensitive.
 #
@@ -17,11 +17,18 @@
 
 
 session_name=${1:-home}
-screen_list="$(screen -list)"
 command_options=
 
+# If more than one argument given, just pass it to `screen` and bow out
+if [ $# -ge 2 ] || [ "${1:0:1}" == '-' ]; then
+   screen "$@" 
+   exit $?
+fi
+
+screen_list="$(screen -list)"
+
 # If the named screen exists, attach to it
-found_screen=$(echo "$screen_list" | grep -im1 "\.$session_name" | awk '{print $1;}')
+found_screen=$(echo "$screen_list" | grep -im1 "\.$session_name[^ ]* " | awk '{print $1;}')
 if [ -n "$found_screen" ]; then
     screen -x "$found_screen"
     exit 0
@@ -33,7 +40,7 @@ if [ -f ~/.screen/"$session_name" ]; then
 fi
 
 screen $command_options -S "$session_name"
-
+exit 0
 
 ####
 #if [ ! $(echo "$screen_list" | grep -i 'no sockets') ]; then
@@ -41,3 +48,4 @@ screen $command_options -S "$session_name"
 #else
 #    echo "Some screens!"
 #fi
+

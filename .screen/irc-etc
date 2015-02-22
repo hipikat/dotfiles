@@ -1,0 +1,27 @@
+
+# Source default screen settings
+source .screenrc
+
+# Create shell screens
+screen      # 0 
+screen      # 1 
+screen      # 2 
+screen      # 3 
+screen      # 4 
+screen      # 5 
+screen      # 6 
+screen      # 7 
+screen      # 8 
+screen      # 9 
+
+# Set up screens
+at 1 stuff "irssi^M"
+at 2 stuff "irssi2^M"
+#at 1 stuff "sleep 999^M"
+#at 2 stuff "sleep 9999^M"
+at 3 stuff "cd irclogs/Furnet^M"
+at 4 stuff "cd irclogs/Freenode^M"
+at 5 stuff "cd irclogs^M"
+
+# Return to the first screen
+select 1

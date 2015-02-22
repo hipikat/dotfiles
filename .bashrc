@@ -9,6 +9,9 @@
 
 # Do nothing if we're not running interactively
 [ -z "$PS1" ] && return
+if [ -z "$USER" ]; then
+    USER=`whoami`
+fi
 
 
 ### Machine information
@@ -140,7 +143,7 @@ set_xterm_title () {
 }
 
 set_screen_title () {
-    if [[ $TERM =~ screen ]]; then
+    if [[ "$TERM" =~ screen ]]; then
         echo -ne "\033k$1\033\\"
     fi
 }
@@ -262,7 +265,7 @@ function set_ps1_strings() {
     fi
 
     # Set username if we aren't running as root
-    if [[ $EUID != 0 ]]; then
+    if [ "$EUID" != "0" ]; then
         PS1_USERNAME="$USER"
     else
         PS1_USERNAME=""
@@ -304,7 +307,6 @@ PROMPT_COMMAND=prepare_prompt
 # Run before every command (returns early if not being run interactively
 # (i.e. from a user hitting enter on an idle shell prompt)).
 function prepare_command() {
-
     if [[ -n "$COMP_LINE" ]]; then
         # We're inside a completer so we can't be running interactively
         return
@@ -346,11 +348,18 @@ PS1="$Green\$PS1_SCREEN"
 
 # (User name in green if one of my regulars, yellow otherwise and missing if root.)
 # (Don't worry... root gets a high-vis, uniquely red symbol at the end of the prompt.)
-PS1+="\$(if [[ $USER == hipikat || $USER == zeno ]]; then echo \"$Green\"; else echo \"$Yellow\"; fi)"
+#PS1+="\$(if [ "$USER" == "hipikat" ] || [ "$USER" == "zeno" ]; then echo \"$Green\"; else echo \"$Yellow\"; fi)"
+if [ "$USER" == hipikat ] || [ "$USER" == zeno ]; then
+    PS1+="$Green"
+else
+    PS1+="$Yellow"
+fi
+
+#PS1+="$(echo \"$Green\")"
 PS1+="\$PS1_USERNAME"
 
 # Green '@' symbol, if not root
-PS1+="\$(if [[ $EUID != 0 ]]; then echo \"$Green@\"; fi)"
+PS1+="\$(if [ "$EUID" != "0" ]; then echo \"$Green@\"; fi)"
 
 # Hostname in bright, bold green
 PS1+="$BIGreen\$PS1_HOST"
@@ -359,7 +368,7 @@ PS1+="$BIGreen\$PS1_HOST"
 PS1+="$White:$Blue\w$Cyan\$PS1_BRANCH"
 
 # Red section symbol for root, white section symbol otherwise
-PS1+="$White\$(if [[ $EUID == 0 ]]; then echo \"$Red\"; fi) "
+PS1+="$White\$(if [ "$EUID" == "0" ]; then echo \"$Red\"; fi) "
 PS1+=`echo -e "\xC2\xA7"`
 
 # End prompt
