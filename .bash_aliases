@@ -58,7 +58,8 @@ alias gco='git commit';         __git_complete gco _git_commit
 alias gdi='git diff';           __git_complete gdi _git_diff
 alias gfe='git fetch';          __git_complete gfe _git_fetch
 alias glo='git log';            __git_complete glo _git_log
-alias gpu='git pull';           __git_complete gpu _git_pull
+alias gpl='git pull';           __git_complete gpu _git_pull
+alias gps='git push';           __git_complete gpu _git_push
 alias gre='git remote';         __git_complete gre _git_remote
 alias gst='git status';         __git_complete gst _git_status
 
