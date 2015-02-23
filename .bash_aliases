@@ -31,6 +31,9 @@ fi
 ### 2. Convenience alises
 ##########################################
 
+# Dispense at UCC - http://wiki.ucc.asn.au/Dispense
+alias dis='dispense'
+
 # Re-execute the last command with 'sudo' appended
 alias fuck='sudo $(history -p \!\!)'
 
@@ -75,7 +78,6 @@ if type __git_complete &>/dev/null; then
     __git_complete gpu _git_pull
     __git_complete gpu _git_push
 fi
-
 
 alias irssi2='irssi --config=~/.irssi/config2'
 
