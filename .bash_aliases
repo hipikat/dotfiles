@@ -50,19 +50,31 @@ alias gir='_grep -Iri'
 
 # Etcetera
 
-alias gad='git add';            __git_complete gad _git_add
-alias gbr='git branch';         __git_complete gbr _git_branch
-alias gch='git checkout';       __git_complete gch _git_checkout
-alias gcl='git clone';          __git_complete gcl _git_clone
-alias gco='git commit';         __git_complete gco _git_commit
-alias gdi='git diff';           __git_complete gdi _git_diff
-alias gfe='git fetch';          __git_complete gfe _git_fetch
-alias glo='git log';            __git_complete glo _git_log
-alias gpl='git pull';           __git_complete gpu _git_pull
-alias gps='git push';           __git_complete gpu _git_push
-alias gre='git remote';         __git_complete gre _git_remote
-alias gst='git status';         __git_complete gst _git_status
+alias gad='git add'
+alias gbr='git branch'
+alias gch='git checkout'
+alias gcl='git clone'
+alias gco='git commit'
+alias gdi='git diff'
+alias gfe='git fetch'
+alias glo='git log'
+alias gpl='git pull'
+alias gps='git push'
+alias gre='git remote'
+alias gst='git status'
 
+if type __git_complete &>/dev/null; then
+    __git_complete gad _git_add
+    __git_complete gbr _git_branch
+    __git_complete gch _git_checkout
+    __git_complete gcl _git_clone
+    __git_complete gco _git_commit
+    __git_complete gdi _git_diff
+    __git_complete gfe _git_fetch
+    __git_complete glo _git_log
+    __git_complete gpu _git_pull
+    __git_complete gpu _git_push
+fi
 
 
 alias irssi2='irssi --config=~/.irssi/config2'
