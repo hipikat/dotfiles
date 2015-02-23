@@ -166,7 +166,7 @@ function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 alias sv='sudo supervisorctl'
 
 # l == ls -l ... (but filtering out junk files)
-l() {
+function l() {
     if [ "$1" = "s-al" ]; then
         ls -al ${*:2}
     elif [ `uname` = "Darwin" ]; then
@@ -177,7 +177,7 @@ l() {
 }
 export -f l
 
-ll() {
+function ll() {
     l "$@" | less
 }
 
