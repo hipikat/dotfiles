@@ -25,6 +25,8 @@
 
 if [ "$#" -eq 0 ]; then
     HISTTIMEFORMAT= 
+    history -a
+    history -n
     rev_history=`history | tr -s ' ' | cut -d' ' -f 3- | tac |\
                  awk '{printf("%10d  %s\n", NR, $0)}' - | tac`
     #"$rev_history" | awk '{printf("%10d  %s\n", NR, $0)}' -

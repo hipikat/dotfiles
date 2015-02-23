@@ -50,16 +50,19 @@ alias gir='_grep -Iri'
 
 # Etcetera
 
-alias gitad='git add'
-alias gitbr='git branch'
-alias gitch='git checkout'
-alias gitcl='git clone'
-alias gitco='git commit'
-alias gitdi='git diff'
-alias gitfe='git fetch'
-alias gitlo='git log'
-alias gitre='git remote'
-alias gitst='git status'
+alias gad='git add';            __git_complete gad _git_add
+alias gbr='git branch';         __git_complete gbr _git_branch
+alias gch='git checkout';       __git_complete gch _git_checkout
+alias gcl='git clone';          __git_complete gcl _git_clone
+alias gco='git commit';         __git_complete gco _git_commit
+alias gdi='git diff';           __git_complete gdi _git_diff
+alias gfe='git fetch';          __git_complete gfe _git_fetch
+alias glo='git log';            __git_complete glo _git_log
+alias gpu='git pull';           __git_complete gpu _git_pull
+alias gre='git remote';         __git_complete gre _git_remote
+alias gst='git status';         __git_complete gst _git_status
+
+
 
 alias irssi2='irssi --config=~/.irssi/config2'
 
