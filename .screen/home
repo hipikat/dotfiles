@@ -7,11 +7,21 @@ screen      # 0
 screen      # 1
 screen      # 2
 screen      # 3
-screen 9    # 9
+screen      # 4
+screen      # 5
+screen      # 6
+screen      # 7
+screen      # 8
+screen      # 9
 
 # Set up screens
 at 2 stuff "cd ~/Desktop^Mclear^M"
 at 3 stuff "cd ~/Desktop^Mclear^M"
+at 4 stuff "cd ~/.bin^M"
+at 5 stuff "cd ~/Documents/Dropbox/bin^M"
+at 6 stuff "cd ~/.dotfiles^M"
+at 7 stuff "cd ~/Code/pristine^M"
+at 8 stuff "cd ~^M"
 at 9 stuff "cd /etc^M"
 
 # Return to first screen and start in the screens menu

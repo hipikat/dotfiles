@@ -6,17 +6,17 @@
 # exists, attach to it. If no such session exists, start a new session
 # with that name, using the configuration file ~/.screen/[session_name],
 # if such a file exists. Calling without parameters is equivalent to
-# calling `scr home`. The search for sessions is case-insensitive.
+# calling `scr default`. The search for sessions is case-insensitive.
 #
 ########################################################################
 # Originally packaged under the BSD 2-Clause License at
 # https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
 #
-# TODO: Prompt for which screen to resume if [ ! -f ~/.screen/home ]
+# TODO: Prompt for which screen to resume if [ ! -f ~/.screen/default ]
 # TODO: Prompt if multiple screens match given session_name
 
 
-session_name=${1:-home}
+session_name=${1:-default}
 command_options=
 
 # If more than one argument given, just pass it to `screen` and bow out

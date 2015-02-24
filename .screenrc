@@ -98,3 +98,11 @@ windowlist title '     %{G}%H %{d}: %{C}%S%{d}%=CPU averages [1m 5m 15m] [%l]'
 windowlist string "%{b}%3n)%{d} %t%=%f"
 #windowlist string '%?%F%{.R.}%?%3n %`%t`%? [%h]%?'
 
+
+
+silencewait 600
+
+rendition monitor =s
+rendition bell =b
+rendition silence =u
+rendition so =b
