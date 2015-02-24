@@ -1,0 +1,31 @@
+
+# Source default screen settings
+source .screenrc
+
+# Create shell screens
+screen -h 4096  # 0
+screen -h 4096  # 1
+screen          # 2
+screen          # 3
+screen          # 4
+screen          # 5
+screen          # 6
+screen          # 7
+screen          # 8
+screen          # 9
+screen          # 10
+
+# Set up screens
+at 0 stuff "sudoe^M"
+at 1 stuff "sudoe^M"
+at 2 stuff "cd /srv/pillar^Mvim -S .vs^M"
+at 3 stuff "cd /srv/pillar^Mla^M"
+at 4 stuff "cd /srv/pillar^Mla^M"
+at 5 stuff "cd /srv/^Mla^M"
+at 6 stuff "cd /srv/salt^Mvim -S .vs^M"
+at 7 stuff "cd /srv/salt^Mla^M"
+at 8 stuff "cd /srv/salt^Mla^M"
+at 10 stuff "cd /etc/salt^M"
+
+# Return to the first screen
+select 1

@@ -13,6 +13,7 @@
 .idea
 .project
 .vs
+.vs-*
 build/
 dist/
 *.egg-info/
