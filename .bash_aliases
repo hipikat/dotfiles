@@ -7,6 +7,7 @@
 # 3.    Shell Builtin overrides 
 # 4.    POSIX command overrides
 # 5.    Typos
+# 10.   Commands
 #
 # Originally packaged under the BSD 2-Clause License at
 # https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
@@ -138,6 +139,13 @@ alias pign='ping'
 alias ivm='vim'
 alias whomai='whoami'
 
+
+### 10. Commands
+##########################################
+
+function 10shells() {
+    scr -S "$1" -c ~/.screen/10shells
+}
 
 
 
