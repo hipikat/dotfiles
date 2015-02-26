@@ -103,6 +103,6 @@ windowlist string "%{b}%3n)%{d} %t%=%f"
 silencewait 600
 
 rendition monitor =s
-rendition bell =b
+rendition bell =
 rendition silence =u
 rendition so =b
