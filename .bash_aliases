@@ -82,6 +82,7 @@ fi
 alias irssi2='irssi --config=~/.irssi/config2'
 
 alias sush='sudo -E bash'
+alias sup='supervisorctl'
 
 
 ### 2.1. Aliases affecting default program behaviour
