@@ -66,6 +66,7 @@ alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
 alias gst='git status'
+alias gsh='git stash'
 
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
@@ -76,8 +77,11 @@ if type __git_complete &>/dev/null; then
     __git_complete gdi _git_diff
     __git_complete gfe _git_fetch
     __git_complete glo _git_log
-    __git_complete gpu _git_pull
-    __git_complete gpu _git_push
+    __git_complete gpl _git_pull
+    __git_complete gps _git_push
+    __git_complete gpr _git_remote
+    __git_complete gst _git_status
+    __git_complete gsh _git_stash
 fi
 
 alias irssi2='irssi --config=~/.irssi/config2'
@@ -132,12 +136,15 @@ function tar() {
 ### 5. Typos
 ##########################################
 alias al='la'
-alias vl='lv'
+alias hsot='host'
+alias hsto='host'
+alias ivm='vim'
+alias pign='ping'
+alias piong='ping'
 alias poing='ping'
 alias tial='tail'
 alias sssh='ssh'
-alias pign='ping'
-alias ivm='vim'
+alias vl='lv'
 alias whomai='whoami'
 
 

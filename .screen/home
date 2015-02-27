@@ -18,7 +18,7 @@ screen      # 9
 at 2 stuff "cd ~/Desktop^Mclear^M"
 at 3 stuff "cd ~/Desktop^Mclear^M"
 at 4 stuff "cd ~/.bin^M"
-at 5 stuff "cd ~/Documents/Dropbox/bin^M"
+at 5 stuff "cd ~/Dropbox/bin^M"
 at 6 stuff "cd ~/.dotfiles^M"
 at 7 stuff "cd ~/Code/pristine^M"
 at 8 stuff "cd ~^M"
