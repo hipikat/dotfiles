@@ -54,17 +54,28 @@ alias gir='_grep -Iri'
 
 # Etcetera
 
-alias gad='git add'
+function gad() {
+    if [ "$#" -eq "0" ]; then
+        git add .
+    else
+        git add "$@"
+    fi
+}
 alias gbr='git branch'
 alias gch='git checkout'
 alias gcl='git clone'
 alias gco='git commit'
+alias gcoa='git commit -a'
+alias gcom='git commit -m'
+alias gcoam='git commit -am'
 alias gdi='git diff'
+alias gdic='git diff --cached'
 alias gfe='git fetch'
 alias glo='git log'
 alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
+alias grm='git rm'
 alias gst='git status'
 alias gsh='git stash'
 
@@ -74,12 +85,17 @@ if type __git_complete &>/dev/null; then
     __git_complete gch _git_checkout
     __git_complete gcl _git_clone
     __git_complete gco _git_commit
+    __git_complete gcoa _git_commit
+    __git_complete gcom _git_commit
+    __git_complete gcoam _git_commit
     __git_complete gdi _git_diff
+    __git_complete gdic _git_diff
     __git_complete gfe _git_fetch
     __git_complete glo _git_log
     __git_complete gpl _git_pull
     __git_complete gps _git_push
-    __git_complete gpr _git_remote
+    __git_complete gre _git_remote
+    __git_complete grm _git_rm
     __git_complete gst _git_status
     __git_complete gsh _git_stash
 fi
@@ -135,6 +151,10 @@ alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
+
+alias slt='salt --force-color'
+alias sltssh='salt-ssh --force-color'
+
 alias sup='supervisorctl'
 
 
@@ -142,9 +162,6 @@ alias sup='supervisorctl'
 
 alias vim='vim -p'      # Open files in tabs
 
-# Mostly, short 'hand-typed' alises just force colour, for piping to less
-alias slt='salt --force-color'
-alias sltssh='salt-ssh --force-color'
 
 
 ### 3. Shell Builtin overrides
@@ -153,8 +170,8 @@ alias sltssh='salt-ssh --force-color'
 function cd() {
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
-    # TODO: '..2/minion', for example, should work
-    if [[ "$1" =~ ^..[0-9]+$ ]]; then
+    # TODO: '..2/minion', for example, should work. With completion.
+    if [[ "$1" =~ ^\.\.[0-9]+$ ]]; then
         dirs_rootward="${1#..}"
         back_string=
         for ((n=0; n<$dirs_rootward; n++)); do
@@ -200,13 +217,16 @@ alias whomai='whoami'
 ##########################################
 
 function 10shells() {
-    scr -S "$1" -c ~/.screen/10shells
+    screen -S "$1" -c ~/.screen/10shells
 }
 
 
 
+
+
 ##########################################
-### unclean...
+### unclean... UNCLEANNNNNN...
+### a.k.a. "I hadn't read the Advanced Bash Programming guide yet".
 
 # Enable color support of ls and also add handy aliases
 if [ "$TERM" != "dumb" ]; then
