@@ -86,7 +86,55 @@ fi
 
 alias irssi2='irssi --config=~/.irssi/config2'
 
-alias sush='sudo -E bash'
+# Common chown/chgrp shortcuts
+function _own() {
+
+    # Change files to match a user account if we're sudoing from one
+    if [ -n "$SUDO_USER" ]; then
+        ch_name="$SUDO_USER"
+    # Or hopefully we're a user who can make the impending changes
+    elif [ -n "$USER" ]; then
+        ch_name="$USER"
+    # Or we've fallen through to the bottom and still need a user/group name
+    else
+        ch_name=`whoami`
+    fi
+   
+    # Set options ('r' is for 'recursive')
+    ch_ops=
+    if [[ $1 =~ .*r.* ]]; then
+        ch_ops+=" -R "
+    fi
+
+    # Set owning user/group ('b' is for 'both')
+    if [[ $1 =~ .*b.* ]]; then
+        ch_owners="$ch_name:$ch_name"
+    else
+        ch_owners="$ch_name"
+    fi
+
+    # Assume current directory if no files specified
+    if [ "$#" -le "1" ]; then
+        ch_targets="./"
+    else
+        ch_targets="${@:2}"
+    fi
+
+    # Change something ('g' is for 'group')
+    if [[ $1 =~ .*g.* ]]; then
+        chgrp $ch_ops "$ch_owners" "$ch_targets"
+    else
+        chown $ch_ops "$ch_owners" "$ch_targets"
+    fi
+}
+alias own='_own b'              # Own both user and group on files
+alias ownr='_own br'            # Own user and group on files, recursively
+alias ownu='_own u'             # Own user flag on files
+alias owng='_own g'             # Own group flag on files
+alias ownur='_own ur'           # Own user flag on files, recursively
+alias owngr='_own gr'           # Own group flag on files, recursively
+
+alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 alias sup='supervisorctl'
 
 
