@@ -22,6 +22,7 @@ at 2 stuff "irssi2^M"
 at 3 stuff "cd irclogs/Furnet^M"
 at 4 stuff "cd irclogs/Freenode^M"
 at 5 stuff "cd irclogs^M"
+at 6 stuff "cd .irssi^Mvim config*^M"
 
 # Return to the first screen
 select 1

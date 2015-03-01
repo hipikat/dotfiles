@@ -61,13 +61,23 @@ function gad() {
         git add "$@"
     fi
 }
+function _git_commit_n_push() {
+    # Regular `git commit ...` then `git push` if it succeeds.
+    if git commit "$@"; then
+        git push
+    fi
+}
 alias gbr='git branch'
 alias gch='git checkout'
 alias gcl='git clone'
 alias gco='git commit'
+alias gcop='_git_commit_n_push'
 alias gcoa='git commit -a'
+alias gcoap='_git_commit_n_push -a'
 alias gcom='git commit -m'
+alias gcomp='_git_commit_n_push -m'
 alias gcoam='git commit -am'
+alias gcoamp='_git_commit_n_push -am'
 alias gdi='git diff'
 alias gdic='git diff --cached'
 alias gfe='git fetch'
@@ -75,9 +85,11 @@ alias glo='git log'
 alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
+alias grev='git remote -v'
 alias grm='git rm'
+alias gshw='git show'
 alias gst='git status'
-alias gsh='git stash'
+alias gstsh='git stash'
 
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
@@ -85,9 +97,13 @@ if type __git_complete &>/dev/null; then
     __git_complete gch _git_checkout
     __git_complete gcl _git_clone
     __git_complete gco _git_commit
+    __git_complete gcop _git_commit
     __git_complete gcoa _git_commit
+    __git_complete gcoap _git_commit
     __git_complete gcom _git_commit
+    __git_complete gcomp _git_commit
     __git_complete gcoam _git_commit
+    __git_complete gcoamp _git_commit
     __git_complete gdi _git_diff
     __git_complete gdic _git_diff
     __git_complete gfe _git_fetch
@@ -95,9 +111,11 @@ if type __git_complete &>/dev/null; then
     __git_complete gpl _git_pull
     __git_complete gps _git_push
     __git_complete gre _git_remote
+    __git_complete grev _git_remote
     __git_complete grm _git_rm
+    __git_complete gshw _git_show
     __git_complete gst _git_status
-    __git_complete gsh _git_stash
+    __git_complete gstsh _git_stash
 fi
 
 alias irssi2='irssi --config=~/.irssi/config2'
@@ -149,6 +167,8 @@ alias ownu='_own u'             # Own user flag on files
 alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
+
+alias scrl='screen -list'
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
