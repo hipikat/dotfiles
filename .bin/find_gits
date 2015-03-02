@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for file in `find . -name '.git' -type d`; do
+    echo '--' ${file%/*}
+    pushd ${file%/*} &> /dev/null &&\
+        git status --short
+        popd &> /dev/null
+done
