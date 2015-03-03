@@ -169,6 +169,7 @@ alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
 alias scrl='screen -list'
+alias scrx='screen -x'
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 

@@ -21,7 +21,7 @@ at 4 stuff "cd ~/.bin^M"
 at 5 stuff "cd ~/Dropbox/bin^M"
 at 6 stuff "cd ~/.dotfiles^M"
 at 7 stuff "cd ~/Code/pristine^M"
-at 8 stuff "cd ~^M"
+at 8 stuff "cd ~/.ssh^M"
 at 9 stuff "cd /etc^M"
 
 # Return to first screen and start in the screens menu
