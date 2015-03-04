@@ -57,7 +57,7 @@ arg_parser = argparse.ArgumentParser(description=__doc__)
 arg_parser.add_argument('-s', '--source', type=str, default=MODULE_DIR, metavar="DIR",
                         help="Base directory from which to apply actions on files. "
                         "(defaults to the directory containing "
-                        "{} - currently {}).".format(MODULE_NAME, MODULE_DIR))
+                        "{0} - currently {1}).".format(MODULE_NAME, MODULE_DIR))
 
 # Destination - mutually exclusive group of options
 dest_group = arg_parser.add_mutually_exclusive_group(required=True)
@@ -192,11 +192,11 @@ class FilePlumber(object):
         """
         if dest_exists:
             if not force:
-                logging.info("Skipping {} of {} because destination exists.".format(
+                logging.info("Skipping {0} of {1} because destination exists.".format(
                     action, rel_path))
                 return
             else:
-                logging.info("Deleting existing {} before {} operation.".format(
+                logging.info("Deleting existing {0} before {1} operation.".format(
                     rel_path, action))
                 if not dry_run:
                     self._remove_item(path.join(self.dest, rel_path))
