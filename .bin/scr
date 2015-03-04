@@ -41,4 +41,4 @@ if [ -f ~/.screen/"$session_name" ]; then
     command_options="-c ~/.screen/$session_name"
 fi
 
-screen $command_options -S "$session_name" -p '='
+eval screen $command_options -S \"$session_name\" -p '='
