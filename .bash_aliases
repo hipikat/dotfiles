@@ -182,6 +182,17 @@ alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias slt='salt --force-color'
 alias sltssh='salt-ssh --force-color'
+alias sltkey='salt-key --force-color'
+function slt-cln() {
+    # Clean out Salt caches before running a `salt` command
+    salt-run cache.clear_all
+    if [ "$#" -ge "1" ]; then
+        salt "$1" saltutil.clear_cache
+        if [ "$#" -gt "1" ]; then
+            salt --force-color $@
+        fi
+    fi
+}
 
 alias sup='supervisorctl'
 
