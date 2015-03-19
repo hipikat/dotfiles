@@ -80,6 +80,7 @@ alias gcom='git commit -m'
 alias gcomp='_git_commit_n_push -m'
 alias gcoam='git commit -am'
 alias gcoamp='_git_commit_n_push -am'
+alias gcoAmp='git add -A; _git_commit_n_push -am'
 alias gdi='git diff'
 alias gdic='git diff --cached'
 alias gfe='git fetch'
@@ -108,6 +109,7 @@ if type __git_complete &>/dev/null; then
     __git_complete gcomp _git_commit
     __git_complete gcoam _git_commit
     __git_complete gcoamp _git_commit
+    __git_complete gcoAmp _git_commit
     __git_complete gdi _git_diff
     __git_complete gdic _git_diff
     __git_complete gfe _git_fetch
