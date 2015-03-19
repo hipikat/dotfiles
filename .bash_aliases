@@ -68,6 +68,8 @@ function _git_commit_n_push() {
     fi
 }
 alias gbr='git branch'
+alias gbra='git branch -a'
+alias gbrav='git branch -av'
 alias gch='git checkout'
 alias gcl='git clone'
 alias gco='git commit'
@@ -94,6 +96,8 @@ alias gstsh='git stash'
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
     __git_complete gbr _git_branch
+    __git_complete gbra _git_branch
+    __git_complete gbrav _git_branch
     __git_complete gch _git_checkout
     __git_complete gcl _git_clone
     __git_complete gco _git_commit
@@ -178,6 +182,17 @@ alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias slt='salt --force-color'
 alias sltssh='salt-ssh --force-color'
+alias sltkey='salt-key --force-color'
+function slt-cln() {
+    # Clean out Salt caches before running a `salt` command
+    salt-run cache.clear_all
+    if [ "$#" -ge "1" ]; then
+        salt "$1" saltutil.clear_cache
+        if [ "$#" -gt "1" ]; then
+            salt --force-color $@
+        fi
+    fi
+}
 
 alias sup='supervisorctl'
 
