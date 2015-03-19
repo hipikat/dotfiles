@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Usage: curlsh [-S] [URL_to_pipe_to_sh]
+#
+#   -S  Use a sudo shell
+#
+# If no protocol is provided with the URL, 'http://' will be prefixed.
+
+sudo_prefix=''
+if [ "$1" == "-S" ]; then
+    sudo_prefix='sudo'
+    shift
+fi
+
+if [[ "$1" == *"://"* ]]; then
+    url="$1"
+else
+    url="http://$1"
+fi
+
+curl -L "$url" | $sudo_prefix sh -s -- "${@:2}"
