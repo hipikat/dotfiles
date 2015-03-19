@@ -7,6 +7,7 @@
 # 3.    Shell Builtin overrides 
 # 4.    POSIX command overrides
 # 5.    Typos
+# 6.    Operating system consistency
 # 10.   Commands
 #
 # Originally packaged under the BSD 2-Clause License at
@@ -252,6 +253,13 @@ alias tial='tail'
 alias sssh='ssh'
 alias vl='lv'
 alias whomai='whoami'
+
+
+### 6. Operating system consistence
+##########################################
+if [ "$BASIC_MACHINE_TYPE" = "Mac" ]; then
+    alias updatedb="sudo /usr/libexec/locate.updatedb"
+fi
 
 
 ### 10. Commands
