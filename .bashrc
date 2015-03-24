@@ -207,6 +207,11 @@ add_missing_paths () {
 }
 add_missing_paths ${paths[@]}
 
+if [[ "$BASIC_MACHINE_TYPE" == "Mac" && -d ~/Dropbox/bin/osx ]]; then
+    PATH="~/Dropbox/bin/osx:$PATH"
+fi
+
+
 # Echo each element of $PATH to a new line
 echo_paths () {
     paths=(${PATH//:/ })
