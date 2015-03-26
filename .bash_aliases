@@ -166,9 +166,9 @@ function _own() {
 
     # Change something ('g' is for 'group')
     if [[ $1 =~ .*g.* ]]; then
-        chgrp $ch_ops "$ch_owners" "$ch_targets"
+        eval chgrp $ch_ops "$ch_owners" "$ch_targets"
     else
-        chown $ch_ops "$ch_owners" "$ch_targets"
+        eval chown $ch_ops "$ch_owners" "$ch_targets"
     fi
 }
 alias own='_own b'              # Own both user and group on files
@@ -184,6 +184,7 @@ alias scrx='screen -x'
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias slt='salt --force-color'
+alias sltcld='salt-cloud --force-color'
 alias sltssh='salt-ssh --force-color'
 alias sltkey='salt-key --force-color'
 function slt-cln() {
