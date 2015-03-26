@@ -178,6 +178,8 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias rmrf='rm -Rf'
+
 alias scrl='screen -list'
 alias scrx='screen -x'
 
@@ -256,7 +258,7 @@ alias vl='lv'
 alias whomai='whoami'
 
 
-### 6. Operating system consistence
+### 6. Operating system consistency
 ##########################################
 if [ "$BASIC_MACHINE_TYPE" = "Mac" ]; then
     alias updatedb="sudo /usr/libexec/locate.updatedb"
