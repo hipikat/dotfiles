@@ -183,10 +183,12 @@ alias rmrf='rm -Rf'
 alias scrl='screen -list'
 alias scrx='screen -x'
 
-alias sush='sudo -E bash'       # TODO: Use $SHELL if set
-
 alias slt='salt --force-color'
 alias sltcld='salt-cloud --force-color'
+alias sltcll='salt-call --force-color'
+alias sltcp='salt-cp --force-color'
+alias sltapi='salt-api --force-color'
+alias sltkey='salt-key --force-color'
 alias sltssh='salt-ssh --force-color'
 alias sltkey='salt-key --force-color'
 function slt-cln() {
@@ -199,6 +201,8 @@ function slt-cln() {
         fi
     fi
 }
+
+alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
 
