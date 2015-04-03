@@ -1,0 +1,11 @@
+#!/bin/bash
+
+saltlick_module=
+if [ "$#" -ge 1 ]; then
+    saltlick_module=".$@"
+fi
+
+saltlick_cmd=`echo salt --force-color "$HOSTNAME" state.sls saltlick$saltlick_module`
+
+echo $saltlick_cmd
+exec $saltlick_cmd
