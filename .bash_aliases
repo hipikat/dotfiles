@@ -130,6 +130,13 @@ alias histg='history | grep -i'
 
 alias irssi2='irssi --config=~/.irssi/config2'
 
+function mkcd() {
+    mkdir "$@"
+    cd "$@"
+}
+alias mkd='mkdir'
+alias mysls='echo /srv/pillar/users/hipikat.sls'
+
 # Common chown/chgrp shortcuts
 function _own() {
 
@@ -183,7 +190,24 @@ alias rmrf='rm -Rf'
 alias scrl='screen -list'
 alias scrx='screen -x'
 
-alias slt='salt --force-color'
+function sls() {
+    if [ "$#" -eq "0" ]; then
+        echo "Usage: sls [salt_minion] state_name"
+    elif [ "$#" -eq "1" ]; then
+        salt --force-color "${HOSTNAME-`hostname`}" state.sls "$@"
+    else
+        salt --force-color "$1" state.sls "${@:2}"
+    fi
+}
+function _salt() {
+    if [ "$#" -eq "1" ]; then
+        salt --force-color "${HOSTNAME-`hostname`}" "$1"
+    else
+        salt --force-color "$@"
+    fi
+}
+
+alias slt='_salt'
 alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
@@ -205,6 +229,10 @@ function slt-cln() {
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
+alias supt='supervisorctl tail'
+alias suptf='supervisorctl tail -f'
+
+alias trel='tree -C | less'
 
 
 ### 2.1. Aliases affecting default program behaviour
