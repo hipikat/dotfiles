@@ -20,7 +20,7 @@
 
 # Tacocat is a palindrome. Tac is cat, reversed.
 if ! type tac >/dev/null 2>&1; then
-    # Happens under Homebrew
+    # Homebrew installs Gnu Coreutils with a 'g' prefix by default
     if type gtac >/dev/null 2>&1; then
         function tac() { gtac "$@"; }
     else
@@ -63,7 +63,6 @@ function gad() {
     fi
 }
 function _git_commit_n_push() {
-    # Regular `git commit ...` then `git push` if it succeeds.
     if git commit "$@"; then
         git push
     fi
@@ -146,7 +145,7 @@ function _own() {
     # Or hopefully we're a user who can make the impending changes
     elif [ -n "$USER" ]; then
         ch_name="$USER"
-    # Or we've fallen through to the bottom and still need a user/group name
+    # Or we've gotten this far *somehow* and still need a user/group name
     else
         ch_name=`whoami`
     fi
@@ -233,6 +232,8 @@ alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -f'
 
 alias trel='tree -C | less'
+
+alias typp='type -p'
 
 
 ### 2.1. Aliases affecting default program behaviour
