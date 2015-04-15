@@ -124,8 +124,8 @@ if type __git_complete &>/dev/null; then
     __git_complete gstsh _git_stash
 fi
 
-alias hist='history'
-alias histg='history | grep -i'
+alias hst='history'
+alias hsg='history | grep -i'
 
 alias irssi2='irssi --config=~/.irssi/config2'
 
