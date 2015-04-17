@@ -1,60 +1,46 @@
 ###
 # .bash_aliases
 #
-# 1.    Emulate missing Gnu Coreutils
-# 2.    Convenience aliases
-# 2.1.  Aliases affecting default program behaviour
+# 1.    Convenience aliases
+# 1.1.  Aliases affecting default program behaviour
+# 2.    Emulate missing Gnu Coreutils
 # 3.    Shell Builtin overrides 
 # 4.    POSIX command overrides
 # 5.    Typos
 # 6.    Operating system consistency
-# 10.   Commands
+# 10.   Functions
 #
 # Originally packaged under the BSD 2-Clause License at
 # https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
 ###
 
 
-### 1. Emulate missing Gnu Coreutils
+### 1. Convenience alises
 ##########################################
 
-# Tacocat is a palindrome. Tac is cat, reversed.
-if ! type tac >/dev/null 2>&1; then
-    # Homebrew installs Gnu Coreutils with a 'g' prefix by default
-    if type gtac >/dev/null 2>&1; then
-        function tac() { gtac "$@"; }
-    else
-        function tac() { awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -; }
-    fi
-    export -f tac
-fi
-    
-
-### 2. Convenience alises
-##########################################
-
-# Dispense at UCC - http://wiki.ucc.asn.au/Dispense
+# Dispense from the UCC Coke machine
+#  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
 
-# Re-execute the last command with 'sudo' appended
+# Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
 
-# Common grep call shortcuts
+# Grep shortcuts
 function _grep() {
-    # If recursive and just a search term is given, defualt to ./
+    # If grepping recursively, and just a search term is
+    # given, defualt to searching the current directory.
     if [[ "$#" -eq "2" && $1 == *"r"* ]]; then
         grep --color=always "$@" ./
     else
         grep --color=always "$@"
     fi
 }
-alias g='_grep -I'          # -I ignores binary files
-alias gi='_grep -Ii'
-alias gr='_grep -Ir'
+alias g='_grep -I'          # I: ignores binary files
+alias gi='_grep -Ii'        # i: case insensitive
+alias gr='_grep -Ir'        # r: recursive
 alias gir='_grep -Iri'
 
-# Etcetera
-
+# Git shortcuts
 function gad() {
     if [ "$#" -eq "0" ]; then
         git add .
@@ -124,9 +110,11 @@ if type __git_complete &>/dev/null; then
     __git_complete gstsh _git_stash
 fi
 
+# History shortcuts
 alias hst='history'
 alias hsg='history | grep -i'
 
+# ...
 alias irssi2='irssi --config=~/.irssi/config2'
 
 function mkcd() {
@@ -134,7 +122,6 @@ function mkcd() {
     cd "$@"
 }
 alias mkd='mkdir'
-alias mysls='echo /srv/pillar/users/hipikat.sls'
 
 # Common chown/chgrp shortcuts
 function _own() {
@@ -184,20 +171,16 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias psa='ps aux'
+alias psg='ps aux | grep -i'
+
 alias rmrf='rm -Rf'
 
+# Screen shortcuts
+#  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
 alias scrl='screen -list'
 alias scrx='screen -x'
 
-function sls() {
-    if [ "$#" -eq "0" ]; then
-        echo "Usage: sls [salt_minion] state_name"
-    elif [ "$#" -eq "1" ]; then
-        salt --force-color "${HOSTNAME-`hostname`}" state.sls "$@"
-    else
-        salt --force-color "$1" state.sls "${@:2}"
-    fi
-}
 function _salt() {
     if [ "$#" -eq "1" ]; then
         salt --force-color "${HOSTNAME-`hostname`}" "$1"
@@ -236,10 +219,26 @@ alias trel='tree -C | less'
 alias typp='type -p'
 
 
-### 2.1. Aliases affecting default program behaviour
+### 1.1. Aliases affecting default program behaviour
 
 alias vim='vim -p'      # Open files in tabs
 
+
+### 2. Emulate missing Gnu Coreutils
+##########################################
+
+# Tacocat is a palindrome. Tac is cat, reversed.
+if ! type tac >/dev/null 2>&1; then
+    # Homebrew installs Gnu Coreutils with a 'g' prefix by default
+    if type gtac >/dev/null 2>&1; then
+        function tac() { gtac "$@"; }
+    else
+        function tac() {
+            awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -;
+        }   
+    fi  
+    export -f tac 
+fi
 
 
 ### 3. Shell Builtin overrides
@@ -278,6 +277,7 @@ function tar() {
 
 ### 5. Typos
 ##########################################
+
 alias al='la'
 alias hsot='host'
 alias hsto='host'
@@ -293,12 +293,13 @@ alias whomai='whoami'
 
 ### 6. Operating system consistency
 ##########################################
-if [ "$BASIC_MACHINE_TYPE" = "Mac" ]; then
+
+if [ "$BASIC_MACHINE_TYPE" = "Mac" ] && ! type updatedb &>/dev/null; then
     alias updatedb="sudo /usr/libexec/locate.updatedb"
 fi
 
 
-### 10. Commands
+### 10. Functions
 ##########################################
 
 function 10shells() {

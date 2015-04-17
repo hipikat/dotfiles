@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Usage: sls [salt_minion] state_name
+#
+# Apply a Salt state to a salt_minion, or ourselves if none is given.
+
+
+if [ "$#" -eq "0" ]; then
+    echo "Usage: sls [salt_minion] state_name"
+elif [ "$#" -eq "1" ]; then
+    salt --force-color "${HOSTNAME-`hostname`}" state.sls "$@"
+else
+    salt --force-color "$1" state.sls "${@:2}"
+fi
