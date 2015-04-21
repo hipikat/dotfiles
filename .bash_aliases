@@ -289,6 +289,7 @@ alias tial='tail'
 alias sssh='ssh'
 alias vl='lv'
 alias whomai='whoami'
+alias wpd='pwd'
 
 
 ### 6. Operating system consistency

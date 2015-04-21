@@ -246,7 +246,7 @@ if [ "$TERM" != "dumb" ]; then
     fi
 fi
 
-### Machine-local configuration
+### Environment-specific shell setup
 ##########################################
 if [ -f ~/.bash_local ]; then
     source ~/.bash_local
