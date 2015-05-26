@@ -18,6 +18,8 @@
 ### 1. Convenience alises
 ##########################################
 
+alias cd..='cd ..'
+
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
@@ -114,8 +116,12 @@ fi
 alias hst='history'
 alias hsg='history | grep -i'
 
+alias htp='http --pretty all'
+
 # ...
 alias irssi2='irssi --config=~/.irssi/config2'
+
+alias jqc='jq -C'
 
 function mkcd() {
     mkdir "$@"
@@ -279,7 +285,6 @@ function tar() {
 ##########################################
 
 alias al='la'
-alias cd..='cd ..'
 alias hsot='host'
 alias hsto='host'
 alias ivm='vim'
