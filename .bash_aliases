@@ -279,6 +279,7 @@ function tar() {
 ##########################################
 
 alias al='la'
+alias cd..='cd ..'
 alias hsot='host'
 alias hsto='host'
 alias ivm='vim'
