@@ -38,9 +38,13 @@ function _grep() {
     fi
 }
 alias g='_grep -I'          # I: ignores binary files
+alias gn='_grep -In'        # n: print line numbers
 alias gi='_grep -Ii'        # i: case insensitive
 alias gr='_grep -Ir'        # r: recursive
+alias gin='_grep -Iin'
+alias grn='_grep -Irn'
 alias gir='_grep -Iri'
+alias girn='_grep -Irin'
 
 # Git shortcuts
 function gad() {
@@ -287,6 +291,7 @@ function tar() {
 alias al='la'
 alias hsot='host'
 alias hsto='host'
+alias grpe='grep'
 alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
