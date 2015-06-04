@@ -221,9 +221,6 @@ echo_paths () {
 }
 export -f echo_paths
 
-### Install pyenv shims
-##########################################
-eval "$(pyenv init - 2>/dev/null)"
 
 ### I don't even
 ##########################################
@@ -392,13 +389,28 @@ if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
 
-### Command-line auto-completers
+
+### Environment manipulators
 ##########################################
 
-# Bash
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    source /etc/bash_completion
+# Chippery shared-environments
+#. /usr/local/bin/set_chippery_env.sh 2>/dev/null
+
+# Pyenv shims 
+if [[ -d /usr/local/pyenv ]]; then
+    export PYENV_ROOT=/usr/local/pyenv
+    export PATH="$PYENV_ROOT/bin:$PATH"
 fi
+
+eval "$(pyenv init - 2>/dev/null)"
+
+# Virtualenvwrapper
+if ! pyenv virtualenvwrapper 2>/dev/null
+    then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
+fi
+
+### Command-line auto-completers
+##########################################
 
 # Django bash completion
 if [ -f ~/.django_bash_completion.sh ]; then
@@ -408,14 +420,7 @@ fi
 # Ruby Version Manager
 [[ -r $rvm_path/scripts/completion ]] && . $rvm_path/scripts/completion
 
-
-### Environment manipulators
-##########################################
-
-# Chippery shared-environments
-. /usr/local/bin/set_chippery_env.sh 2>/dev/null
-
-# Virtualenvwrapper
-if ! pyenv virtualenvwrapper 2>/dev/null
-    then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
+# Bash
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    source /etc/bash_completion 2> /dev/null
 fi
