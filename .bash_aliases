@@ -24,6 +24,8 @@ alias cd..='cd ..'
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
 
+alias dfh='df -h'
+
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
 
@@ -119,13 +121,13 @@ fi
 # History shortcuts
 alias hst='history'
 alias hsg='history | grep -i'
+alias hstn='history -n'         # Append new lines from the history file
 
-alias htp='http --pretty all'
+alias htp='http --pretty all'   # HTTPie - a CLI, cURL-like tool for humans
 
-# ...
-alias irssi2='irssi --config=~/.irssi/config2'
+alias irssi2='irssi --config=~/.irssi/config2'  # My *other* IRC configuration
 
-alias jqc='jq -C'
+alias jqc='jq -C'       # Command-line JSON processor (with --colour-output)
 
 function mkcd() {
     mkdir "$@"
@@ -258,6 +260,8 @@ function cd() {
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
     # TODO: '..2/minion', for example, should work. With completion.
+    # TODO: ignore second 'cd' if `cd cd foo` :P
+    # TODO: `cd ....` should be equivalent to `cd ..4`
     if [[ "$1" =~ ^\.\.[0-9]+$ ]]; then
         dirs_rootward="${1#..}"
         back_string=
@@ -285,10 +289,11 @@ function tar() {
 }
 
 
-### 5. Typos
+### 5. Typos - usually typed in anger
 ##########################################
 
 alias al='la'
+alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
 alias grpe='grep'
