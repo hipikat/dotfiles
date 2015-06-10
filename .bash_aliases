@@ -119,9 +119,9 @@ if type __git_complete &>/dev/null; then
 fi
 
 # History shortcuts
-alias hst='history'
+alias hs='history'
 alias hsg='history | grep -i'
-alias hstn='history -n'         # Append new lines from the history file
+alias hsn='history -n'         # Append new lines from the history file
 
 alias htp='http --pretty all'   # HTTPie - a CLI, cURL-like tool for humans
 

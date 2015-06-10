@@ -5,8 +5,11 @@
 " http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
 """"""""""""""""""""""""""""""""""""""""""
 
+
+""""
 " Mapleader sets a namespace for custom bindings, defined below
 let mapleader=","
+
 
 """ Vundle configuration
 """ https://github.com/gmarik/vundle
@@ -16,15 +19,21 @@ filetype off            " Required for vundle setup
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+""""
 " Let Vundle manage Vundle
 Bundle 'gmarik/vundle'
 
+""""
 " Installed bundles
 Bundle 'The-NERD-tree'
 Bundle 'Tagbar'
+
+" Bind Flake8 before including its bundle so it doesn't steal <F7>
+autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
 Bundle 'vim-flake8'
 
-"  End Vundle config
+""""
+" End Vundle config
 filetype plugin indent on
 
 
@@ -39,7 +48,6 @@ colorscheme peachpuff
 
 
 
-autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
 syntax on
 
 
