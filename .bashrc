@@ -207,8 +207,12 @@ add_missing_paths () {
 }
 add_missing_paths ${paths[@]}
 
-if [[ "$BASIC_MACHINE_TYPE" == "Mac" && -d ~/Dropbox/bin/osx ]]; then
-    PATH="~/Dropbox/bin/osx:$PATH"
+if [[ "$BASIC_MACHINE_TYPE" == "Mac" ]]; then
+    if [[ -d ~/Dropbox/bin/osx ]]; then
+        export PATH="~/Dropbox/bin/osx:$PATH"
+    elif [[ -d ~/Documents/Dropbox/bin/osx ]]; then
+        export PATH="~/Documents/Dropbox/bin/osx:$PATH"
+    fi
 fi
 
 
