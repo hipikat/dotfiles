@@ -84,7 +84,7 @@ alias gps='git push'
 alias gre='git remote'
 alias grev='git remote -v'
 alias grm='git rm'
-alias gshw='git show'
+alias gsh='git show'
 alias gst='git status'
 alias gstsh='git stash'
 
@@ -118,17 +118,21 @@ if type __git_complete &>/dev/null; then
     __git_complete gstsh _git_stash
 fi
 
-# History shortcuts
+# History
 alias hs='history'
 alias hsg='history | grep -i'
-alias hsn='history -n'         # Append new lines from the history file
+alias hsn='history -n'          # Append new lines from the history file to history
 
-alias htp='http --pretty all'   # HTTPie - a CLI, cURL-like tool for humans
+# HTTPie - a CLI, cURL-like tool for humans
+alias htp='http --pretty all'
 
-alias irssi2='irssi --config=~/.irssi/config2'  # My *other* IRC configuration
+# My *other* IRC configuration
+alias irssi2='irssi --config=~/.irssi/config2'
 
-alias jqc='jq -C'       # Command-line JSON processor (with --colour-output)
+# Command-line JSON processor (with --colour-output)
+alias jqc='jq -C'
 
+#
 function mkcd() {
     mkdir "$@"
     cd "$@"
@@ -269,7 +273,6 @@ function cd() {
             back_string="$back_string../"
         done
         builtin cd "$back_string"
-        unset back_string
     else
         builtin cd "$@"
     fi
@@ -377,13 +380,16 @@ export -f d
 
 # f == find ./ -iname ...
 function f() {
-    if [ "$#" -eq 0 ] ; then
-        find ./ -iname "*"
-    else
-        find ./ -iname "$@"
-    fi
+    find . -iname "*$@*"
+    #if [ "$#" -eq 0 ] ; then
+    #    find ./ -iname "*"
+    #else
+    #    find ./ -iname "*$@*"
+    #fi
 }
 export -f f
+#alias f='eval $(find ./ -iname "*$@*")'
+
 
 # g == grep -Iris ... ./
 # gh == grep -Iis ... ./ (grep here)
