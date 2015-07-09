@@ -26,6 +26,8 @@ alias dis='dispense'
 
 alias dfh='df -h'
 
+alias dja='_django-admin'
+
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
 
@@ -375,8 +377,8 @@ function ll() {
 }
 
 # d == django-admin.py ...
-function d() { django-admin.py "$@" ;}
-export -f d
+#function d() { django-admin.py "$@" ;}
+#export -f d
 
 # f == find ./ -iname ...
 function f() {
