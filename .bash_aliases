@@ -263,6 +263,8 @@ fi
 ##########################################
 
 function cd() {
+    autoenv_init &>/dev/null
+
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
     # TODO: '..2/minion', for example, should work. With completion.

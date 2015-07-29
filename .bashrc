@@ -416,6 +416,9 @@ fi
 ### Environment manipulators
 ##########################################
 
+# Kenneth Reitz's autoenv
+. ~/.local/bin/activate.sh
+
 # Chippery shared-environments
 . /usr/local/bin/set_chippery_env.sh 2>/dev/null
 
@@ -423,3 +426,9 @@ fi
 if ! pyenv virtualenvwrapper 2>/dev/null
     then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
+
+
+### Run directory context hooks
+##########################################
+
+cd .
