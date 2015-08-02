@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+# target_host="${HOSTNAME:-$(hostname)}"
+
+
 saltlick_module=
 if [ "$#" -ge 1 ]; then
     saltlick_module=".$@"
