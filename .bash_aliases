@@ -26,6 +26,8 @@ alias dis='dispense'
 
 alias dfh='df -h'
 
+alias dja='_django-admin'
+
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
 
@@ -261,6 +263,8 @@ fi
 ##########################################
 
 function cd() {
+    autoenv_init &>/dev/null
+
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
     # TODO: '..2/minion', for example, should work. With completion.
@@ -375,8 +379,8 @@ function ll() {
 }
 
 # d == django-admin.py ...
-function d() { django-admin.py "$@" ;}
-export -f d
+#function d() { django-admin.py "$@" ;}
+#export -f d
 
 # f == find ./ -iname ...
 function f() {
