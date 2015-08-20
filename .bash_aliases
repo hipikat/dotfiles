@@ -234,7 +234,7 @@ alias suptf='supervisorctl tail -f'
 
 alias trel='tree -C | less'
 
-alias typp='type -p'
+alias typ='type -p'
 
 
 ### 1.1. Aliases affecting default program behaviour

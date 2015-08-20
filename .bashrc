@@ -417,7 +417,12 @@ fi
 ##########################################
 
 # Kenneth Reitz's autoenv
-. ~/.local/bin/activate.sh &>/dev/null
+if [ -f ~/.local/bin/activate.sh ]; then
+    . ~/.local/bin/activate.sh
+elif [ -f /usr/local/bin/activate.sh ]; then
+    . /usr/local/bin/activate.sh
+fi
+
 
 # Chippery shared-environments
 . /usr/local/bin/set_chippery_env.sh 2>/dev/null
