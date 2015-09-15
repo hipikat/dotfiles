@@ -28,6 +28,12 @@ alias dfh='df -h'
 
 alias dja='_django-admin'
 
+function docker-rmi-dangling() {
+    docker rmi $(docker images --filter dangling=true -q)
+}
+
+alias drn='docker run'
+
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
 
@@ -86,6 +92,8 @@ alias gps='git push'
 alias gre='git remote'
 alias grev='git remote -v'
 alias grm='git rm'
+alias grmc='git rm --cached'
+alias grs='git reset'
 alias gsh='git show'
 alias gst='git status'
 alias gstsh='git stash'
@@ -115,6 +123,7 @@ if type __git_complete &>/dev/null; then
     __git_complete gre _git_remote
     __git_complete grev _git_remote
     __git_complete grm _git_rm
+    __git_complete grmc _git_rmc
     __git_complete gshw _git_show
     __git_complete gst _git_status
     __git_complete gstsh _git_stash
@@ -189,10 +198,23 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias pfr='pip freeze'
+
 alias psa='ps aux'
 alias psg='ps aux | grep -i'
 
 alias rmrf='rm -Rf'
+
+function run() {
+    for file in $(ls .); do
+        if [[ -f "$file" && -x "$file" && "$file" =~ ^run ]]; then
+            ./"$file" ${@:1}
+            return $?
+        fi
+    done
+    echo 'No run command found!'
+    return 1
+}
 
 # Screen shortcuts
 #  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
