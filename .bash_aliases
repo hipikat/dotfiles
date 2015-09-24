@@ -221,15 +221,10 @@ function run() {
 alias scrl='screen -list'
 alias scrx='screen -x'
 
-function _salt() {
-    if [ "$#" -eq "1" ]; then
-        salt --force-color "${HOSTNAME-`hostname`}" "$1"
-    else
-        salt --force-color "$@"
-    fi
+alias slt='salt --force-color'
+function slt.() {
+    salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
-
-alias slt='_salt'
 alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
