@@ -32,6 +32,8 @@ function docker-rmi-dangling() {
     docker rmi $(docker images --filter dangling=true -q)
 }
 
+alias dcp='docker-compose'
+alias dbd='docker build'
 alias drn='docker run'
 
 # Re-execute the last command, but prefix it with 'sudo'
