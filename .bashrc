@@ -390,12 +390,6 @@ PS2+=`echo -e " \xE2\x8E\xB1"`       # Upper-right curly bracket section
 PS2+="$Color_Off "
 
 
-### Command-line aliases
-##########################################
-if [ -f ~/.bash_aliases ]; then
-    source ~/.bash_aliases
-fi
-
 ### Command-line auto-completers
 ##########################################
 
@@ -417,6 +411,7 @@ fi
 ##########################################
 
 # Kenneth Reitz's autoenv
+# (NB: Must source before ~/.bash_aliases due to `cd` wrapper.)
 if [ -f ~/.local/bin/activate.sh ]; then
     . ~/.local/bin/activate.sh
 elif [ -f /usr/local/bin/activate.sh ]; then
@@ -433,7 +428,14 @@ if ! pyenv virtualenvwrapper 2>/dev/null
 fi
 
 
-### Run directory context hooks
+### Command-line aliases
+##########################################
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+
+### Run directory context hooks (i.e. autoenv scripts)
 ##########################################
 
-cd .
+cd $(pwd)

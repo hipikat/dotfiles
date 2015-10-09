@@ -20,6 +20,10 @@
 
 alias cd..='cd ..'
 
+function dif() {
+    colordiff "$@" | less -R
+}
+
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
@@ -194,6 +198,8 @@ alias psg='ps aux | grep -i'
 
 alias rmrf='rm -Rf'
 
+alias scpr='scp -r'
+
 # Screen shortcuts
 #  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
 alias scrl='screen -list'
@@ -236,6 +242,7 @@ alias trel='tree -C | less'
 
 alias typ='type -p'
 
+alias upt='uptime'
 
 ### 1.1. Aliases affecting default program behaviour
 
