@@ -17,7 +17,7 @@
 
 
 # Check for likely matching environments created by Virtualenvwrapper
-current_dir="$PWD"
+current_dir=$(pwd)
 if [ -n "$WORKON_HOME" ]; then
     while [ -n "$current_dir" ]; do
         if [ -f "$WORKON_HOME/$(basename $current_dir)/bin/activate" ]; then

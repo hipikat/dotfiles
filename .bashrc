@@ -225,9 +225,6 @@ echo_paths () {
 }
 export -f echo_paths
 
-### Install pyenv shims
-##########################################
-eval "$(pyenv init - 2>/dev/null)"
 
 ### I don't even
 ##########################################
@@ -390,6 +387,25 @@ PS2+=`echo -e " \xE2\x8E\xB1"`       # Upper-right curly bracket section
 PS2+="$Color_Off "
 
 
+### Command-line aliases
+##########################################
+
+###
+# Kenneth Reitz's autoenv. Autoenv wraps `cd` by default, so we need
+# to source activate.sh before defining our custom `cd` (there's one in
+# .bash_aliases), and call `autoenv_init` manually in that function.
+if [ -f ~/.local/bin/activate.sh ]; then
+    . ~/.local/bin/activate.sh
+elif [ -f /usr/local/bin/activate.sh ]; then
+    . /usr/local/bin/activate.sh
+fi
+###
+
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+
 ### Command-line auto-completers
 ##########################################
 
@@ -410,17 +426,11 @@ fi
 ### Environment manipulators
 ##########################################
 
-# Kenneth Reitz's autoenv
-# (NB: Must source before ~/.bash_aliases due to `cd` wrapper.)
-if [ -f ~/.local/bin/activate.sh ]; then
-    . ~/.local/bin/activate.sh
-elif [ -f /usr/local/bin/activate.sh ]; then
-    . /usr/local/bin/activate.sh
+# Pyenv shims
+if type -ap pyenv &>/dev/null; then
+    export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
+    eval "$(pyenv init -)"
 fi
-
-
-# Chippery shared-environments
-. /usr/local/bin/set_chippery_env.sh 2>/dev/null
 
 # Virtualenvwrapper
 if ! pyenv virtualenvwrapper 2>/dev/null
@@ -435,7 +445,6 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 
-### Run directory context hooks (i.e. autoenv scripts)
+### Run directory-context hooks (e.g. Autoenv scripts)
 ##########################################
-
 cd $(pwd)

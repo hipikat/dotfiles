@@ -16,25 +16,36 @@ let mapleader=","
 """""""""""""""""""""""""""""""""""""""""""""
 set nocompatible        " Be iMproved
 filetype off            " Required for vundle setup
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-""""
-" Let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
 
-""""
-" Installed bundles
-Bundle 'The-NERD-tree'
-Bundle 'Tagbar'
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
 
-" Bind Flake8 before including its bundle so it doesn't steal <F7>
-autocmd FileType python map <buffer> <leader>8 :call Flake8()<CR>
-Bundle 'vim-flake8'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'majutsushi/tagbar'
 
-""""
-" End Vundle config
-filetype plugin indent on
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
 
 
 """ Display
