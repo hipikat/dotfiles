@@ -20,6 +20,10 @@
 
 alias cd..='cd ..'
 
+function dif() {
+    colordiff "$@" | less -R
+}
+
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
@@ -89,6 +93,7 @@ alias gdi='git diff'
 alias gdic='git diff --cached'
 alias gfe='git fetch'
 alias glo='git log'
+alias gmr='git merge'
 alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
@@ -120,6 +125,7 @@ if type __git_complete &>/dev/null; then
     __git_complete gdic _git_diff
     __git_complete gfe _git_fetch
     __git_complete glo _git_log
+    __git_complete gmr _git_merge
     __git_complete gpl _git_pull
     __git_complete gps _git_push
     __git_complete gre _git_remote
@@ -218,6 +224,8 @@ function run() {
     return 1
 }
 
+alias scpr='scp -r'
+
 # Screen shortcuts
 #  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
 alias scrl='screen -list'
@@ -258,6 +266,7 @@ function typ() {
 }
 export -f typ
 
+alias upt='uptime'
 
 ### 1.1. Aliases affecting default program behaviour
 

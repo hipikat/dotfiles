@@ -391,7 +391,9 @@ PS2+="$Color_Off "
 ##########################################
 
 ###
-# Kenneth Reitz's autoenv (wraps `cd`)
+# Kenneth Reitz's autoenv. Autoenv wraps `cd` by default, so we need
+# to source activate.sh before defining our custom `cd` (there's one in
+# .bash_aliases), and call `autoenv_init` manually in that function.
 if [ -f ~/.local/bin/activate.sh ]; then
     . ~/.local/bin/activate.sh
 elif [ -f /usr/local/bin/activate.sh ]; then
@@ -424,7 +426,6 @@ fi
 ### Environment manipulators
 ##########################################
 
-
 # Pyenv shims
 if type -ap pyenv &>/dev/null; then
     export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
@@ -437,6 +438,13 @@ if ! pyenv virtualenvwrapper 2>/dev/null
 fi
 
 
-### Run (autoenv) directory context hooks
+### Command-line aliases
 ##########################################
-cd .
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+
+### Run directory-context hooks (e.g. Autoenv scripts)
+##########################################
+cd $(pwd)
