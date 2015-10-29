@@ -227,13 +227,13 @@ alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
+
+alias sltapi='salt-api --force-color'
 alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
-alias sltapi='salt-api --force-color'
 alias sltkey='salt-key --force-color'
 alias sltssh='salt-ssh --force-color'
-alias sltkey='salt-key --force-color'
 function slt-cln() {
     # Clean out Salt caches before running a `salt` command
     salt-run cache.clear_all
@@ -253,7 +253,10 @@ alias suptf='supervisorctl tail -f'
 
 alias trel='tree -C | less'
 
-alias typ='type -p'
+function typ() {
+    type -p "$@"
+}
+export -f typ
 
 
 ### 1.1. Aliases affecting default program behaviour
