@@ -211,6 +211,7 @@ alias pfr='pip freeze'
 alias psa='ps aux'
 alias psg='ps aux | grep -i'
 
+alias rmr='rm -R'
 alias rmrf='rm -Rf'
 
 function run() {
@@ -336,6 +337,7 @@ alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
 alias poing='ping'
+alias poip='pip'
 alias tial='tail'
 alias sssh='ssh'
 alias vl='lv'
