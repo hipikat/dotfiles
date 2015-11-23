@@ -61,6 +61,7 @@ alias gin='_grep -Iin'
 alias grn='_grep -Irn'
 alias gir='_grep -Iri'
 alias girn='_grep -Irin'
+alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
 function gad() {
