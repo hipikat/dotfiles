@@ -268,6 +268,7 @@ function typ() {
 }
 export -f typ
 
+alias upd='updatedb'
 alias upt='uptime'
 
 ### 1.1. Aliases affecting default program behaviour
