@@ -20,6 +20,8 @@
 
 alias cd..='cd ..'
 
+alias clr='clear'
+
 function dif() {
     colordiff "$@" | less -R
 }
@@ -261,7 +263,9 @@ alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -f'
 
-alias trel='tree -C | less'
+function tre() {
+    tree -C "$@" | less
+}
 
 function typ() {
     type -p "$@"
