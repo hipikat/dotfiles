@@ -152,6 +152,7 @@ set_screen_title () {
 ##########################################
 # http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin
 #
+# autocd         If a command is not found and matches a directory name, cd into it
 # checkwinsize   Check the window size after each command and update LINES and COLUMNS
 # cdspell        Correct minor directory spelling mistakes for cd
 #-cmdhist        Save multi-line commands to the history as a single line
@@ -164,10 +165,10 @@ set_screen_title () {
 
 # Get an array of shell options supported by this version of bash
 shopts=( $(shopt | cut -f1) )
-# Enabled the following shell options - copy this block but use `shopt -u` to
-# unset any of the shell options which are set by default.
-for opt in "checkwinsize cdspell dotglob extglob nocaseglob
-            histappend autocd"; do
+# Enabled the following shell options - you can duplicate this 'for' block but
+# use `shopt -u` to unset any of the shell options which are set by default.
+for opt in "autocd checkwinsize cdspell dotglob extglob
+            nocaseglob histappend autocd"; do
     if in_array $opt "${shopts[@]}"; then
         shopt -s $opt
     fi
