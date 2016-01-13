@@ -168,7 +168,7 @@ shopts=( $(shopt | cut -f1) )
 # Enabled the following shell options - you can duplicate this 'for' block but
 # use `shopt -u` to unset any of the shell options which are set by default.
 for opt in "autocd checkwinsize cdspell dotglob extglob
-            nocaseglob histappend autocd"; do
+            nocaseglob histappend"; do
     if in_array $opt "${shopts[@]}"; then
         shopt -s $opt
     fi
