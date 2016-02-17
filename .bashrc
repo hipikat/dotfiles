@@ -410,9 +410,11 @@ fi
 ### Command-line auto-completers
 ##########################################
 
-# Bash
+# Bash completion (native or via Homebrew)
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     source /etc/bash_completion
+elif [ -f $(brew --prefix 2> /dev/null)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
 fi
 
 # Django bash completion

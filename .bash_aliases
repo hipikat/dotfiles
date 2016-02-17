@@ -216,6 +216,7 @@ alias psa='ps aux'
 alias psg='ps aux | grep -i'
 
 alias rmr='rm -R'
+alias rmf='rm -f'
 alias rmrf='rm -Rf'
 
 function run() {
