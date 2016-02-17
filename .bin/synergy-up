@@ -14,11 +14,11 @@ mkdir -p "$HOME/var/log"
 
 
 # Magic removal
-$SERVER_HOSTNAME="is-m-00068"
-$MIDDLE_HOST="hpk.io"
-$MIDDLE_DOWN_PORT=24808
-$MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
-$SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
+SERVER_HOSTNAME="is-m-00068"
+MIDDLE_HOST="hpk.io"
+MIDDLE_DOWN_PORT=24808
+MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
+SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
 
 
 # If we're on Bellus (2015 MBP)
