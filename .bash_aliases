@@ -108,6 +108,7 @@ alias grs='git reset'
 alias gsh='git show'
 alias gst='git status'
 alias gstsh='git stash'
+alias gta='git tag'
 
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
@@ -139,6 +140,7 @@ if type __git_complete &>/dev/null; then
     __git_complete gshw _git_show
     __git_complete gst _git_status
     __git_complete gstsh _git_stash
+    __git_complete gta _git_tag
 fi
 
 # History
@@ -276,6 +278,10 @@ export -f typ
 
 alias upd='updatedb'
 alias upt='uptime'
+
+alias wcc='wc -c'
+alias wcl='wc -l'
+alias wcw='wc -w'
 
 ### 1.1. Aliases affecting default program behaviour
 
