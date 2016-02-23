@@ -243,6 +243,10 @@ alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
+export -f slt.
+function slt.doc() {
+    slt. sys.doc "$@" | less
+}
 
 alias sltapi='salt-api --force-color'
 alias sltcld='salt-cloud --force-color'
