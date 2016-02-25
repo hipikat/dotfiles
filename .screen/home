@@ -17,10 +17,10 @@ screen      # 9
 # Set up screens
 at 2 stuff "cd ~/Desktop^Mclear^M"
 at 3 stuff "cd ~/Desktop^Mclear^M"
-at 4 stuff "cd ~/.bin^M"
-at 5 stuff "cd ~/Dropbox/bin^M"
+at 4 stuff "cd ~/Code^M"
+at 5 stuff "cd ~/Code^M"
 at 6 stuff "cd ~/.dotfiles^M"
-at 7 stuff "cd ~/Code/pristine^M"
+at 7 stuff "cd ~/.bin^M"
 at 8 stuff "cd ~/.ssh^M"
 at 9 stuff "cd /etc^M"
 

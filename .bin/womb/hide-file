@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Hide a file from Finder and create a symlink to it in ~/hidden
+#
+# Hide a file from Finder and create an alias to it in a 'hidden' directory.
+# The chosen hidden directory is the first found in a case-insensitive search
+# for ~/documents/hidden and ~/hidden
+
+
+#$ osascript -e 'tell application "Finder" to make alias file to POSIX file "/file/to/make/link/from" at POSIX file "/folder/where/to/make/link"'
+
+#$ osascript -e 'tell application "Finder" to make alias file to POSIX file "/Applications/Xcode.app/Contents/Applications/OpenGL ES Performance Detective.app" at POSIX file "/Users/mylogin/Applications"'
+
+#————
+
+#
+# TODO: Remember to pipe the output to /dev/null
+
+
+if [ "$#" -eq "0" ]; then
+    echo "Usage: ${0##*/} [file ...]"
+fi
+
+
+# Find a 'hidden' directory
+
+
+# Create a Finder alias (if OS X) or symlink to the all named files
+
+> osascript -e 'tell application "Finder" to make alias file to POSIX file "/Users/hipikat/Zomboid" at POSIX file "/Users/hipikat/Documents/Hidden"'
+alias file Zomboid of folder Hidden of folder Documents of folder hipikat of folder Users of startup disk
+
+> SetFile -a V /Users/hipikat/Zomboid
+

@@ -1,9 +1,11 @@
 #!/bin/bash
+#
+# Concatenate and echo the contents of .pub files in a directory (default: '.')
 
 find_in_dir='.'
 
 if [ "$#" -gt "1" ]; then
-    echo "Usage: ${0##*/} [dir] -- Concatenates .pub files found under dir. (Default: '.')"
+    echo "Usage: ${0##*/} [dir]"
     exit 1
 elif [ "$#" -eq "1" ]; then
     find_in_dirs="$1"

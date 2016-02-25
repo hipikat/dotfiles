@@ -152,6 +152,7 @@ set_screen_title () {
 ##########################################
 # http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin
 #
+# autocd         If a command is not found and matches a directory name, cd into it
 # checkwinsize   Check the window size after each command and update LINES and COLUMNS
 # cdspell        Correct minor directory spelling mistakes for cd
 #-cmdhist        Save multi-line commands to the history as a single line
@@ -164,10 +165,10 @@ set_screen_title () {
 
 # Get an array of shell options supported by this version of bash
 shopts=( $(shopt | cut -f1) )
-# Enabled the following shell options - copy this block but use `shopt -u` to
-# unset any of the shell options which are set by default.
-for opt in "checkwinsize cdspell dotglob extglob nocaseglob
-            histappend autocd"; do
+# Enabled the following shell options - you can duplicate this 'for' block but
+# use `shopt -u` to unset any of the shell options which are set by default.
+for opt in "autocd checkwinsize cdspell dotglob extglob
+            nocaseglob histappend"; do
     if in_array $opt "${shopts[@]}"; then
         shopt -s $opt
     fi
@@ -207,8 +208,12 @@ add_missing_paths () {
 }
 add_missing_paths ${paths[@]}
 
-if [[ "$BASIC_MACHINE_TYPE" == "Mac" && -d ~/Dropbox/bin/osx ]]; then
-    PATH="~/Dropbox/bin/osx:$PATH"
+if [[ "$BASIC_MACHINE_TYPE" == "Mac" ]]; then
+    if [[ -d ~/Dropbox/bin/osx ]]; then
+        export PATH="~/Dropbox/bin/osx:$PATH"
+    elif [[ -d ~/Documents/Dropbox/bin/osx ]]; then
+        export PATH="~/Documents/Dropbox/bin/osx:$PATH"
+    fi
 fi
 
 
@@ -221,9 +226,6 @@ echo_paths () {
 }
 export -f echo_paths
 
-### Install pyenv shims
-##########################################
-eval "$(pyenv init - 2>/dev/null)"
 
 ### I don't even
 ##########################################
@@ -388,16 +390,31 @@ PS2+="$Color_Off "
 
 ### Command-line aliases
 ##########################################
+
+###
+# Kenneth Reitz's autoenv. Autoenv wraps `cd` by default, so we need
+# to source activate.sh before defining our custom `cd` (there's one in
+# .bash_aliases), and call `autoenv_init` manually in that function.
+if [ -f ~/.local/bin/activate.sh ]; then
+    . ~/.local/bin/activate.sh
+elif [ -f /usr/local/bin/activate.sh ]; then
+    . /usr/local/bin/activate.sh
+fi
+###
+
 if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
 
+
 ### Command-line auto-completers
 ##########################################
 
-# Bash
+# Bash completion (native or via Homebrew)
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     source /etc/bash_completion
+elif [ -f $(brew --prefix 2> /dev/null)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
 fi
 
 # Django bash completion
@@ -412,10 +429,25 @@ fi
 ### Environment manipulators
 ##########################################
 
-# Chippery shared-environments
-. /usr/local/bin/set_chippery_env.sh 2>/dev/null
+# Pyenv shims
+if type -ap pyenv &>/dev/null; then
+    export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
+    eval "$(pyenv init -)"
+fi
 
 # Virtualenvwrapper
 if ! pyenv virtualenvwrapper 2>/dev/null
     then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
+
+
+### Command-line aliases
+##########################################
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+
+### Run directory-context hooks (e.g. Autoenv scripts)
+##########################################
+cd $(pwd)

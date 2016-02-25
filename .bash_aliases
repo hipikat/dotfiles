@@ -20,9 +20,27 @@
 
 alias cd..='cd ..'
 
+alias clr='clear'
+
+function dif() {
+    colordiff "$@" | less -R
+}
+
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='dispense'
+
+alias dfh='df -h'
+
+alias dja='_django-admin'
+
+function docker-rmi-dangling() {
+    docker rmi $(docker images --filter dangling=true -q)
+}
+
+alias dcp='docker-compose'
+alias dbd='docker build'
+alias drn='docker run'
 
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
@@ -45,6 +63,7 @@ alias gin='_grep -Iin'
 alias grn='_grep -Irn'
 alias gir='_grep -Iri'
 alias girn='_grep -Irin'
+alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
 function gad() {
@@ -71,20 +90,25 @@ alias gcoap='_git_commit_n_push -a'
 alias gcom='git commit -m'
 alias gcomp='_git_commit_n_push -m'
 alias gcoam='git commit -am'
+alias gcoAm='git add -A; git commit -am'
 alias gcoamp='_git_commit_n_push -am'
 alias gcoAmp='git add -A; _git_commit_n_push -am'
 alias gdi='git diff'
 alias gdic='git diff --cached'
 alias gfe='git fetch'
 alias glo='git log'
+alias gmr='git merge'
 alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
 alias grev='git remote -v'
 alias grm='git rm'
-alias gshw='git show'
+alias grmc='git rm --cached'
+alias grs='git reset'
+alias gsh='git show'
 alias gst='git status'
 alias gstsh='git stash'
+alias gta='git tag'
 
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
@@ -106,27 +130,34 @@ if type __git_complete &>/dev/null; then
     __git_complete gdic _git_diff
     __git_complete gfe _git_fetch
     __git_complete glo _git_log
+    __git_complete gmr _git_merge
     __git_complete gpl _git_pull
     __git_complete gps _git_push
     __git_complete gre _git_remote
     __git_complete grev _git_remote
     __git_complete grm _git_rm
+    __git_complete grmc _git_rmc
     __git_complete gshw _git_show
     __git_complete gst _git_status
     __git_complete gstsh _git_stash
+    __git_complete gta _git_tag
 fi
 
-# History shortcuts
-alias hst='history'
+# History
+alias hs='history'
 alias hsg='history | grep -i'
+alias hsn='history -n'          # Append new lines from the history file to history
 
+# HTTPie - a CLI, cURL-like tool for humans
 alias htp='http --pretty all'
 
-# ...
+# My *other* IRC configuration
 alias irssi2='irssi --config=~/.irssi/config2'
 
+# Command-line JSON processor (with --colour-output)
 alias jqc='jq -C'
 
+#
 function mkcd() {
     mkdir "$@"
     cd "$@"
@@ -181,32 +212,48 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias pfr='pip freeze'
+
 alias psa='ps aux'
 alias psg='ps aux | grep -i'
 
+alias rmr='rm -R'
+alias rmf='rm -f'
 alias rmrf='rm -Rf'
+
+function run() {
+    for file in $(ls .); do
+        if [[ -f "$file" && -x "$file" && "$file" =~ ^run ]]; then
+            ./"$file" ${@:1}
+            return $?
+        fi
+    done
+    echo 'No run command found!'
+    return 1
+}
+
+alias scpr='scp -r'
 
 # Screen shortcuts
 #  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
 alias scrl='screen -list'
 alias scrx='screen -x'
 
-function _salt() {
-    if [ "$#" -eq "1" ]; then
-        salt --force-color "${HOSTNAME-`hostname`}" "$1"
-    else
-        salt --force-color "$@"
-    fi
+alias slt='salt --force-color'
+function slt.() {
+    salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
+}
+export -f slt.
+function slt.doc() {
+    slt. sys.doc "$@" | less
 }
 
-alias slt='_salt'
+alias sltapi='salt-api --force-color'
 alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
-alias sltapi='salt-api --force-color'
 alias sltkey='salt-key --force-color'
 alias sltssh='salt-ssh --force-color'
-alias sltkey='salt-key --force-color'
 function slt-cln() {
     # Clean out Salt caches before running a `salt` command
     salt-run cache.clear_all
@@ -218,16 +265,36 @@ function slt-cln() {
     fi
 }
 
+alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -f'
 
-alias trel='tree -C | less'
+alias syu='synergy-up'
 
-alias typp='type -p'
+function tre() {
+    tree -C "$@" | less
+}
+export -f tre
+alias tre2='tre -L 2'
+alias tre3='tre -L 3'
+alias tre4='tre -L 3'
+alias tre5='tre -L 3'
 
+function typ() {
+    type -p "$@"
+}
+export -f typ
+
+alias upd='updatedb'
+alias upt='uptime'
+
+alias wcc='wc -c'
+alias wcl='wc -l'
+alias wcw='wc -w'
 
 ### 1.1. Aliases affecting default program behaviour
 
@@ -255,9 +322,13 @@ fi
 ##########################################
 
 function cd() {
+    autoenv_init &>/dev/null
+
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
     # TODO: '..2/minion', for example, should work. With completion.
+    # TODO: ignore second 'cd' if `cd cd foo` :P
+    # TODO: `cd ....` should be equivalent to `cd ..4`
     if [[ "$1" =~ ^\.\.[0-9]+$ ]]; then
         dirs_rootward="${1#..}"
         back_string=
@@ -265,7 +336,6 @@ function cd() {
             back_string="$back_string../"
         done
         builtin cd "$back_string"
-        unset back_string
     else
         builtin cd "$@"
     fi
@@ -285,10 +355,11 @@ function tar() {
 }
 
 
-### 5. Typos
+### 5. Typos - usually typed in anger
 ##########################################
 
 alias al='la'
+alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
 alias grpe='grep'
@@ -296,7 +367,9 @@ alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
 alias poing='ping'
+alias poip='pip'
 alias tial='tail'
+alias screne='screen'
 alias sssh='ssh'
 alias vl='lv'
 alias whomai='whoami'
@@ -367,18 +440,21 @@ function ll() {
 }
 
 # d == django-admin.py ...
-function d() { django-admin.py "$@" ;}
-export -f d
+#function d() { django-admin.py "$@" ;}
+#export -f d
 
 # f == find ./ -iname ...
 function f() {
-    if [ "$#" -eq 0 ] ; then
-        find ./ -iname "*"
-    else
-        find ./ -iname "$@"
-    fi
+    find . -iname "*$@*"
+    #if [ "$#" -eq 0 ] ; then
+    #    find ./ -iname "*"
+    #else
+    #    find ./ -iname "*$@*"
+    #fi
 }
 export -f f
+#alias f='eval $(find ./ -iname "*$@*")'
+
 
 # g == grep -Iris ... ./
 # gh == grep -Iis ... ./ (grep here)
@@ -442,6 +518,4 @@ function runsrv() {
 }
 
 
-
-alias ssh-blind='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
