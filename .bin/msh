@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Shortcut wrapper for Mosh. The first argument is the target server
-# and the second argument names a screen session to resume, focusing
-# on the window list.
+# Shortcut wrapper for Mosh. The first argument is the target server.
+# If a second argument is given, attempt to resume a GNU Screen session
+# starting with that name, with an initial focus on the window list.
 
 if [ $# -eq 0 ]; then
     echo "Usage: msh address [screen_session]"

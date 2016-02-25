@@ -265,6 +265,8 @@ function slt-cln() {
     fi
 }
 
+alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
@@ -509,6 +511,4 @@ function runsrv() {
 }
 
 
-
-alias ssh-blind='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 

@@ -1,0 +1,31 @@
+# Change to the Weboffice Network Location
+#scselect 'Website Office (Wired)'
+
+
+# Disable Wi-Fi
+#networksetup -setairportpower en0 off
+
+
+# Setup
+if [ -z "$HOME" ]; then
+    HOME=$( cd && pwd )
+fi
+mkdir -p "$HOME/var/log"
+
+
+# Magic removal
+SERVER_HOSTNAME="is-m-00068"
+MIDDLE_HOST="hpk.io"
+MIDDLE_DOWN_PORT=24808
+MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
+SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
+
+
+	# Kill old ssh tunnels if they're present
+	old_tunnel_pids=$( ps aux | grep ssh | grep "24800:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
+	if [ -n "$old_tunnel_pids" ]; then
+	    for pid in $old_tunnel_pids; do
+	        kill -9 "$pid"
+	    done
+	fi
+
