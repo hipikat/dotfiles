@@ -271,6 +271,8 @@ alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -f'
 
+alias syu='synergy-up'
+
 function tre() {
     tree -C "$@" | less
 }
