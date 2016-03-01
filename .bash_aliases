@@ -22,6 +22,8 @@ alias cd..='cd ..'
 
 alias clr='clear'
 
+alias cpr='cp -r'
+
 function dif() {
     colordiff "$@" | less -R
 }
@@ -243,7 +245,6 @@ alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
-export -f slt.
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
