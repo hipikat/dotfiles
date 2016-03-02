@@ -68,6 +68,11 @@ alias girn='_grep -Irin'
 alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
+function git-get_remote_branches() {
+    _REMOTE=${1-origin}
+    git remote set-branches $_REMOTE '*'
+    git fetch -vvv
+}
 function gad() {
     if [ "$#" -eq "0" ]; then
         git add .
