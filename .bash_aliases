@@ -162,7 +162,9 @@ alias htp='http --pretty all'
 alias irssi2='irssi --config=~/.irssi/config2'
 
 # Command-line JSON processor (with --colour-output)
+alias jq.='jq .'
 alias jqc='jq -C'
+alias jqc.='jq -C .'
 
 #
 function mkcd() {
