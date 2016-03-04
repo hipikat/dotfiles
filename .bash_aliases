@@ -22,6 +22,8 @@ alias cd..='cd ..'
 
 alias clr='clear'
 
+alias cpr='cp -r'
+
 function dif() {
     colordiff "$@" | less -R
 }
@@ -66,6 +68,11 @@ alias girn='_grep -Irin'
 alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
+function git-get_remote_branches() {
+    _REMOTE=${1-origin}
+    git remote set-branches $_REMOTE '*'
+    git fetch -vvv
+}
 function gad() {
     if [ "$#" -eq "0" ]; then
         git add .
@@ -155,7 +162,9 @@ alias htp='http --pretty all'
 alias irssi2='irssi --config=~/.irssi/config2'
 
 # Command-line JSON processor (with --colour-output)
+alias jq.='jq .'
 alias jqc='jq -C'
+alias jqc.='jq -C .'
 
 #
 function mkcd() {
@@ -243,7 +252,6 @@ alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
-export -f slt.
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
@@ -362,6 +370,8 @@ function tar() {
 ### 5. Typos - usually typed in anger
 ##########################################
 
+alias :q="echo I think you\'re already out of it, dude."
+alias :w="echo \"/bin/bash\" 523L, 12398C written \(j/k\)"
 alias al='la'
 alias chwon='chown'
 alias hsot='host'
