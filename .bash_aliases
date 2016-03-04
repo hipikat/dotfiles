@@ -85,6 +85,11 @@ function _git_commit_n_push() {
         git push
     fi
 }
+function _git_diff_commit() {
+    # Usage: _git_diff_commit (commit) [commits_behind]
+    # (commits_behind defaults to 1.)
+    git diff $1^${2-1} $1
+}
 alias gbr='git branch'
 alias gbra='git branch -a'
 alias gbrav='git branch -av'
@@ -102,6 +107,7 @@ alias gcoamp='_git_commit_n_push -am'
 alias gcoAmp='git add -A; _git_commit_n_push -am'
 alias gdi='git diff'
 alias gdic='git diff --cached'
+alias gdico='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
 alias gmr='git merge'
