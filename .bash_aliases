@@ -91,7 +91,7 @@ function _git_diff_commit() {
     # Usage: _git_diff_commit [commit] [commits_behind]
     # - commit defaults to HEAD
     # - commits_behind defaults to '1'
-    target_commit=${1:-$( git log -n 1 --format=oneline | cut -d' ' -f1 )}
+    target_commit=${1:-HEAD}
     commits_behind=${2:-1}
     git diff $target_commit^$commits_behind $target_commit
 }
