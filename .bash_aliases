@@ -86,9 +86,14 @@ function _git_commit_n_push() {
     fi
 }
 function _git_diff_commit() {
-    # Usage: _git_diff_commit (commit) [commits_behind]
-    # (commits_behind defaults to 1.)
-    git diff $1^${2-1} $1
+    # Diff a commit and the commit N behind it in the tree
+    #
+    # Usage: _git_diff_commit [commit] [commits_behind]
+    # - commit defaults to HEAD
+    # - commits_behind defaults to '1'
+    target_commit=${1:-$( git log -n 1 --format=oneline | cut -d' ' -f1 )}
+    commits_behind=${2:-1}
+    git diff $target_commit^$commits_behind $target_commit
 }
 alias gbr='git branch'
 alias gbra='git branch -a'
