@@ -16,6 +16,7 @@ mkdir -p "$HOME/var/log"
 # Magic removal
 SERVER_HOSTNAME="is-m-00068"
 #MIDDLE_HOST="hpk.io"
+MIDDLE_USER="zeno"
 MIDDLE_HOST="motsugo.ucc.gu.uwa.edu.au"
 MIDDLE_DOWN_PORT=24808
 MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
@@ -50,7 +51,7 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
     # from (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT to localhost:24800
     nohup ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
         -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_HOST" &>/dev/null
+        "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null
 
 else
 
@@ -72,7 +73,7 @@ else
     # to (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT
 	nohup ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
         -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_HOST"
+        "$MIDDLE_USER@$MIDDLE_HOST"
 
 	/Applications/Synergy.app/Contents/MacOS/synergyc \
     	--daemon --no-tray --debug INFO --enable-drag-drop \
