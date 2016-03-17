@@ -304,6 +304,11 @@ alias tre4='tre -L 3'
 alias tre5='tre -L 3'
 
 function typ() {
+    #type_p_out=$(type -p "$@")
+    #if [ "$?" -eq "0" ] && [ -z "$type_p_out" ]; then
+    #    if type "$@" | grep 'is aliased to'; then
+    #fi
+
     type -p "$@"
 }
 export -f typ
