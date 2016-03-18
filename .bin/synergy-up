@@ -16,8 +16,8 @@ mkdir -p "$HOME/var/log"
 # Magic removal
 SERVER_HOSTNAME="is-m-00068"
 #MIDDLE_HOST="hpk.io"
-MIDDLE_USER="zeno"
-MIDDLE_HOST="motsugo.ucc.gu.uwa.edu.au"
+MIDDLE_USER="awright"
+MIDDLE_HOST="cadmus.its.uwa.edu.au"
 MIDDLE_DOWN_PORT=24808
 MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
 SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
