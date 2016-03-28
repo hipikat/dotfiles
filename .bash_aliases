@@ -80,6 +80,9 @@ function gad() {
         git add "$@"
     fi
 }
+function _git_clone_my_github() {
+    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git
+}
 function _git_commit_n_push() {
     if git commit "$@"; then
         git push
@@ -100,6 +103,7 @@ alias gbra='git branch -a'
 alias gbrav='git branch -av'
 alias gch='git checkout'
 alias gcl='git clone'
+alias gclmy='_git_clone_my_github'
 alias gco='git commit'
 alias gcop='_git_commit_n_push'
 alias gcoa='git commit -a'
@@ -177,7 +181,12 @@ alias jq.='jq .'
 alias jqc='jq -C'
 alias jqc.='jq -C .'
 
-#
+# Repeat the last command, piped through less
+function les() {
+    $(history -p \!\!) | less
+}
+
+# Make a directory and change into it
 function mkcd() {
     mkdir "$@"
     cd "$@"
@@ -255,9 +264,37 @@ function run() {
 alias scpr='scp -r'
 
 # Screen shortcuts
-#  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
+# `scr` is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
+# It is very handy.
 alias scrl='screen -list'
 alias scrx='screen -x'
+
+# Show a command
+function shw() {
+    _TYPE=$(type $1 &> /dev/null)
+    if [ $? -eq 1 ]; then
+        echo $1 not found.
+        return 1
+    else
+        _TYPE=$(type $1 | head -n 1)
+    fi
+
+    # Type describes aliases and functions by default
+    if [[ "$_TYPE" =~ aliased\ to|a\ function ]]; then
+        type $1
+    elif [[ "$_TYPE" =~ $1\ is\ / ]]; then
+        type $1
+        _FILE=$(file $1)
+        if [[ "$_FILE" =~ ASCII ]]; then
+            cat $(type -p $1)
+        else
+            echo "$_FILE"
+        fi
+    # Not sure what this is. Could be a binary. Just use the default.
+    else
+        type $1
+    fi
+}
 
 alias slt='salt --force-color'
 function slt.() {
