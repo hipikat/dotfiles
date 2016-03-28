@@ -10,8 +10,15 @@
 # Do nothing if we're not running interactively
 [ -z "$PS1" ] && return
 if [ -z "$USER" ]; then
-    USER=`whoami`
+    export USER=`whoami`
 fi
+
+
+### Globals
+##########################################
+export DEFAULT_USER=hipikat
+export GH=git@github.com
+export MYGH=git@github.com:$DEFAULT_USER
 
 
 ### Machine information
