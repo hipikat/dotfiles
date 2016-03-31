@@ -424,6 +424,7 @@ function tar() {
 ### 5. Typos - usually typed in anger
 ##########################################
 
+# NB: Do not add until you've seen it multiple times in the wild.
 alias :q="echo I think you\'re already out of it, dude."
 alias :w="echo \"/bin/bash\" 523L, 12398C written \(j/k\)"
 alias al='la'
@@ -431,6 +432,8 @@ alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
 alias grpe='grep'
+alias im='vim'
+alias ir='gir'
 alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
