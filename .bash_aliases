@@ -266,6 +266,14 @@ function slt.() {
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
+function slt.high() {
+    if [ "$#" -ge "1" ]; then
+        salt --force-color "${@}" state.highstate
+    else
+        salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
+    fi
+}
+
 
 alias sltapi='salt-api --force-color'
 alias sltcld='salt-cloud --force-color'
