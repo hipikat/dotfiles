@@ -174,6 +174,11 @@ alias hsn='history -n'          # Append new lines from the history file to hist
 # HTTPie - a CLI, cURL-like tool for humans
 alias htp='http --pretty all'
 
+# Iptables
+alias ipt='iptables'
+alias iptl='iptables -L --line-numbers'
+alias iptd='iptables -D'
+
 # My *other* IRC configuration
 alias irssi2='irssi --config=~/.irssi/config2'
 
