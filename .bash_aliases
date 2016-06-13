@@ -275,6 +275,11 @@ alias scpr='scp -r'
 alias scrl='screen -list'
 alias scrx='screen -x'
 
+# Useful Sed filters
+alias sed-fail="sed -n -e '/\[\(CRITICAL\|WARNING\) *\]/,/\[\(DEBUG\|INFO\) *\]/ { /\[\(DEBUG\|INFO\) *\]/b; p }'"
+
+
+
 # Show a command
 function shw() {
     _TYPE=$(type $1 &> /dev/null)
@@ -306,6 +311,9 @@ alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
+function slt..() {
+    salt --force-color \* "${@:1}"
+}
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
@@ -316,6 +324,9 @@ function slt.high() {
         salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
     fi
 }
+alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
+alias slt..refresh_pillar='slt... saltutil.refresh_pillar'
+alias slt..high='slt.. \* state.highstate'
 
 
 alias sltapi='salt-api --force-color'
@@ -323,6 +334,7 @@ alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
 alias sltkey='salt-key --force-color'
+alias sltrun='salt-run --force-color'
 alias sltssh='salt-ssh --force-color'
 function slt-cln() {
     # Clean out Salt caches before running a `salt` command
@@ -341,7 +353,7 @@ alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'
-alias suptf='supervisorctl tail -f'
+alias suptf='supervisorctl tail -F'
 
 alias syu='synergy-up'
 
@@ -414,7 +426,7 @@ function cd() {
     fi
 
     # Look for autoenv scripts *after* we've successfully changed directories
-    if [[ "$(type autoenv_init &>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
+    if [[ "$(type autoenv_init 2>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
         autoenv_init
     fi
 
