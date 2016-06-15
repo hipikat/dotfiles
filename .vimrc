@@ -318,4 +318,5 @@ autocmd FileType yaml setlocal shiftwidth=2
 autocmd FileType yaml setlocal expandtab
 "au BufNewFile,BufRead *.sls set filetype=yaml
 
+autocmd FileType sass setlocal tabstop=2
 
