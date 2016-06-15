@@ -18,6 +18,8 @@
 ### 1. Convenience alises
 ##########################################
 
+alias brc='. ~/.bashrc'
+
 alias cd..='cd ..'
 
 alias clr='clear'
@@ -365,6 +367,8 @@ alias tre2='tre -L 2'
 alias tre3='tre -L 3'
 alias tre4='tre -L 3'
 alias tre5='tre -L 3'
+
+alias tlf='tail -F'
 
 function typ() {
     #type_p_out=$(type -p "$@")
