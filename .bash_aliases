@@ -123,6 +123,7 @@ alias gdico='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
 alias gmr='git merge'
+alias gmv='git move'
 alias gpl='git pull'
 alias gps='git push'
 alias gre='git remote'
@@ -326,8 +327,12 @@ function slt.high() {
         salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
     fi
 }
+#function slt.pil() {
+#    if [ "$#" -ge "1" ]; then
+#        salt --force-color "${HOSTNAME} pillar.get
+#}
 alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
-alias slt..refresh_pillar='slt... saltutil.refresh_pillar'
+alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
 alias slt..high='slt.. \* state.highstate'
 
 
