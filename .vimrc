@@ -181,7 +181,7 @@ nmap <silent> <leader>s :set spell!<CR>
 " Split sizing
 map <leader>+ 99<C-w>+
 " Toggle word wrap
-map <leader>r :set wrap!<CR>
+map <leader>r :set wrap!<CR>:set linebreak!<CR>
 
 
 " Code folding

@@ -1,0 +1,19 @@
+// Default options for HTML Tidy
+alt-text: 
+indent: auto
+indent-spaces: 4
+tab-size: 4
+show-body-only: true
+wrap: 128
+clean: yes
+quiet: yes
+quote-marks: yes
+drop-empty-paras: no
+drop-empty-elements: no
+fix-bad-comments: no
+join-classes: yes
+merge-divs: no
+merge-spans: no
+indent-attributes: yes
+break-before-br: yes
+vertical-space: yes

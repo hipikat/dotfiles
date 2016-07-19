@@ -27,8 +27,9 @@ alias clr='clear'
 alias cpr='cp -r'
 
 function dif() {
-    colordiff "$@" | less -R
+    colordiff -w "$@" | less -R
 }
+alias dif3='dif -C3'
 
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
@@ -364,6 +365,37 @@ alias suptf='supervisorctl tail -F'
 
 alias syu='synergy-up'
 
+function tdy() {
+    # Use default options, don't let attribute/values wrap, reduce
+    # double-new-lines (from HTML Tidy, for 'readability') to single new lines.
+    #
+    # My original .htmltidy, used more for non-destructively formatting
+    # single-page-in-a-line documents than for doing any actual 'tidying':
+    #
+    # indent: auto
+    # indent-spaces: 4
+    # tab-size: 4
+    # show-body-only: true
+    # wrap: 128
+    # clean: yes
+    # quiet: yes
+    # quote-marks: yes
+    # drop-empty-paras: no
+    # fix-bad-comments: no
+    # join-classes: yes
+    # merge-divs: no
+    # merge-spans: no
+    # indent-attributes: yes
+    # break-before-br: yes
+    # vertical-space: yes
+    tidy -config ~/.htmltidy "$@" | sed ':a;N;$!ba;s/=\n\s*/=/g;s/\n\n/\n/ig'
+}
+# As in `tdy`, but modify the file in-place
+# Todo: Make this work when 'extra options' consitute the first words of $@
+function tdym() {
+    tdy "$@" > "$@"
+}
+
 function tre() {
     tree -C "$@" | less
 }
@@ -460,9 +492,10 @@ function tar() {
 
 # NB: Do not add until you've seen it multiple times in the wild.
 alias :q="echo I think you\'re already out of it, dude."
+alias :qa="echo '(╯°□°）╯︵ ┻━┻'"
 alias :w="echo \"/bin/bash\" 523L, 12398C written \(j/k\)"
 alias al='la'
-alias burp='brup'
+alias burp='brup'       # `brew up` alias
 alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
@@ -474,10 +507,11 @@ alias pign='ping'
 alias piong='ping'
 alias poing='ping'
 alias poip='pip'
+alias rew='brew'
 alias tial='tail'
 alias screne='screen'
 alias sssh='ssh'
-alias vl='lv'
+alias vl='lv'           # ls (visible, vertical & verbose)
 alias whomai='whoami'
 alias wpd='pwd'
 
@@ -517,7 +551,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # Some more ls aliases
-alias lv='ls -l'            # List Visible, Vertical & Verbose
+alias lv='ls -l'            # ls (visible, vertical & verbose)
 alias lvs='ls -l | less'    # (again, but piped through less)
 alias la='ls -Al'           # List All, with details
 alias las='ls -Al | less'   # (and again, also piped through less)
