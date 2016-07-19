@@ -462,6 +462,7 @@ function tar() {
 alias :q="echo I think you\'re already out of it, dude."
 alias :w="echo \"/bin/bash\" 523L, 12398C written \(j/k\)"
 alias al='la'
+alias burp='brup'
 alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
