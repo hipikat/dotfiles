@@ -84,10 +84,10 @@ function gad() {
     fi
 }
 function _git_clone_github() {
-    git clone git@github.com:$1.git
+    git clone git@github.com:$1.git ${@:2}
 }
 function _git_clone_my_github() {
-    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git
+    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git ${@:2}
 }
 function _git_commit_n_push() {
     if git commit "$@"; then
