@@ -83,8 +83,11 @@ function gad() {
         git add "$@"
     fi
 }
+function _git_clone_github() {
+    git clone git@github.com:$1.git ${@:2}
+}
 function _git_clone_my_github() {
-    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git
+    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git ${@:2}
 }
 function _git_commit_n_push() {
     if git commit "$@"; then
@@ -108,6 +111,7 @@ alias gch='git checkout'
 alias gchb='git checkout -b'
 alias gcht='git checkout -t'
 alias gcl='git clone'
+alias gclgh='_git_clone_github'
 alias gclmy='_git_clone_my_github'
 alias gco='git commit'
 alias gcop='_git_commit_n_push'
