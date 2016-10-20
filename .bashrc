@@ -407,6 +407,8 @@ if [ -f ~/.local/bin/activate.sh ]; then
     . ~/.local/bin/activate.sh
 elif [ -f /usr/local/bin/activate.sh ]; then
     . /usr/local/bin/activate.sh
+elif [ -f /usr/bin/activate.sh ]; then
+    . /usr/bin/activate.sh
 elif [ -f /usr/local/opt/autoenv/activate.sh ]; then
     . /usr/local/opt/autoenv/activate.sh
 fi
