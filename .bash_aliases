@@ -403,7 +403,7 @@ function tdym() {
 }
 
 function tre() {
-    tree -C "$@" | less
+    tree -C "$@" | grep -v '\.pyc$' | less
 }
 export -f tre
 alias tre2='tre -L 2'
