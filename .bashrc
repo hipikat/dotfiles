@@ -397,6 +397,8 @@ PS2+="$Color_Off "
 # .bash_aliases), and call `autoenv_init` manually in that function.
 if [ -f ~/.local/bin/activate.sh ]; then
     . ~/.local/bin/activate.sh
+elif [ -f ~/.autoenv/activate.sh ]; then
+    . ~/.autoenv/activate.sh
 elif [ -f /usr/local/bin/activate.sh ]; then
     . /usr/local/bin/activate.sh
 fi
