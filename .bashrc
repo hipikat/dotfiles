@@ -10,8 +10,15 @@
 # Do nothing if we're not running interactively
 [ -z "$PS1" ] && return
 if [ -z "$USER" ]; then
-    USER=`whoami`
+    export USER=`whoami`
 fi
+
+
+### Globals
+##########################################
+export DEFAULT_USER=hipikat
+export GH=git@github.com
+export MYGH=git@github.com:$DEFAULT_USER
 
 
 ### Machine information
@@ -183,6 +190,7 @@ declare -a paths
 # Added to the front of $PATH, if not already included, in order
 paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
 paths+=( /usr/local/heroku/bin )
+paths+=( /usr/local/opt/coreutils/libexec/gnubin )
 paths+=( /usr/local/opt/gnu-sed/libexec/gnubin )
 paths+=( /usr/local/sbin /usr/local/bin )
 paths+=( /usr/local/mysql/bin )
@@ -401,6 +409,10 @@ elif [ -f ~/.autoenv/activate.sh ]; then
     . ~/.autoenv/activate.sh
 elif [ -f /usr/local/bin/activate.sh ]; then
     . /usr/local/bin/activate.sh
+elif [ -f /usr/bin/activate.sh ]; then
+    . /usr/bin/activate.sh
+elif [ -f /usr/local/opt/autoenv/activate.sh ]; then
+    . /usr/local/opt/autoenv/activate.sh
 fi
 ###
 
@@ -433,6 +445,8 @@ fi
 
 # Pyenv shims
 if type -ap pyenv &>/dev/null; then
+    # You should install 'coreutils' with Homebrew, and make sure GNU readlink
+    # is on your path. (readlink '-f' doesn't exist with default OS X readlink.)
     export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
     eval "$(pyenv init -)"
 fi

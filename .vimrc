@@ -31,12 +31,14 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
+Plugin 'vim-scripts/vim-flake8'
+Plugin 'saltstack/salt-vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
-filetype plugin on
+"filetype plugin on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -102,6 +104,7 @@ map <leader>F :syntax sync fromstart<CR>
 
 " Check for pep8 compliance
 "let g:pep8_map='<leader>8'
+map <leader>8 :call Flake8()<CR>
 
 " Run PyLint
 "map <leader>p :PyLint<CR>
@@ -158,9 +161,9 @@ highlight Search ctermfg=Black ctermbg=DarkBlue cterm=bold guifg=Black guibg=Lig
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
 " Tab behaviour
-set tabstop=4           " Number of spaces a <Tab> counts for
+set tabstop=2           " Number of spaces a <Tab> counts for
+set shiftwidth=2        " Spaces for each step of (auto)indent
 set expandtab           " Use spaces for tabs; Use CTRL-V<Tab> for tabs
-set shiftwidth=4        " Spaces for each step of (auto)indent
 
 """
 " Display
@@ -178,7 +181,7 @@ nmap <silent> <leader>s :set spell!<CR>
 " Split sizing
 map <leader>+ 99<C-w>+
 " Toggle word wrap
-map <leader>r :set wrap!<CR>
+map <leader>r :set wrap!<CR>:set linebreak!<CR>
 
 
 " Code folding
@@ -311,7 +314,9 @@ au BufNewFile,BufRead *.mako,*.mak set filetype=mako
 au BufNewFile,BufRead *.mako,*.mak so ~/.vim/mako.vim
 
 autocmd FileType yaml setlocal tabstop=2
-autocmd FileType yaml setlocal sw=2
+autocmd FileType yaml setlocal shiftwidth=2
+autocmd FileType yaml setlocal expandtab
 "au BufNewFile,BufRead *.sls set filetype=yaml
 
+autocmd FileType sass setlocal tabstop=2
 

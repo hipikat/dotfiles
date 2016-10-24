@@ -18,13 +18,18 @@
 ### 1. Convenience alises
 ##########################################
 
+alias brc='. ~/.bashrc'
+
 alias cd..='cd ..'
 
 alias clr='clear'
 
+alias cpr='cp -r'
+
 function dif() {
-    colordiff "$@" | less -R
+    colordiff -w "$@" | less -R
 }
+alias dif3='dif -C3'
 
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
@@ -66,6 +71,11 @@ alias girn='_grep -Irin'
 alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
+function git-get_remote_branches() {
+    _REMOTE=${1-origin}
+    git remote set-branches $_REMOTE '*'
+    git fetch -vvv
+}
 function gad() {
     if [ "$#" -eq "0" ]; then
         git add .
@@ -73,16 +83,37 @@ function gad() {
         git add "$@"
     fi
 }
+function _git_clone_github() {
+    # TODO: If '/' not in $1, use "$1/$1"
+    git clone git@github.com:$1.git ${@:2}
+}
+function _git_clone_my_github() {
+    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git ${@:2}
+}
 function _git_commit_n_push() {
     if git commit "$@"; then
         git push
     fi
 }
+function _git_diff_commit() {
+    # Diff a commit and the commit N behind it in the tree
+    #
+    # Usage: _git_diff_commit [commit] [commits_behind]
+    # - commit defaults to HEAD
+    # - commits_behind defaults to '1'
+    target_commit=${1:-HEAD}
+    commits_behind=${2:-1}
+    git diff $target_commit^$commits_behind $target_commit
+}
 alias gbr='git branch'
 alias gbra='git branch -a'
 alias gbrav='git branch -av'
 alias gch='git checkout'
+alias gchb='git checkout -b'
+alias gcht='git checkout -t'
 alias gcl='git clone'
+alias gclgh='_git_clone_github'
+alias gclmy='_git_clone_my_github'
 alias gco='git commit'
 alias gcop='_git_commit_n_push'
 alias gcoa='git commit -a'
@@ -95,11 +126,14 @@ alias gcoamp='_git_commit_n_push -am'
 alias gcoAmp='git add -A; _git_commit_n_push -am'
 alias gdi='git diff'
 alias gdic='git diff --cached'
+alias gdico='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
 alias gmr='git merge'
+alias gmv='git mv'
 alias gpl='git pull'
 alias gps='git push'
+alias gpsu='git push --set-upstream'
 alias gre='git remote'
 alias grev='git remote -v'
 alias grm='git rm'
@@ -151,13 +185,25 @@ alias hsn='history -n'          # Append new lines from the history file to hist
 # HTTPie - a CLI, cURL-like tool for humans
 alias htp='http --pretty all'
 
+# Iptables
+alias ipt='iptables'
+alias iptl='iptables -L --line-numbers'
+alias iptd='iptables -D'
+
 # My *other* IRC configuration
 alias irssi2='irssi --config=~/.irssi/config2'
 
 # Command-line JSON processor (with --colour-output)
+alias jq.='jq .'
 alias jqc='jq -C'
+alias jqc.='jq -C .'
 
-#
+# Repeat the last command, piped through less
+function les() {
+    $(history -p \!\!) | less
+}
+
+# Make a directory and change into it
 function mkcd() {
     mkdir "$@"
     cd "$@"
@@ -235,24 +281,75 @@ function run() {
 alias scpr='scp -r'
 
 # Screen shortcuts
-#  - scr is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
+# `scr` is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
+# It is very handy.
 alias scrl='screen -list'
 alias scrx='screen -x'
+
+# Useful Sed filters
+alias sed-fail="sed -n -e '/\[\(CRITICAL\|WARNING\) *\]/,/\[\(DEBUG\|INFO\) *\]/ { /\[\(DEBUG\|INFO\) *\]/b; p }'"
+
+
+
+# Show a command
+function shw() {
+    _TYPE=$(type $1 &> /dev/null)
+    if [ $? -eq 1 ]; then
+        echo $1 not found.
+        return 1
+    else
+        _TYPE=$(type $1 | head -n 1)
+    fi
+
+    # Type describes aliases and functions by default
+    if [[ "$_TYPE" =~ aliased\ to|a\ function ]]; then
+        type $1
+    elif [[ "$_TYPE" =~ $1\ is\ / ]]; then
+        type $1
+        _FILE=$(file $1)
+        if [[ "$_FILE" =~ ASCII ]]; then
+            cat $(type -p $1)
+        else
+            echo "$_FILE"
+        fi
+    # Not sure what this is. Could be a binary. Just use the default.
+    else
+        type $1
+    fi
+}
 
 alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
 }
-export -f slt.
+function slt..() {
+    salt --force-color \* "${@:1}"
+}
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
+function slt.high() {
+    if [ "$#" -ge "1" ]; then
+        salt --force-color "${@}" state.highstate
+    else
+        salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
+    fi
+}
+#function slt.pil() {
+#    if [ "$#" -ge "1" ]; then
+#        salt --force-color "${HOSTNAME} pillar.get
+#}
+alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
+alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
+alias slt..high='slt.. \* state.highstate'
+
 
 alias sltapi='salt-api --force-color'
 alias sltcld='salt-cloud --force-color'
 alias sltcll='salt-call --force-color'
 alias sltcp='salt-cp --force-color'
 alias sltkey='salt-key --force-color'
+alias sltrun='salt-run --force-color'
 alias sltssh='salt-ssh --force-color'
 function slt-cln() {
     # Clean out Salt caches before running a `salt` command
@@ -271,12 +368,43 @@ alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'
-alias suptf='supervisorctl tail -f'
+alias suptf='supervisorctl tail -F'
 
 alias syu='synergy-up'
 
+function tdy() {
+    # Use default options, don't let attribute/values wrap, reduce
+    # double-new-lines (from HTML Tidy, for 'readability') to single new lines.
+    #
+    # My original .htmltidy, used more for non-destructively formatting
+    # single-page-in-a-line documents than for doing any actual 'tidying':
+    #
+    # indent: auto
+    # indent-spaces: 4
+    # tab-size: 4
+    # show-body-only: true
+    # wrap: 128
+    # clean: yes
+    # quiet: yes
+    # quote-marks: yes
+    # drop-empty-paras: no
+    # fix-bad-comments: no
+    # join-classes: yes
+    # merge-divs: no
+    # merge-spans: no
+    # indent-attributes: yes
+    # break-before-br: yes
+    # vertical-space: yes
+    tidy -config ~/.htmltidy "$@" | sed ':a;N;$!ba;s/=\n\s*/=/g;s/\n\n/\n/ig'
+}
+# As in `tdy`, but modify the file in-place
+# Todo: Make this work when 'extra options' consitute the first words of $@
+function tdym() {
+    tdy "$@" > "$@"
+}
+
 function tre() {
-    tree -C "$@" | less
+    tree -C "$@" | grep -v '\.pyc$' | less
 }
 export -f tre
 alias tre2='tre -L 2'
@@ -284,7 +412,14 @@ alias tre3='tre -L 3'
 alias tre4='tre -L 3'
 alias tre5='tre -L 3'
 
+alias tlf='tail -F'
+
 function typ() {
+    #type_p_out=$(type -p "$@")
+    #if [ "$?" -eq "0" ] && [ -z "$type_p_out" ]; then
+    #    if type "$@" | grep 'is aliased to'; then
+    #fi
+
     type -p "$@"
 }
 export -f typ
@@ -322,8 +457,6 @@ fi
 ##########################################
 
 function cd() {
-    autoenv_init &>/dev/null
-
     # Usage: `cd ..3` will take you back 3 directories.
     # Otherwise, it's business as usual.
     # TODO: '..2/minion', for example, should work. With completion.
@@ -339,6 +472,12 @@ function cd() {
     else
         builtin cd "$@"
     fi
+
+    # Look for autoenv scripts *after* we've successfully changed directories
+    if [[ "$(type autoenv_init 2>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
+        autoenv_init
+    fi
+
 }
 
 
@@ -358,20 +497,28 @@ function tar() {
 ### 5. Typos - usually typed in anger
 ##########################################
 
+# NB: Do not add until you've seen it multiple times in the wild.
+alias :q="echo I think you\'re already out of it, dude."
+alias :qa="echo '(╯°□°）╯︵ ┻━┻'"
+alias :w="echo \"/bin/bash\" 523L, 12398C written \(j/k\)"
 alias al='la'
+alias burp='brup'       # `brew up` alias
 alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
 alias grpe='grep'
+alias im='vim'
+alias ir='gir'
 alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
 alias poing='ping'
 alias poip='pip'
+alias rew='brew'
 alias tial='tail'
 alias screne='screen'
 alias sssh='ssh'
-alias vl='lv'
+alias vl='lv'           # ls (visible, vertical & verbose)
 alias whomai='whoami'
 alias wpd='pwd'
 
@@ -411,7 +558,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # Some more ls aliases
-alias lv='ls -l'            # List Visible, Vertical & Verbose
+alias lv='ls -l'            # ls (visible, vertical & verbose)
 alias lvs='ls -l | less'    # (again, but piped through less)
 alias la='ls -Al'           # List All, with details
 alias las='ls -Al | less'   # (and again, also piped through less)

@@ -16,13 +16,31 @@
 # https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
 
 
-# Check for likely matching environments created by Virtualenvwrapper
+# Source a virtual environment's activate script, if that environment
+# doesn't look like it's already the active on. (Takes the full path
+# to a virtualenv 'activate' script.)
+function _source_virtualenv() {
+    env_dir="${1%/*/*}"
+    env_name="${env_dir##*/}"
+    if [ "$env_dir" != "$VIRTUAL_ENV" ]; then
+        echo "Activating virtualenv environment '$env_name'."
+        source "$1"
+    fi
+}
+
 current_dir=$(pwd)
+
+# Set default WORKON_HOME if it's unset and the default Virtualenvwrapper
+# directory for environments exists in the user's home directory
+if [ -d "$HOME/.virtualenvs" ] && [ -z "$WORKON_HOME" ]; then
+    WORKON_HOME=$HOME/.virtualenvs
+fi
+
+# Check for likely matching environments created by Virtualenvwrapper
 if [ -n "$WORKON_HOME" ]; then
     while [ -n "$current_dir" ]; do
         if [ -f "$WORKON_HOME/$(basename $current_dir)/bin/activate" ]; then
-            echo "Sourcing $WORKON_HOME/$(basename $current_dir)/bin/activate"
-            . "$WORKON_HOME/$(basename $current_dir)/bin/activate"
+            _source_virtualenv "$WORKON_HOME/$(basename $current_dir)/bin/activate"
             sourced_activate="true"
             break
         else
@@ -32,12 +50,11 @@ if [ -n "$WORKON_HOME" ]; then
 fi
 
 # Check up through parent directories, to see if we're buried in a Virtualenv
-current_dir="$PWD"
+current_dir=$(pwd)
 if [ "$sourced_activate" != "true" ]; then
     while [ -n "$current_dir" ]; do
         if [ -f "$current_dir/bin/activate" ]; then
-            echo "Sourcing $current_dir/bin/activate"
-            . "$current_dir/bin/activate"
+            _source_virtualenv "$current_dir/bin/activate"
             sourced_activate="true"
             break
         else
@@ -46,14 +63,8 @@ if [ "$sourced_activate" != "true" ]; then
     done
 fi
 
-# Check for a system-wide Virtualenv
-if [ -f "/bin/activate" ] && [ "$sourced_activate" != "true" ]; then
-    echo "Sourcing /bin/activate"
-    . /bin/activate
-    sourced_activate="true"
-fi
 
-# Warn if we didn't source anything. Don't exit, because we're sourced.
+# Warn if we didn't source anything. Don't exit. Because we're sourced too.
 if [ "$sourced_activate" != "true" ]; then 
     echo "Failed to locate an activate script"
 else
