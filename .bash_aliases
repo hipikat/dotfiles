@@ -63,10 +63,13 @@ function _grep() {
 alias g='_grep -I'          # I: ignores binary files
 alias gn='_grep -In'        # n: print line numbers
 alias gi='_grep -Ii'        # i: case insensitive
+alias giv='_grep -Iiv'      # v: invert matching
 alias gr='_grep -Ir'        # r: recursive
+alias gv='_grep -Iv'
 alias gin='_grep -Iin'
 alias grn='_grep -Irn'
 alias gir='_grep -Iri'
+alias girv='_grep -Iriv'
 alias girn='_grep -Irin'
 alias glb='grep --line-buffered'    # Stream into pipes
 
