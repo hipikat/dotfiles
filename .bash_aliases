@@ -412,8 +412,8 @@ function tre() {
 export -f tre
 alias tre2='tre -L 2'
 alias tre3='tre -L 3'
-alias tre4='tre -L 3'
-alias tre5='tre -L 3'
+alias tre4='tre -L 4'
+alias tre5='tre -L 5'
 
 alias tlf='tail -F'
 
