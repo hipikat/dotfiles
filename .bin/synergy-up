@@ -18,11 +18,11 @@ SERVER_HOSTNAME="is-m-00068"
 
 #MIDDLE_HOST="hpk.io"
 
-#MIDDLE_USER="00047925"
-#MIDDLE_HOST="cadmus.its.uwa.edu.au"
+MIDDLE_USER="00047925"
+MIDDLE_HOST="cadmus.its.uwa.edu.au"
 
-MIDDLE_USER="awright"
-MIDDLE_HOST="is-nix-156.is.uwa.edu.au"
+#MIDDLE_USER="awright"
+#MIDDLE_HOST="is-nix-156.is.uwa.edu.au"
 
 MIDDLE_DOWN_PORT=24808
 MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
