@@ -15,9 +15,15 @@ mkdir -p "$HOME/var/log"
 
 # Magic removal
 SERVER_HOSTNAME="is-m-00068"
+
 #MIDDLE_HOST="hpk.io"
-MIDDLE_USER="00047925"
-MIDDLE_HOST="cadmus.its.uwa.edu.au"
+
+#MIDDLE_USER="00047925"
+#MIDDLE_HOST="cadmus.its.uwa.edu.au"
+
+MIDDLE_USER="awright"
+MIDDLE_HOST="is-nix-156.is.uwa.edu.au"
+
 MIDDLE_DOWN_PORT=24808
 MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
 SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
@@ -49,7 +55,8 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
 
     # Set up remote port forwarding over ssh,
     # from (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT to localhost:24800
-    nohup sshpass -p "$MIDDLE_PASS" ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
+    #nohup sshpass -p "$MIDDLE_PASS" ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
+    nohup ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
         -i "$MIDDLE_PRIVATE_KEY" \
         "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null
 
@@ -71,7 +78,8 @@ else
 
     # Establish a tunnel over ssh, from localhost:24800,
     # to (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT
-	nohup sshpass -p "$MIDDLE_PASS" ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
+  	#nohup sshpass -p "$MIDDLE_PASS" ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
+	  nohup ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
         -i "$MIDDLE_PRIVATE_KEY" \
         "$MIDDLE_USER@$MIDDLE_HOST"
 

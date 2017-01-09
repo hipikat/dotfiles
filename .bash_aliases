@@ -403,7 +403,8 @@ function tdy() {
 # As in `tdy`, but modify the file in-place
 # Todo: Make this work when 'extra options' consitute the first words of $@
 function tdym() {
-    tdy "$@" > "$@"
+    tidy -m -config ~/.htmltidy "$@"
+    sed -i ':a;N;$!ba;s/=\n\s*/=/g;s/\n\n/\n/ig' "$@"
 }
 
 function tre() {

@@ -106,6 +106,8 @@ map <leader>F :syntax sync fromstart<CR>
 "let g:pep8_map='<leader>8'
 map <leader>8 :call Flake8()<CR>
 
+" Filter the whole file with (html)tidy
+
 " Run PyLint
 "map <leader>p :PyLint<CR>
 
