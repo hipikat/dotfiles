@@ -63,6 +63,19 @@ if [ "$sourced_activate" != "true" ]; then
     done
 fi
 
+# Check up through parent directories for a hidden '.venv/' Virtualenv
+current_dir=$(pwd)
+if [ "$sourced_activate" != "true" ]; then
+    while [ -n "$current_dir" ]; do
+        if [ -f "$current_dir/.venv/bin/activate" ]; then
+            _source_virtualenv "$current_dir/.venv/bin/activate"
+            sourced_activate="true"
+            break
+        else
+            current_dir="${current_dir%/*}"
+        fi
+    done
+fi
 
 # Warn if we didn't source anything. Don't exit. Because we're sourced too.
 if [ "$sourced_activate" != "true" ]; then 
