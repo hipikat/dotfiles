@@ -253,6 +253,7 @@ if [ "$TERM" != "dumb" ]; then
     else
         export CLICOLOR_FORCE='TRUE'        # Probably on a Mac
         alias ls='ls -G -F'
+        eval $(dircolors -b $HOME/.dircolors)
     fi
 fi
 

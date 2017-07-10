@@ -79,7 +79,7 @@ fi
 
 # Warn if we didn't source anything. Don't exit. Because we're sourced too.
 if [ "$sourced_activate" != "true" ]; then 
-    echo "Failed to locate an activate script"
+    echo "Failed to locate an activate script" 1>&2
 else
     unset sourced_activate
 fi

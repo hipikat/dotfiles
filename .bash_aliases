@@ -562,13 +562,12 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 # Some more ls aliases
-alias lv='ls -l'            # ls (visible, vertical & verbose)
-alias lvs='ls -l | less'    # (again, but piped through less)
-alias la='ls -Al'           # List All, with details
-alias las='ls -Al | less'   # (and again, also piped through less)
-alias lad='ls -lad ./.[^.]*'
-function lvl() { ls $COLOR_ALWAYS -l "$@" | less ;}
-function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
+#alias lv='l -l'            # ls (visible, vertical & verbose)
+alias les='l | less'        # List piped through less
+alias la='l -a'             # List all
+alias las='l -a | less'     # List all piped through less
+#function lvl() { ls $COLOR_ALWAYS -l "$@" | less ;}
+#function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
 function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 
 # supervisor
@@ -579,7 +578,7 @@ function l() {
     if [ "$1" = "s-al" ]; then
         ls -al ${*:2}
     elif [ `uname` = "Darwin" ]; then
-        ls -l "$@" | grep -v '\(\.swp\|\.pyc\)$';
+        ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
     else
         ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
     fi  
