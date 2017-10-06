@@ -56,7 +56,6 @@ set t_Co=256
 colorscheme peachpuff
 
 
-
 """""" unclean .....
 
 
@@ -158,6 +157,7 @@ set nowrap              " Don't linewrap
 map ,, :set hls!<CR>
 map! ,, <ESC>:set hls!<CR>a
 highlight Search ctermfg=Black ctermbg=DarkBlue cterm=bold guifg=Black guibg=LightBlue gui=bold
+highlight ColorColumn ctermbg=8
 
 " For file name completion, ignore files with the listed suffixes first
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc

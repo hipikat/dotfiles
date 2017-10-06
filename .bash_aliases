@@ -522,6 +522,7 @@ alias rew='brew'
 alias tial='tail'
 alias screne='screen'
 alias sssh='ssh'
+alias vin='vim'
 alias vl='lv'           # ls (visible, vertical & verbose)
 alias whomai='whoami'
 alias wpd='pwd'
@@ -531,7 +532,10 @@ alias wpd='pwd'
 ##########################################
 
 if [ "$BASIC_MACHINE_TYPE" = "Mac" ] && ! type updatedb &>/dev/null; then
-    alias updatedb="sudo /usr/libexec/locate.updatedb"
+    # NB: If your PATH is defaulting commands to Homebrew's set of Gnu
+    # Coreutils, locate.updatedb will just throw errors; you need something
+    # like: `export PATH=/usr/bin:/bin:$PATH`
+    alias updatedb="sudo -E /usr/libexec/locate.updatedb"
 fi
 
 

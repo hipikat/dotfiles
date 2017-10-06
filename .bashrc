@@ -197,6 +197,7 @@ paths+=( /usr/local/mysql/bin )
 paths+=( /usr/games /foo/bar /bar/foo )
 paths+=( ~/.rvm/bin )
 paths+=( /Applications/Xcode.app/Contents/Developer/usr/bin )
+paths+=( /Applications/FontForge.app/Contents/Resources/opt/local/bin )
 paths+=( /Developer/Tools )
 add_missing_paths () {
     PATH=":$PATH:"
