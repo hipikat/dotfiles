@@ -111,6 +111,7 @@ function _git_diff_commit() {
 alias gbr='git branch'
 alias gbra='git branch -a'
 alias gbrav='git branch -av'
+alias gbrv='git branch -v'
 alias gch='git checkout'
 alias gchb='git checkout -b'
 alias gcht='git checkout -t'
