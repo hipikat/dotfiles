@@ -8,6 +8,8 @@
         ".git",
         "CONFIG",
         "plumb_files.*",
-        "LICENSE.rst"
+        "LICENSE.rst",
+        "install_dotfiles.sh",
+        "fabfile.py"
     ]
 }
