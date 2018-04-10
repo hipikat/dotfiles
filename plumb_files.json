@@ -5,6 +5,7 @@
     ],
     "ignore": [
         "*.swp*",
+        "*.example",
         ".git",
         "CONFIG",
         "plumb_files.*",
