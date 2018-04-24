@@ -14,6 +14,9 @@ if [ -z "$USER" ]; then
 fi
 
 
+. /etc/profile
+
+
 ### Globals
 ##########################################
 export DEFAULT_USER=hipikat
