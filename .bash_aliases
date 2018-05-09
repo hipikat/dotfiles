@@ -367,9 +367,12 @@ function slt-cln() {
     if [ "$#" -ge "1" ]; then
         salt "$1" saltutil.clear_cache
         if [ "$#" -gt "1" ]; then
-            salt --force-color $@
+            salt --force-color "${@}"
         fi
     fi
+}
+function slt-run() {
+    salt-run --force-color "${@}"
 }
 
 alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
