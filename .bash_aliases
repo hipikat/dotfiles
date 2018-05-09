@@ -329,6 +329,12 @@ function slt.() {
 function slt..() {
     salt --force-color \* "${@:1}"
 }
+function slt.apply() {
+    slt. state.apply "$@"
+}
+function slt..apply() {
+    slt.. state.apply "$@"
+}
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
