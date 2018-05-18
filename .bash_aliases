@@ -144,7 +144,7 @@ alias grm='git rm'
 alias grmc='git rm --cached'
 alias grs='git reset'
 alias gsh='git show'
-alias gst='git status'
+alias gst='git -c color.status=always status'
 alias gstsh='git stash'
 alias gta='git tag'
 
@@ -203,9 +203,11 @@ alias jqc='jq -C'
 alias jqc.='jq -C .'
 
 # Repeat the last command, piped through less
-function les() {
-    $(history -p \!\!) | less
-}
+#function les() {
+#    $(history -p \!\!) | less
+#}
+
+alias les='less --quit-if-one-screen'
 
 # Make a directory and change into it
 function mkcd() {
@@ -568,7 +570,7 @@ fi
 
 # Some more ls aliases
 #alias lv='l -l'            # ls (visible, vertical & verbose)
-alias les='l | less'        # List piped through less
+#alias les='l | less'        # List piped through less
 alias la='l -a'             # List all
 alias las='l -a | less'     # List all piped through less
 #function lvl() { ls $COLOR_ALWAYS -l "$@" | less ;}
