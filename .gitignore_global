@@ -14,8 +14,6 @@
 .project
 .vs
 .vs-*
-build/
-dist/
 *.egg-info/
 Gemfile.lock
 Icon?
