@@ -8,8 +8,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
 # If we're running bash, include .bashrc if it exists
 if [ -n "$BASH_VERSION" ]; then
     if [ -f "$HOME/.bashrc" ]; then
