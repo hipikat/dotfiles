@@ -19,6 +19,7 @@ fi
 export DEFAULT_USER=hipikat
 export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
+export KSP_PLUGINS='/Users/00047925/Library/Application Support/Steam/steamapps/common/Kerbal Space Program/GameData'
 
 
 ### Machine information
@@ -284,7 +285,11 @@ function set_ps1_strings() {
 
     # Set username if we aren't running as root
     if [ "$EUID" != "0" ]; then
-        PS1_USERNAME="$USER"
+        if [[ -n $USER_ALIAS ]]; then
+            PS1_USERNAME=$USER_ALIAS
+        else
+            PS1_USERNAME=$USER
+        fi
     else
         PS1_USERNAME=""
     fi
@@ -294,6 +299,13 @@ function set_ps1_strings() {
         PS1_HOST=$HOST_ALIAS 
     else
         PS1_HOST=$HOSTNAME
+    fi
+
+    # Username (or an alias, typically provided in .bash_local)
+    if [[ -n $USER_ALIAS ]]; then
+        PS1_USER=$USER_ALIAS
+    else
+        PS1_USER=$USER
     fi
 
     # Current Git branch
