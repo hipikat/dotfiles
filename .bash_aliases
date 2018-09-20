@@ -385,7 +385,7 @@ alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -F'
 
-alias syu='synergy-up'
+alias syu='synergy-up-metis'
 
 function tdy() {
     # Use default options, don't let attribute/values wrap, reduce
