@@ -1,0 +1,2 @@
+#!/bin/bash
+sshfs -o volname=lemon -o allow_other,defer_permissions,IdentityFile=/Users/00047925/.ssh/id_rsa hipikat@lemon.hpk.io:/home/hipikat /mnt/lemon

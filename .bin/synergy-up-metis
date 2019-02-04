@@ -56,7 +56,7 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
     #nohup sshpass -p "$MIDDLE_PASS" ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
     nohup ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
         -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null
+        "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null 2>&1
 
 else
 
@@ -79,7 +79,7 @@ else
     #nohup ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
     nohup sshpass -p "$MIDDLE_PASS" ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
         -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_USER@$MIDDLE_HOST"
+        "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null 2>&1
 
   /Applications/Synergy.app/Contents/MacOS/synergyc \
       --daemon --no-tray --debug INFO --enable-drag-drop \

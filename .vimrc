@@ -101,6 +101,13 @@ noremap <leader>a <C-A> 50
 " Fix syntax
 map <leader>F :syntax sync fromstart<CR>
 
+" God i work with a lot of HTML
+map <leader>c :set syntax=css<CR>
+map <leader>h :set syntax=html<CR>
+map <leader>j :set syntax=javascript<CR>
+map <leader>p :set syntax=python<CR>
+map <leader>y :set syntax=yaml<CR>
+
 " Check for pep8 compliance
 "let g:pep8_map='<leader>8'
 map <leader>8 :call Flake8()<CR>
