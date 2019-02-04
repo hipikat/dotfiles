@@ -190,6 +190,7 @@ fi
 declare -a paths
 # Added to the front of $PATH, if not already included, in order
 paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
+paths+=( ~/.local/bin )
 paths+=( /usr/local/heroku/bin )
 paths+=( /usr/local/opt/coreutils/libexec/gnubin )
 paths+=( /usr/local/opt/gnu-sed/libexec/gnubin )
