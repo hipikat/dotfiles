@@ -6,4 +6,5 @@ if [ ! -d ../.vim/bundle/Vundle.vim ]; then
 fi
 
 # Having just a BIT of trouble getting this to process with Salt...
-vim +VundleInstall +qa >/dev/null
+#vim -nes -c ':VundleInstall' -c ':qa!'
+vim +VundleInstall '+qa!' >/dev/null
