@@ -9,6 +9,7 @@
 .*cache*
 .*.swo
 ._*
+.git_remotes
 .coverage
 .idea
 .project
