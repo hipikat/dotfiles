@@ -226,6 +226,7 @@ if [[ "$BASIC_MACHINE_TYPE" == "Mac" ]]; then
         export PATH="~/Documents/Dropbox/bin/osx:$PATH"
     fi
 fi
+export VIM_APP_DIR=/usr/local/Cellar/macvim/8.1-153/
 
 
 # Echo each element of $PATH to a new line

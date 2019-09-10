@@ -108,6 +108,12 @@ function _git_diff_commit() {
     commits_behind=${2:-1}
     git diff $target_commit^$commits_behind $target_commit
 }
+function _git_log_author() {
+    git log --color=always --author="$@"
+}
+function _git_log_author_stat() {
+    git log --color=always --author="$@" --stat
+}
 alias gbr='git branch'
 alias gbra='git branch -a'
 alias gbrav='git branch -av'
@@ -133,6 +139,9 @@ alias gdic='git diff --cached'
 alias gdico='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
+alias gloa='_git_log_author'
+alias gloas='_git_log_author_stat'
+alias glos='git log --stat'
 alias gmr='git merge'
 alias gmv='git mv'
 alias gpl='git pull'

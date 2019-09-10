@@ -16,6 +16,7 @@
 .vs
 .vs-*
 *.egg-info/
+_nocvs/
 Gemfile.lock
 Icon?
 Thumbs.db
