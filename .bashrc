@@ -471,13 +471,20 @@ if ! pyenv virtualenvwrapper 2>/dev/null
     then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
 
+# Node Version Manager (NVM)
+if [ -d ~/.nvm ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # Load NVM
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Load NVM bash_completion
+fi
 
-### Command-line aliases
+
+
+### Load command-line aliases
 ##########################################
 if [ -f "$SUDO_USER/.bash_aliases" ]; then
     source $SUDO_USER/.bash_aliases
 fi
-
 if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
