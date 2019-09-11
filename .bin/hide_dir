@@ -1,0 +1,4 @@
+#!/bin/bash
+
+SetFile -a V "$@"
+ln -s "../$@" ~/Hidden/
