@@ -201,6 +201,8 @@ paths+=( ~/.rvm/bin )
 paths+=( /Applications/Xcode.app/Contents/Developer/usr/bin )
 paths+=( /Applications/FontForge.app/Contents/Resources/opt/local/bin )
 paths+=( /Developer/Tools )
+paths+=( venv/bin .venv/bin )
+paths+=( ./node_modules/.bin )
 add_missing_paths () {
     PATH=":$PATH:"
     new_paths=""
