@@ -14,7 +14,7 @@ mkdir -p "$HOME/var/log"
 
 
 # Magic removal
-#SERVER_HOSTNAME="central-39808"
+SERVER_HOSTNAME="lemon.local"
 
 #MIDDLE_USER="00047925"
 #MIDDLE_HOST="cadmus.its.uwa.edu.au"
@@ -37,7 +37,8 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
     old_tunnel_pids=$( ps aux | grep ssh | grep "$MIDDLE_DOWN_PORT:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
   if [ -n "$old_tunnel_pids" ]; then
         for pid in "$old_tunnel_pids"; do
-            kill -9 "$pid"
+            #kill -9 "$pid"
+            :
         done
     fi
 
@@ -45,6 +46,7 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
   sleep 3
 
   # Launch a new server
+  echo "Running server..."
   /Applications/Synergy.app/Contents/MacOS/synergys \
     --address :24800 --daemon --no-tray \
         --log "$HOME/var/log/synergys.log" --debug INFO \
