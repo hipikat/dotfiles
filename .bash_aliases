@@ -346,6 +346,12 @@ function slt.apply() {
 function slt..apply() {
     slt.. state.apply "$@"
 }
+function slt.ping() {
+    slt. test.ping
+}
+function slt..ping() {
+    slt. test..ping
+}
 function slt.doc() {
     slt. sys.doc "$@" | less
 }
