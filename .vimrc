@@ -106,6 +106,9 @@ noremap <leader>a <C-A> 50
 " Fix syntax
 map <leader>F :syntax sync fromstart<CR>
 
+" When did paste start resetting expandtab this never used to happen to me
+map <leader>v :set paste!<CR>:set expandtab<CR>:set paste?<CR>
+
 " God i work with a lot of HTML
 map <leader>c :set syntax=css<CR>
 map <leader>h :set syntax=html<CR>
