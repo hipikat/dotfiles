@@ -21,6 +21,9 @@ export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
 export KSP_PLUGINS='/Users/00047925/Library/Application Support/Steam/steamapps/common/Kerbal Space Program/GameData'
 
+# weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
+export MAN_DISABLE_SECCOMP=1
+
 
 ### Machine information
 ##########################################
