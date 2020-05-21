@@ -358,7 +358,7 @@ function slt.ping() {
     slt. test.ping
 }
 function slt..ping() {
-    slt. test..ping
+    slt.. test.ping
 }
 function slt.doc() {
     slt. sys.doc "$@" | less
