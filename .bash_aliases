@@ -455,6 +455,11 @@ function typ() {
 }
 export -f typ
 
+alias ufwd='ufw delete'
+alias ufws='ufw status'
+alias ufwsn='ufw status numbered'
+alias ufwsv='ufw status verbose'
+
 alias upd='updatedb'
 alias upt='uptime'
 
