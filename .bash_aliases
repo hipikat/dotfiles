@@ -24,6 +24,11 @@ alias cd..='cd ..'
 
 alias clr='clear'
 
+compresspdf() {
+  echo 'Usage: compresspdf [input file] [output file] [screen|ebook|printer|prepress]'
+  gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
+}
+
 alias cpr='cp -r'
 
 function dif() {
@@ -400,7 +405,7 @@ alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -F'
 
-alias syu='synergy-up-metis'
+alias syu='synergy-up-home'
 
 function tdy() {
     # Use default options, don't let attribute/values wrap, reduce

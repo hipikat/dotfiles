@@ -13,16 +13,21 @@ screen      # 6
 screen      # 7
 screen      # 8
 screen      # 9
+screen      # 10
 
 # Set up screens
-at 2 stuff "cd ~/Desktop^Mclear^M"
-at 3 stuff "cd ~/Desktop^Mclear^M"
-at 4 stuff "cd ~/Code^M"
-at 5 stuff "cd ~/Code^M"
-at 6 stuff "cd ~/.dotfiles^M"
-at 7 stuff "cd ~/.dotfiles^M"
-at 8 stuff "cd ~/.ssh^M"
-at 9 stuff "cd /etc^M"
+#at 2 stuff "cd ~/Desktop^Mclear^M"
+#at 3 stuff "cd ~/Desktop^Mclear^M"
+#at 4 stuff "cd ~/Code^M"
+#at 5 stuff "cd ~/Code^M"
+#at 6 stuff "cd ~/.dotfiles^M"
+
+at 5 stuff "cd ~/Desktop^Mclear^M"
+at 6 stuff "cd ~/Desktop^Mclear^M"
+at 7 stuff "cd ~/Downloads^Mclear^M"
+at 8 stuff "cd ~/.dotfiles^M"
+at 9 stuff "cd ~/.ssh^M"
+at 10 stuff "cd /etc^M"
 
 # Return to first screen and start in the screens menu
 select 0
