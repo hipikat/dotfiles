@@ -152,8 +152,11 @@ alias gmv='git mv'
 alias gpl='git pull'
 alias gps='git push'
 alias gpsu='git push --set-upstream'
+alias grea='git remote add'
 alias gre='git remote'
 alias grev='git remote -v'
+alias grer='git remote rename'
+alias grerm='git remote remove'
 alias grm='git rm'
 alias grmc='git rm --cached'
 alias grs='git reset'
@@ -355,7 +358,7 @@ function slt.ping() {
     slt. test.ping
 }
 function slt..ping() {
-    slt. test..ping
+    slt.. test.ping
 }
 function slt.doc() {
     slt. sys.doc "$@" | less
@@ -459,6 +462,11 @@ function typ() {
     type -p "$@"
 }
 export -f typ
+
+alias ufwd='ufw delete'
+alias ufws='ufw status'
+alias ufwsn='ufw status numbered'
+alias ufwsv='ufw status verbose'
 
 alias upd='updatedb'
 alias upt='uptime'
