@@ -155,7 +155,7 @@ set_xterm_title () {
 
 set_screen_title () {
     if [[ "$TERM" =~ screen ]]; then
-        echo -ne "\033k$1\033\\"
+        echo -ne "\033k$1\033\\ "
     fi
 }
 
