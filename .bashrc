@@ -24,6 +24,10 @@ export KSP_PLUGINS='/Users/00047925/Library/Application Support/Steam/steamapps/
 # weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
 export MAN_DISABLE_SECCOMP=1
 
+# pipenv Issue - it falsely assumes Homebrew's Python to be in a virtualenv
+# https://github.com/pypa/pipenv/issues/4316
+export PIPENV_IGNORE_VIRTUALENVS=1
+
 
 ### Machine information
 ##########################################
@@ -155,7 +159,11 @@ set_xterm_title () {
 
 set_screen_title () {
     if [[ "$TERM" =~ screen ]]; then
-        echo -ne "\033k$1\033\\ "
+        echo -ne "\033k$1\033\\"
+        # " <- This quotation mark stops Vim\'s syntax highlighting
+        # from thinking the rest of this file is quoted, because it
+        # thinks the quotation mark before it is escaped. And that
+        # the quotation mark before *that* one started a quote. Anywho...
     fi
 }
 
@@ -476,6 +484,7 @@ fi
 if ! pyenv virtualenvwrapper 2>/dev/null
     then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
+
 
 # Node Version Manager (NVM)
 if [ -d ~/.nvm ]; then
