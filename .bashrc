@@ -19,7 +19,6 @@ fi
 export DEFAULT_USER=hipikat
 export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
-export KSP_PLUGINS='/Users/00047925/Library/Application Support/Steam/steamapps/common/Kerbal Space Program/GameData'
 
 # weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
 export MAN_DISABLE_SECCOMP=1
@@ -131,7 +130,7 @@ export COPYFILE_DISABLE=true
 # Ignore case when pattern is all lowercase & print raw control characters
 export LESS="-iR"
 # Ignore duplicate history entries
-export HISTCONTROL=ignoredups
+export HISTCONTROL=ignoredups:erasedups
 # Maximum number of lines contained in the history file
 export HISTFILESIZE=131071
 # Maximum number of commands to remember in the command history
@@ -337,8 +336,11 @@ function set_ps1_strings() {
 function prepare_prompt() {
     #last_command=$?     # Must come first!
 
-    # Flush buffered command-line history items to ~/.bash_history
+    # Append, clear, and read, to, of, and from, ~/.bash_history
+    # (I.e. try to keep history consistent, despite 20 screens and 4000 bash shells)
     history -a
+    history -c
+    history -r
 
     set_ps1_strings
     screen_title="$SHORT_PWD"
