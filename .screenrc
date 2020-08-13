@@ -39,8 +39,6 @@ ignorecase on
 #term screen-256color
 #term xterm-256color
 
-termcapinfo xterm* ti@:te@
-
 # The vt100 description does not mention "dl". *sigh*
 #termcapinfo vt100 dl=5\E[M
 
@@ -72,6 +70,10 @@ termcapinfo xterm* ti@:te@
 attrcolor b ".I"
 # Tell screen how to set colors. AB = background, AF=foreground
 termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+# Make xterm scrolling work properly with screen.
+termcapinfo xterm-color|xterm|xterms|xs|rxvt ti@:te@
+
 # Use current bg color for erased chars
 defbce "on"
 # Set TERM
