@@ -1,4 +1,5 @@
 *.bak
+*.egg-info/
 *.pyc
 *.swp
 *.vimsession
@@ -15,7 +16,7 @@
 .project
 .vs
 .vs-*
-*.egg-info/
+_mocks/
 _nocvs/
 Gemfile.lock
 Icon?
