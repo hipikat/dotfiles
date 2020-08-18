@@ -281,7 +281,13 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias per='pipenv run'
+alias perp='pipenv run python'
+alias pesh='pipenv shell'
+
 alias pif='pip freeze'
+
+alias pmn='python manage.py'
 
 alias psa='ps aux'
 alias psg='ps aux | grep -i'

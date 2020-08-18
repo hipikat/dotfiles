@@ -1,0 +1,16 @@
+bash
+flake8
+gettext
+gnu-sed
+gnu-tar
+jq
+mosh
+pipenv
+pyenv
+pyenv-virtualenv
+pyenv-virtualenvwrapper
+readline
+screen
+tree
+vim
+wget
