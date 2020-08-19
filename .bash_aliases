@@ -288,6 +288,7 @@ alias pesh='pipenv shell'
 alias pif='pip freeze'
 
 alias pmn='python manage.py'
+alias pmsh='python manage.py shell'
 
 alias psa='ps aux'
 alias psg='ps aux | grep -i'

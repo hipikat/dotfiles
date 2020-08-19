@@ -337,3 +337,5 @@ autocmd FileType yaml setlocal expandtab
 
 autocmd FileType sass setlocal tabstop=2
 
+
+autocmd FileType python,c,cpp TagbarOpen
