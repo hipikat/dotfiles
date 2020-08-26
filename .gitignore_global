@@ -16,10 +16,12 @@
 .project
 .vs
 .vs-*
+_dump/
 _mocks/
 _nocvs/
 Gemfile.lock
 Icon?
+Pipfile.lock
 Thumbs.db
 ehthumbs.db
 htmlcov/

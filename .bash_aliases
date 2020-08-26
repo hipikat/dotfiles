@@ -281,6 +281,8 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias pei='pipenv install'
+alias peid='pipenv install --dev'
 alias per='pipenv run'
 alias perp='pipenv run python'
 alias pesh='pipenv shell'

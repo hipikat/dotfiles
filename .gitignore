@@ -1,3 +1,4 @@
 .irssi/config*
 .vim/bundle/*
 nohup.out
+.config/configstore/

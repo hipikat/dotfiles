@@ -9,6 +9,7 @@ pipenv
 pyenv
 pyenv-virtualenv
 pyenv-virtualenvwrapper
+pylint
 readline
 screen
 tree

@@ -7,6 +7,7 @@
         "*.swp*",
         "*.example",
         ".git",
+        ".gitignore",
         "CONFIG",
         "plumb_files.*",
         "LICENSE.rst",

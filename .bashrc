@@ -205,6 +205,7 @@ paths+=( /usr/local/heroku/bin )
 paths+=( /usr/local/opt/coreutils/libexec/gnubin )
 paths+=( /usr/local/opt/gnu-sed/libexec/gnubin )
 paths+=( /usr/local/opt/gnu-tar/libexec/gnubin )
+#paths+=( /usr/local/opt/ruby/bin )
 paths+=( /usr/local/sbin /usr/local/bin )
 paths+=( /usr/local/mysql/bin )
 paths+=( /usr/games /foo/bar /bar/foo )
@@ -495,6 +496,9 @@ if [ -d ~/.nvm ]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # Load NVM
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Load NVM bash_completion
 fi
+
+# Whatever rbenv is
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 
 

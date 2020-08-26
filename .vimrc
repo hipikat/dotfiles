@@ -32,6 +32,7 @@ Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/vim-flake8'
+" Plugin 'scrooloose/syntastic'
 Plugin 'saltstack/salt-vim'
 
 " All of your Plugins must be added before the following line
