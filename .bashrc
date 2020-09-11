@@ -19,6 +19,7 @@ fi
 export DEFAULT_USER=hipikat
 export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
+export LOCAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
 
 # weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
 export MAN_DISABLE_SECCOMP=1
@@ -132,9 +133,9 @@ export LESS="-iR"
 # Ignore duplicate history entries
 export HISTCONTROL=ignoredups:erasedups
 # Maximum number of lines contained in the history file
-export HISTFILESIZE=131071
+export HISTFILESIZE=8200
 # Maximum number of commands to remember in the command history
-export HISTSIZE=255
+export HISTSIZE=4096
 # Time specifier, between line number and command, in the `history` command
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 

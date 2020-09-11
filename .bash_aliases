@@ -119,6 +119,7 @@ function _git_log_author() {
 function _git_log_author_stat() {
     git log --color=always --author="$@" --stat
 }
+alias gbl='git blame'
 alias gbr='git branch'
 alias gbra='git branch -a'
 alias gbrav='git branch -av'
@@ -286,6 +287,10 @@ alias peid='pipenv install --dev'
 alias per='pipenv run'
 alias perp='pipenv run python'
 alias pesh='pipenv shell'
+
+alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
+alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
+alias pg_ctl-mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
 
 alias pif='pip freeze'
 
