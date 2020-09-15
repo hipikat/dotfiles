@@ -35,6 +35,9 @@ Plugin 'majutsushi/tagbar'
 Plugin 'vim-scripts/vim-flake8'
 " Plugin 'scrooloose/syntastic'
 Plugin 'saltstack/salt-vim'
+Plugin 'chiel92/vim-autoformat'
+Plugin 'othree/html5.vim'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -106,6 +109,7 @@ noremap \ ,
 noremap <leader>a <C-A> 50
 
 " Fix syntax
+map <leader>f :Autoformat<CR>
 map <leader>F :syntax sync fromstart<CR>
 
 " When did paste start resetting expandtab this never used to happen to me
@@ -121,8 +125,6 @@ map <leader>y :set syntax=yaml<CR>
 " Check for pep8 compliance
 "let g:pep8_map='<leader>8'
 map <leader>8 :call Flake8()<CR>
-
-" Filter the whole file with (html)tidy
 
 " Run PyLint
 "map <leader>p :PyLint<CR>
@@ -180,7 +182,7 @@ highlight ColorColumn ctermbg=8
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
 
 " Tab behaviour
-set tabstop=2           " Number of spaces a <Tab> counts for
+set tabstop=4           " Number of spaces a <Tab> counts for
 set shiftwidth=2        " Spaces for each step of (auto)indent
 set expandtab           " Use spaces for tabs; Use CTRL-V<Tab> for tabs
 
