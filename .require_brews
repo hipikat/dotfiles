@@ -1,4 +1,6 @@
 bash
+coreutils
+ffmpeg
 flake8
 gettext
 gnu-sed
@@ -15,3 +17,4 @@ screen
 tree
 vim
 wget
+youtube-dl
