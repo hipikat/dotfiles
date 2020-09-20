@@ -31,6 +31,9 @@ compresspdf() {
 
 alias cpr='cp -r'
 
+# Cut to window (column width)
+alias ctw='cut -c1-$(tput cols)'
+
 function dif() {
     colordiff -w "$@" | less -R
 }
