@@ -1,0 +1,89 @@
+# Change to the Weboffice Network Location
+#scselect 'Website Office (Wired)'
+
+
+# Disable Wi-Fi
+#networksetup -setairportpower en0 off
+
+
+# Setup
+if [ -z "$HOME" ]; then
+    HOME=$( cd && pwd )
+fi
+mkdir -p "$HOME/var/log"
+
+
+# Magic removal
+SERVER_HOSTNAME="ada-macbook.local"
+
+#MIDDLE_USER="00047925"
+#MIDDLE_HOST="cadmus.its.uwa.edu.au"
+
+#MIDDLE_USER="awright"
+#MIDDLE_HOST="is-nix-156.is.uwa.edu.au"
+
+#MIDDLE_DOWN_PORT=24808
+#MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
+SYNERGYS_CONF="$HOME/.synergy-wfh.conf"
+
+
+# If we're on Metis (2017 MBP)
+if [ `hostname` = "$SERVER_HOSTNAME" ]; then
+
+  # We're the new Synergy server - kill all existing servers
+  killall -9 synergys
+
+    # Kill any existing upstream ssh tunnels
+    old_tunnel_pids=$( ps aux | grep ssh | grep "$MIDDLE_DOWN_PORT:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
+  if [ -n "$old_tunnel_pids" ]; then
+        for pid in "$old_tunnel_pids"; do
+            #kill -9 "$pid"
+            :
+        done
+    fi
+
+    # Give the old processes some time to die
+  sleep 3
+
+  # Launch a new server
+  echo "Running server..."
+  /Applications/Synergy.app/Contents/MacOS/synergys \
+    --address :24800 --daemon --no-tray \
+        --log "$HOME/var/log/synergys.log" --debug INFO \
+    --name "$SERVER_HOSTNAME" --enable-drag-drop \
+    -c "$SYNERGYS_CONF"
+
+    # Set up remote port forwarding over ssh,
+    # from (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT to localhost:24800
+    #nohup sshpass -p "$MIDDLE_PASS" ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
+    #nohup ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
+    #    -i "$MIDDLE_PRIVATE_KEY" \
+    #    "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null 2>&1
+
+else
+
+  # We're a client - kill old clients
+    killall -9 synergyc
+
+  # Kill old ssh tunnels if they're present
+  old_tunnel_pids=$( ps aux | grep ssh | grep "24800:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
+  if [ -n "$old_tunnel_pids" ]; then
+      for pid in $old_tunnel_pids; do
+          kill -9 "$pid"
+      done
+  fi
+
+    # Wait for old processes to die
+  sleep 3
+
+    # Establish a tunnel over ssh, from localhost:24800,
+    # to (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT
+    #nohup ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
+    #nohup sshpass -p "$MIDDLE_PASS" ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
+    #    -i "$MIDDLE_PRIVATE_KEY" \
+    #    "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null 2>&1
+
+  /Applications/Synergy.app/Contents/MacOS/synergyc \
+      --daemon --no-tray --debug INFO --enable-drag-drop \
+      :24800
+fi
