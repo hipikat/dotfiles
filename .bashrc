@@ -437,17 +437,17 @@ PS2+="$Color_Off "
 # Kenneth Reitz's autoenv. Autoenv wraps `cd` by default, so we need
 # to source activate.sh before defining our custom `cd` (there's one in
 # .bash_aliases), and call `autoenv_init` manually in that function.
-if [ -f ~/.local/bin/activate.sh ]; then
-    . ~/.local/bin/activate.sh
-elif [ -f ~/.autoenv/activate.sh ]; then
-    . ~/.autoenv/activate.sh
-elif [ -f /usr/local/bin/activate.sh ]; then
-    . /usr/local/bin/activate.sh
-elif [ -f /usr/bin/activate.sh ]; then
-    . /usr/bin/activate.sh
-elif [ -f /usr/local/opt/autoenv/activate.sh ]; then
-    . /usr/local/opt/autoenv/activate.sh
-fi
+#if [ -f ~/.local/bin/activate.sh ]; then
+#    . ~/.local/bin/activate.sh
+#elif [ -f ~/.autoenv/activate.sh ]; then
+#    . ~/.autoenv/activate.sh
+#elif [ -f /usr/local/bin/activate.sh ]; then
+#    . /usr/local/bin/activate.sh
+#elif [ -f /usr/bin/activate.sh ]; then
+#    . /usr/bin/activate.sh
+#elif [ -f /usr/local/opt/autoenv/activate.sh ]; then
+#    . /usr/local/opt/autoenv/activate.sh
+#fi
 ###
 
 if [ -f ~/.bash_aliases ]; then
@@ -491,12 +491,18 @@ if ! pyenv virtualenvwrapper 2>/dev/null
 fi
 
 
-# Node Version Manager (NVM)
-if [ -d ~/.nvm ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # Load NVM
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Load NVM bash_completion
+# Nodeenv
+if type -ap nodenv &>/dev/null; then
+    eval "$(nodenv init -)"
 fi
+
+
+# Node Version Manager (NVM)
+#if [ -d ~/.nvm ]; then
+#  export NVM_DIR="$HOME/.nvm"
+#  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # Load NVM
+#  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Load NVM bash_completion
+#fi
 
 # Whatever rbenv is
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi

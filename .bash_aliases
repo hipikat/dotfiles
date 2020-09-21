@@ -288,6 +288,7 @@ alias owngr='_own gr'           # Own group flag on files, recursively
 alias pei='pipenv install'
 alias peid='pipenv install --dev'
 alias per='pipenv run'
+alias perm='pipenv run manage'
 alias perp='pipenv run python'
 alias pesh='pipenv shell'
 
@@ -535,9 +536,9 @@ function cd() {
     fi
 
     # Look for autoenv scripts *after* we've successfully changed directories
-    if [[ "$(type autoenv_init 2>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
-        autoenv_init
-    fi
+    #if [[ "$(type autoenv_init 2>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
+    #    autoenv_init
+    #fi
 
 }
 
