@@ -14,7 +14,7 @@ mkdir -p "$HOME/var/log"
 
 
 # Magic removal
-SERVER_HOSTNAME="ada-macbook.local"
+SERVER_HOSTNAME="ada-macbook.lan"
 
 #MIDDLE_USER="00047925"
 #MIDDLE_HOST="cadmus.its.uwa.edu.au"
@@ -29,6 +29,7 @@ SYNERGYS_CONF="$HOME/.synergy-wfh.conf"
 
 # If we're on Metis (2017 MBP)
 if [ `hostname` = "$SERVER_HOSTNAME" ]; then
+  echo "Running server..."
 
   # We're the new Synergy server - kill all existing servers
   killall -9 synergys
@@ -46,6 +47,8 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
   sleep 3
 
   # Launch a new server
+  echo "/Applications/Synergy.app/Contents/MacOS/synergys --address :24800 --daemon --no-tray --log $HOME/var/log/synergys.log --debug INFO --name $SERVER_HOSTNAME --enable-drag-drop -c $SYNERGYS_CONF"
+
   echo "Running server..."
   /Applications/Synergy.app/Contents/MacOS/synergys \
     --address :24800 --daemon --no-tray \
@@ -61,6 +64,7 @@ if [ `hostname` = "$SERVER_HOSTNAME" ]; then
     #    "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null 2>&1
 
 else
+  echo "${hostname} != $SERVER_HOSTNAME"
 
   # We're a client - kill old clients
     killall -9 synergyc
@@ -85,5 +89,5 @@ else
 
   /Applications/Synergy.app/Contents/MacOS/synergyc \
       --daemon --no-tray --debug INFO --enable-drag-drop \
-      :24800
+      lottowfh:24800
 fi
