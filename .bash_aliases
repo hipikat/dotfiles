@@ -237,6 +237,13 @@ function mkcd() {
 }
 alias mkd='mkdir'
 
+alias npi='npm install'
+alias npid='npm install -D'
+alias npia='npm install --production=false'
+alias npl='npm list'
+alias nps='npm show'
+alias nrn='npm run'
+
 # Common chown/chgrp shortcuts
 function _own() {
 
@@ -277,7 +284,7 @@ function _own() {
     else
         eval chown $ch_ops "$ch_owners" "$ch_targets"
     fi
-}
+}   # end _own()
 alias own='_own b'              # Own both user and group on files
 alias ownr='_own br'            # Own user and group on files, recursively
 alias ownu='_own u'             # Own user flag on files
