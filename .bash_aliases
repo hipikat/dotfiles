@@ -20,6 +20,9 @@
 
 alias brc='. ~/.bashrc'
 
+alias bri='brew info'
+alias bru='brew update; brew upgrade; brew doctor'
+
 alias cd..='cd ..'
 
 alias clr='clear'

@@ -1,13 +1,17 @@
 bash
 coreutils
+ctags
 ffmpeg
 flake8
+geckodriver
 gettext
 gnu-sed
 gnu-tar
 jq
 mosh
+nodenv
 pipenv
+postgresql
 pyenv
 pyenv-virtualenv
 pyenv-virtualenvwrapper
