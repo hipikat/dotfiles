@@ -14,7 +14,7 @@ mkdir -p "$HOME/var/log"
 
 
 # Magic removal
-SERVER_HOSTNAME="ada-macbook.local"
+SERVER_HOSTNAME="is1005299.local"
 
 #MIDDLE_USER="00047925"
 #MIDDLE_HOST="cadmus.its.uwa.edu.au"
