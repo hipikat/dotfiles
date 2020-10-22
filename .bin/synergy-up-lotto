@@ -87,5 +87,5 @@ else
 
   /Applications/Synergy.app/Contents/MacOS/synergyc \
       --daemon --no-tray --debug INFO --enable-drag-drop \
-      lottomac:24800
+      pomelo:24800
 fi
