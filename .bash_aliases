@@ -244,8 +244,8 @@ alias npi='npm install'
 alias npid='npm install -D'
 alias npia='npm install --production=false'
 alias npl='npm list'
+alias npr='npm run'
 alias nps='npm show'
-alias nrn='npm run'
 
 # Common chown/chgrp shortcuts
 function _own() {
