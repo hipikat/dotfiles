@@ -5,6 +5,7 @@ ffmpeg
 flake8
 geckodriver
 gettext
+git
 gnu-sed
 gnu-tar
 jq

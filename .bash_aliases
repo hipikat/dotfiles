@@ -240,6 +240,8 @@ function mkcd() {
 }
 alias mkd='mkdir'
 
+alias nodist='grep -v "\(\.css\|\.map\|.min\|.svg\)"'
+
 alias npi='npm install'
 alias npid='npm install -D'
 alias npia='npm install --production=false'
