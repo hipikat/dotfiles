@@ -34,7 +34,7 @@ compresspdf() {
 
 alias cpr='cp -r'
 
-# Cut to window (column width)
+# Cut-to-window (column width)
 alias ctw='cut -c1-$(tput cols)'
 
 function dif() {
@@ -117,7 +117,7 @@ function _git_diff_commit() {
     # - commits_behind defaults to '1'
     target_commit=${1:-HEAD}
     commits_behind=${2:-1}
-    git diff $target_commit^$commits_behind $target_commit
+    git diff --color=always $target_commit^$commits_behind $target_commit
 }
 function _git_log_author() {
     git log --color=always --author="$@"
@@ -126,10 +126,11 @@ function _git_log_author_stat() {
     git log --color=always --author="$@" --stat
 }
 alias gbl='git blame'
-alias gbr='git branch'
-alias gbra='git branch -a'
-alias gbrav='git branch -av'
-alias gbrv='git branch -v'
+alias gbr='git branch --color=always'
+alias gbra='git branch --color=always -a'
+alias gbrav='git branch --color=always -av'
+alias gbrd='git branch --color=always -d'
+alias gbrv='git branch --color=always -v'
 alias gch='git checkout'
 alias gchb='git checkout -b'
 alias gcht='git checkout -t'
@@ -146,8 +147,8 @@ alias gcoam='git commit -am'
 alias gcoAm='git add -A; git commit -am'
 alias gcoamp='_git_commit_n_push -am'
 alias gcoAmp='git add -A; _git_commit_n_push -am'
-alias gdi='git diff'
-alias gdic='git diff --cached'
+alias gdi='git diff --color=always'
+alias gdic='git diff --color=always --cached'
 alias gdico='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
