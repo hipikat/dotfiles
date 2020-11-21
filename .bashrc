@@ -338,12 +338,6 @@ function set_ps1_strings() {
 function prepare_prompt() {
     #last_command=$?     # Must come first!
 
-    # Append, clear, and read, to, of, and from, ~/.bash_history
-    # (I.e. try to keep history consistent, despite 20 screens and 4000 bash shells)
-    history -a
-    history -c
-    history -r
-
     set_ps1_strings
     screen_title="$SHORT_PWD"
     screen_title+=`echo -ne " \xC2\xA7 "`   # Section sign
@@ -387,6 +381,13 @@ function prepare_command() {
 
     # Return the terminal to its default colour; the prompt may have changed it
     echo -en "\033[00m"
+
+    # Append, clear, and read, to, of, and from, ~/.bash_history
+    # (I.e. try to keep history consistent, despite 20 screens and 4000 bash shells)
+    history -a
+    history -c
+    history -r
+
 }
 trap 'prepare_command' DEBUG
 
