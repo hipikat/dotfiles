@@ -299,6 +299,8 @@ alias owngr='_own gr'           # Own group flag on files, recursively
 
 alias pei='pipenv install'
 alias peid='pipenv install --dev'
+alias peid.='pipenv install --dev --python `which python`'
+alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
 alias perm='pipenv run manage'
 alias perp='pipenv run python'
