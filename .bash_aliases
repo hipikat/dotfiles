@@ -71,6 +71,15 @@ function _grep() {
         grep --color=always "$@"
     fi
 }
+function __grep() {
+    # If grepping recursively, and just a search term is
+    # given, defualt to searching the current directory.
+    if [[ "$#" -eq "3" && $1 == *"r"* ]]; then
+        grep --color=always "$@" ./
+    else
+        grep --color=always "$@"
+    fi
+}
 alias g='_grep -I'          # I: ignores binary files
 alias gn='_grep -In'        # n: print line numbers
 alias gi='_grep -Ii'        # i: case insensitive
@@ -80,8 +89,10 @@ alias gv='_grep -Iv'
 alias gin='_grep -Iin'
 alias grn='_grep -Irn'
 alias gir='_grep -Iri'
+alias girnn='__grep -Iri --exclude-dir=node_modules'
 alias girv='_grep -Iriv'
-alias girn='_grep -Irin'
+alias girn='__grep -Irin'
+alias girnnn='__grep -Irin --exclude-dir=node_modules'
 alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
@@ -305,6 +316,7 @@ alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
 alias perm='pipenv run manage'
 alias perp='pipenv run python'
+alias pers='pipenv run server'
 alias pesh='pipenv shell'
 
 alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
