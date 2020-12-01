@@ -54,8 +54,13 @@ function docker-rmi-dangling() {
     docker rmi $(docker images --filter dangling=true -q)
 }
 
-alias dcp='docker-compose'
+###
+# Docker
 alias dbd='docker build'
+alias dcp='docker-compose'
+# (kill all)
+alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
+alias dps='docker ps'
 alias drn='docker run'
 
 # Re-execute the last command, but prefix it with 'sudo'
@@ -311,12 +316,15 @@ alias owngr='_own gr'           # Own group flag on files, recursively
 
 alias pei='pipenv install'
 alias peid='pipenv install --dev'
-alias peid.='pipenv install --dev --python `which python`'
+alias peid.='pipenv install --dev --python `pyenv which python`'
 alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
+alias perd='pipenv run django'
 alias perm='pipenv run manage'
+alias perv='pipenv --rm'
 alias perp='pipenv run python'
 alias pers='pipenv run server'
+alias persh='pipenv run shell'
 alias pesh='pipenv shell'
 
 alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
