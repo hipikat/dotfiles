@@ -17,7 +17,6 @@
 
 ### 1. Convenience alises
 ##########################################
-
 alias brc='. ~/.bashrc'
 
 alias bri='brew info'
@@ -62,6 +61,11 @@ alias dcp='docker-compose'
 alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
 alias dps='docker ps'
 alias drn='docker run'
+
+# Fake TTY
+function fty() {
+    script -qfec "$(printf "%q " "$@")"
+}
 
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
@@ -140,6 +144,15 @@ function _git_log_author() {
 }
 function _git_log_author_stat() {
     git log --color=always --author="$@" --stat
+}
+#alias git.resetlocks='git reset Pipfile.lock'
+#alias gam='git commit --amend'
+function gam() {
+    if [ "$#" -eq "0" ]; then
+      git commit --amend
+    else
+      git commit --amend -m "@"
+    fi
 }
 alias gbl='git blame'
 alias gbr='git branch --color=always'
@@ -257,12 +270,34 @@ function mkcd() {
 }
 alias mkd='mkdir'
 
+alias ne.l='nodenv local'
+alias ne.s='nodenv shell'
+alias ne.g='nodenv global'
+alias nei='nodenv install'
+alias neil='nodenv install --list'
+alias ner='nodenv rehash'
+alias nev='nodenv version'
+alias nevs='nodenv versions'
+alias newi='nodenv which'
+alias newe='nodenv whence'
+function neilg() {
+  nodenv install --list | grep "$@"
+}
+
 alias nodist='grep -v "\(\.css\|\.map\|.min\|.svg\)"'
 
-alias npi='npm install'
+alias npi='npm install -P'
 alias npid='npm install -D'
-alias npia='npm install --production=false'
+alias npia='npm install -PD'
+alias npig='npm install --global'
 alias npl='npm list'
+alias npl0='npm list --depth=0'
+alias npl1='npm list --depth=1'
+alias npu='npm update'
+alias npua='npm update --dev'
+alias npud='npm --depth=9999 update'
+alias npuad='npm --depth=9999 update --dev'
+alias npo='npm outdated'
 alias npr='npm run'
 alias nps='npm show'
 
@@ -503,6 +538,12 @@ alias tre2='tre -L 2'
 alias tre3='tre -L 3'
 alias tre4='tre -L 4'
 alias tre5='tre -L 5'
+alias tren='tre -I node_modules'
+alias tren2='tre -L 2 -I node_modules'
+alias tren3='tre -L 3 -I node_modules'
+alias tren4='tre -L 4 -I node_modules'
+alias tren5='tre -L 5 -I node_modules'
+
 
 alias tlf='tail -F'
 
