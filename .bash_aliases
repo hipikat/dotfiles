@@ -350,6 +350,7 @@ alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
 alias pei='pipenv install'
+alias pei.='pipenv install --python `pyenv which python`'
 alias peid='pipenv install --dev'
 alias peid.='pipenv install --dev --python `pyenv which python`'
 alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
