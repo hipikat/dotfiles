@@ -62,6 +62,7 @@ alias dcp='docker-compose'
 alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
 alias dps='docker ps'
 alias drn='docker run'
+alias dsi='docker system info'
 
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'

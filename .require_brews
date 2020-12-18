@@ -13,6 +13,7 @@ mosh
 nodenv
 pipenv
 postgresql
+pstree
 pyenv
 pyenv-virtualenv
 pyenv-virtualenvwrapper
