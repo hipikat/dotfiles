@@ -18,10 +18,10 @@ screen      # 11
 screen      # 12
 
 # Set up screens
-at 0 stuff "npr watch^M"
+at 0 stuff "npr develop^M"
 at 1 stuff "sleep 5^Mper server^M"
 #at 2 stuff ""
-at 3 stuff "vim Dockerfile Pipfile webpack.config.js package.json^M"
+at 3 stuff "vim Dockerfile Pipfile etc/webpack.config.js package.json^M"
 at 4 stuff "cd src/hpk/settings^Mvim base.py local.py^M"
 at 5 stuff "cd src^M"
 at 6 stuff "cd src^M"
