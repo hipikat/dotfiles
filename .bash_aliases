@@ -56,11 +56,28 @@ function docker-rmi-dangling() {
 ###
 # Docker
 alias dbd='docker build'
-alias dcp='docker-compose'
+alias dcm='docker-compose'
+alias dcmu='docker-compose up'
+alias dcn='docker container'
+alias dcns='docker container ls'
+alias dex='docker exec'
+alias dexit='docker exec -it'
+function dexsh() {
+  docker exec -it "$@" /bin/bash
+}
+alias dim='docker image'
+alias dims='docker images'
+alias dimrm='docker image rm'
 # (kill all)
 alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
 alias dps='docker ps'
 alias drn='docker run'
+alias drnit='docker run -it'
+alias dsp='docker system prune'
+alias dsp!='yes | docker system prune'
+function drnsh() {
+  docker run -it "$@" /bin/bash
+}
 
 # Fake TTY
 function fty() {
@@ -239,6 +256,22 @@ fi
 alias hs='history'
 alias hsg='history | grep -i'
 alias hsn='history -n'          # Append new lines from the history file to history
+
+
+#function hsg() {
+#    # Print reversed, filtered history to .hsging1
+#    history | grep -i "$@" | tac > ~/.hsging1
+#    cat ~/.hsging1 | sort -uk2 | sort -nk1 | cut -f2- > ~/.hsging2
+#    tac ~/.hsging2 > ~/.hsging3
+#    cat ~/.hsging
+#    #rm ~/.hsging*
+#}
+
+#tac stuff.txt > stuff2.txt
+#cat -n stuff2.txt | sort -uk2 | sort -nk1 | cut -f2- > stuff3.txt
+#tac stuff3.txt > stuff4.txt
+#cat stuff4.txt
+
 
 # HTTPie - a CLI, cURL-like tool for humans
 alias htp='http --pretty all'
