@@ -18,8 +18,8 @@ screen      # 11
 screen      # 12
 
 # Set up screens
-at 0 stuff "npr develop^M"
-at 1 stuff "sleep 5^Mper server^M"
+at 0 stuff "pesh^M"
+at 1 stuff "pesh^M"
 #at 2 stuff ""
 at 3 stuff "cd etc^Mvim Dockerfile Dockerfile.alpine Dockerfile.opensuse docker-compose.yml^m"
 at 4 stuff "cd src/sass^Mvim styles.sass foundation/_settings.scss^m"

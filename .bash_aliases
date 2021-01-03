@@ -63,8 +63,10 @@ alias dcns='docker container ls'
 alias dex='docker exec'
 alias dexit='docker exec -it'
 function dexsh() {
-  docker exec -it "$@" /bin/bash
+  docker exec -it $@ /bin/bash
 }
+alias dexsh.="dexsh --user=$(whoami)"
+alias dexsh.src="dexsh. -v $(pwd)/src:/app/src"
 alias dim='docker image'
 alias dims='docker images'
 alias dimrm='docker image rm'
@@ -77,8 +79,10 @@ alias dsi='docker system info'
 alias dsp='docker system prune'
 alias dsp!='yes | docker system prune'
 function drnsh() {
-  docker run -it "$@" /bin/bash
+  docker run -it $@ /bin/bash
 }
+alias drnsh.="drnsh --user=$(whoami)"
+alias drnsh.src="drnsh. -v $(pwd)/src:/app/src"
 
 # Fake TTY
 function fty() {
