@@ -18,15 +18,15 @@ screen      # 11
 screen      # 12
 
 # Set up screens
-at 0 stuff "npr develop^M"
-at 1 stuff "sleep 5^Mper server^M"
+at 0 stuff "pesh^M"
+at 1 stuff "pesh^M"
 #at 2 stuff ""
-at 3 stuff "vim Dockerfile Pipfile etc/webpack.config.js package.json^M"
-at 4 stuff "cd src/hpk/settings^Mvim base.py local.py^M"
-at 5 stuff "cd src^M"
+at 3 stuff "cd etc^Mvim Dockerfile Dockerfile.alpine Dockerfile.opensuse docker-compose.yml^m"
+at 4 stuff "cd src/sass^Mvim styles.sass foundation/_settings.scss^m"
+at 5 stuff "cd src/js^Mvim base.js main.js hpk.js^M"
 at 6 stuff "cd src^M"
-at 7 stuff "cd src/scss^Mvim styles.sass foundation/_index.scss foundation/_settings.scss^M"
-at 8 stuff "cd src/js^Mvim main.js base.js^M"
+at 7 stuff "cd src^M"
+at 8 stuff "cd src^M"
 #at 9 stuff ""
 at 10 stuff "cd static^Mtree -sh^M"
 at 11 stuff "vim static/index-debug.html^M"
