@@ -20,6 +20,7 @@ export DEFAULT_USER=hipikat
 export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
 export LOCAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+export GOPATH=$HOME/go
 
 # weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
 export MAN_DISABLE_SECCOMP=1
@@ -202,6 +203,7 @@ declare -a paths
 # Added to the front of $PATH, if not already included, in order
 paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
 paths+=( ~/.local/bin )
+paths+=( ~/go/src/github.com/docker/swarmkit/bin )
 paths+=( /usr/local/heroku/bin )
 paths+=( /usr/local/opt/coreutils/libexec/gnubin )
 paths+=( /usr/local/opt/gnu-sed/libexec/gnubin )
