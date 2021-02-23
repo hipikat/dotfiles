@@ -1,6 +1,7 @@
 bash
 coreutils
 ctags
+docker-machine
 ffmpeg
 flake8
 geckodriver

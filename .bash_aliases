@@ -31,6 +31,8 @@ compresspdf() {
   gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
 }
 
+alias ccat='pygmentize -O style=monokai -f console256 -g'
+
 alias cpr='cp -r'
 
 # Cut-to-window (column width)
@@ -55,9 +57,16 @@ function docker-rmi-dangling() {
 
 ###
 # Docker
+alias dat='docker attach'
 alias dbd='docker build'
+
 alias dcm='docker-compose'
+alias dcm='docker-compose'
+alias dcmr='docker-compose run'
+alias dcmr.rm='docker-compose run --rm'
 alias dcmu='docker-compose up'
+alias dcmu.d='docker-compose up -d'
+
 alias dcn='docker container'
 alias dcns='docker container ls'
 alias dex='docker exec'
@@ -69,15 +78,28 @@ alias dexsh.="dexsh --user=$(whoami)"
 alias dexsh.src="dexsh. -v $(pwd)/src:/app/src"
 alias dim='docker image'
 alias dims='docker images'
+alias dimi='docker image inspect'
 alias dimrm='docker image rm'
 # (kill all)
 alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
+
+alias dmac='docker-machine'
+alias dmacc='docker-machine create'
+alias dmacc.vb='docker-machine create -d virtualbox'
+alias dmace='docker-machine env'
+
+
 alias dps='docker ps'
 alias drn='docker run'
 alias drnit='docker run -it'
 alias dsi='docker system info'
 alias dsp='docker system prune'
 alias dsp!='yes | docker system prune'
+alias dst='docker start'
+function dstat() {
+  docker start $@
+  docker attach $@
+}
 function drnsh() {
   docker run -it $@ /bin/bash
 }
@@ -415,6 +437,8 @@ alias pmsh='python manage.py shell'
 
 alias psa='ps aux'
 alias psg='ps aux | grep -i'
+
+alias pst='pstree -UpaunZ | less --quit-if-one-screen'
 
 alias rmr='rm -R'
 alias rmf='rm -f'
