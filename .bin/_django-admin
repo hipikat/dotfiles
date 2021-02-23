@@ -5,6 +5,10 @@
 # PYTHONPATH to a src/ directory under the project, if it exists.
 
 
+# You can think of this file as "very old", and "no longer needed".
+# We just use Pipenv now.
+
+
 # If a Python virtual environment with an associated project (typically
 # set by Virtualenvwrapper) is activated...
 if [ -n "$VIRTUAL_ENV" -a -f "$VIRTUAL_ENV/.project" ]; then

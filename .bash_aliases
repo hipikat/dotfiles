@@ -49,7 +49,8 @@ alias dis='dispense'
 
 alias dfh='df -h'
 
-alias dja='_django-admin'
+#alias dja='_django-admin'
+alias dja='django-admin'
 
 function docker-rmi-dangling() {
     docker rmi $(docker images --filter dangling=true -q)
@@ -105,6 +106,30 @@ function drnsh() {
 }
 alias drnsh.="drnsh --user=$(whoami)"
 alias drnsh.src="drnsh. -v $(pwd)/src:/app/src"
+
+
+# Digital ocean api
+function do.api() {
+    curl -s \
+      -X GET \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
+      "https://api.digitalocean.com/v2/$@" | jq -C | less -F
+}
+alias dom='docker-machine'
+function dom.create() {
+    docker-machine create --driver digitalocean \
+        --digitalocean-access-token $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=") \
+        --digitalocean-backups=false \
+        --digitalocean-image 72067660 \
+        --digitalocean-region sgp1 \
+        --digitalocean-size 1gb \
+        --digitalocean-ssh-key-fingerprint "fa:fd:ae:da:0e:c7:79:f6:d6:bd:42:a3:24:d3:c7:c8" \
+        --digitalocean-ssh-user "root" \
+        --engine-install-url "https://releases.rancher.com/install-docker/19.03.9.sh" \
+        `adjspecies`
+}
+alias dom.rm='docker-machine rm -y -f'
 
 # Fake TTY
 function fty() {
@@ -318,6 +343,14 @@ alias irssi2='irssi --config=~/.irssi/config2'
 alias jq.='jq .'
 alias jqc='jq -C'
 alias jqc.='jq -C .'
+alias j='jqc'
+alias j.='jqc.'
+#function jl() {
+#    j "$@" | less
+#}
+#fucntion jl.() {
+#    j. "$@" | less
+#}
 
 # Repeat the last command, piped through less
 #function les() {
@@ -425,6 +458,12 @@ alias perp='pipenv run python'
 alias pers='pipenv run server'
 alias persh='pipenv run shell'
 alias pesh='pipenv shell'
+
+alias pye='pyenv'
+alias pyev='pyenv version'
+alias pyevs='pyenv versions'
+alias pyel='pyenv install -list | less'
+alias depe='deactivate ; exit'
 
 alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
 alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
@@ -758,10 +797,10 @@ function 10shells() {
 if [ "$TERM" != "dumb" ]; then
     if [ -f /usr/bin/dircolors ]; then
         eval "`dircolors -b`"
-        alias ls='ls -F --color=auto'       # Traditional unix options
+        alias ls='ls -Fh --color=auto'       # Traditional unix options
     else 
         export CLICOLOR_FORCE='TRUE'
-        alias ls='ls -G -F'                 # Probably on a Mac
+        alias ls='ls -Gh -F'                 # Probably on a Mac
     fi
 fi
 
@@ -867,9 +906,9 @@ function dosass() {
     eval "bundle exec compass watch &"
     cd "../.."
 }
-function runsrv() {
-    eval "django-admin.py runserver "$@" --traceback"
-}
+#function runsrv() {
+#    eval "django-admin.py runserver "$@" --traceback"
+#}
 
 
 
