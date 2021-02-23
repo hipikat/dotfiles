@@ -436,6 +436,11 @@ alias perp='pipenv run python'
 alias pers='pipenv run server'
 alias persh='pipenv run shell'
 alias pesh='pipenv shell'
+
+alias pye='pyenv'
+alias pyev='pyenv version'
+alias pyevs='pyenv versions'
+alias pyel='pyenv install -list | less'
 alias depe='deactivate ; exit'
 
 alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
