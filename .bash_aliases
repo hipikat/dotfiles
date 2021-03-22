@@ -460,6 +460,7 @@ alias persh='pipenv run shell'
 alias pesh='pipenv shell'
 
 alias pye='pyenv'
+alias pyei='pyenv install'
 alias pyev='pyenv version'
 alias pyevs='pyenv versions'
 alias pyel='pyenv install -list | less'
