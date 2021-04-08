@@ -445,6 +445,7 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias peg='pipenv graph'
 alias pei='pipenv install'
 alias pei.='pipenv install --python `pyenv which python`'
 alias peid='pipenv install --dev'
@@ -452,6 +453,7 @@ alias peid.='pipenv install --dev --python `pyenv which python`'
 alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
 alias perd='pipenv run django'
+alias perf='pipenv run pip freeze'
 alias perm='pipenv run manage'
 alias perv='pipenv --rm'
 alias perp='pipenv run python'
