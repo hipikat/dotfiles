@@ -59,7 +59,7 @@ function docker-rmi-dangling() {
 ###
 # Docker
 alias dat='docker attach'
-alias dbd='docker build'
+alias dbl='docker build'
 
 alias dcm='docker-compose'
 alias dcm='docker-compose'
