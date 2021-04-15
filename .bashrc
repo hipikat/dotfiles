@@ -19,7 +19,9 @@ fi
 export DEFAULT_USER=hipikat
 export GH=git@github.com
 export MYGH=git@github.com:$DEFAULT_USER
-export LOCAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+if ifconfig &> /dev/null; then
+    export LOCAL_IP=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | head -1)
+fi
 export GOPATH=$HOME/go
 
 # weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
@@ -485,7 +487,7 @@ if type -ap pyenv &>/dev/null; then
     # You should install 'coreutils' with Homebrew, and make sure GNU readlink
     # is on your path. (readlink '-f' doesn't exist with default OS X readlink.)
     export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
-    eval "$(pyenv init -)"
+    eval "$(pyenv init - --no-rehash)"
 fi
 
 # Virtualenvwrapper
@@ -508,7 +510,9 @@ fi
 #fi
 
 # Whatever rbenv is
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+if which rbenv &> /dev/null; then
+    eval "$(rbenv init -)";
+fi
 
 
 
