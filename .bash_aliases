@@ -62,11 +62,16 @@ alias dat='docker attach'
 alias dbl='docker build'
 
 alias dcm='docker-compose'
-alias dcm='docker-compose'
+alias dcmb='docker-compose build'
 alias dcmr='docker-compose run'
 alias dcmr.rm='docker-compose run --rm'
 alias dcmu='docker-compose up'
+alias dcmu.b='docker-compose up --build'
 alias dcmu.d='docker-compose up -d'
+alias dcmd='docker-compose down'
+function dcm.migrate() {
+    docker-compose exec $@ pipenv run manage migrate
+}
 
 alias dcn='docker container'
 alias dcns='docker container ls'
@@ -107,6 +112,9 @@ function drnsh() {
 }
 alias drnsh.="drnsh --user=$(whoami)"
 alias drnsh.src="drnsh. -v $(pwd)/src:/app/src"
+alias dvi="docker volume inspect"
+alias dvls="docker volume ls"
+alias dvrm="docker volume rm"
 
 
 # Digital ocean api
