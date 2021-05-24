@@ -61,15 +61,33 @@ function docker-rmi-dangling() {
 alias dat='docker attach'
 alias dbl='docker build'
 
+
 alias dcm='docker-compose'
 alias dcmb='docker-compose build'
+alias dcmex='docker-compose exec'
+function dcm.b() {
+    docker-compose exec $@ npm run watch:build
+}
+function dcm.bd() {
+    docker-compose exec $@ npm run watch:build:debug
+}
+function dcm.bp() {
+    docker-compose exec $@ npm run watch:build:prod
+}
 alias dcmr='docker-compose run'
 alias dcmr.rm='docker-compose run --rm'
 alias dcmu='docker-compose up'
 alias dcmu.b='docker-compose up --build'
 alias dcmu.d='docker-compose up -d'
 alias dcmd='docker-compose down'
-function dcm.migrate() {
+function dcm.m() {
+    docker-compose exec $@ pipenv run manage migrate
+}
+function dcm.mm() {
+    docker-compose exec $@ pipenv run manage makemigrations
+}
+function dcm.mmm() {
+    docker-compose exec $@ pipenv run manage makemigrations
     docker-compose exec $@ pipenv run manage migrate
 }
 
@@ -94,6 +112,11 @@ alias dmacc='docker-machine create'
 alias dmacc.vb='docker-machine create -d virtualbox'
 alias dmace='docker-machine env'
 
+alias dntls='docker network ls'
+alias dnti='docker network inspect'
+alias dntrm='docker network rm'
+alias dntcr='docker network create'
+alias dntco='docker network connect'
 
 alias dps='docker ps'
 alias drn='docker run'

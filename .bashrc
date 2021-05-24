@@ -487,7 +487,9 @@ if type -ap pyenv &>/dev/null; then
     # You should install 'coreutils' with Homebrew, and make sure GNU readlink
     # is on your path. (readlink '-f' doesn't exist with default OS X readlink.)
     export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
-    eval "$(pyenv init - --no-rehash)"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    #eval "$(pyenv init - --no-rehash)"
+    eval "$(pyenv init --path --no-rehash)"
 fi
 
 # Virtualenvwrapper

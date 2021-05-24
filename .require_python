@@ -1,0 +1,8 @@
+#appdirs         # for determining appropriate platform-specific dirs, e.g. a "user data dir".
+coverage
+#distblib        # "...basis for third-party packaging tools"
+#pbr             # Python Build Reasonableness
+pip-autoremove
+pipdeptree
+virtualenv
+virtualenvwrapper
