@@ -36,6 +36,7 @@ export PIPENV_IGNORE_VIRTUALENVS=1
 ##########################################
 if [ "$(uname)" == "Darwin" ]; then
     export BASIC_MACHINE_TYPE="Mac"
+    export LDFLAGS="-L/usr/local/opt/openssl/lib"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     export BASIC_MACHINE_TYPE="Linux"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then

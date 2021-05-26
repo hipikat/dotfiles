@@ -10,8 +10,10 @@ git
 gnu-sed
 gnu-tar
 jq
+mkcert
 mosh
 nodenv
+nss
 pipenv
 postgresql
 pstree

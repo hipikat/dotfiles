@@ -20,7 +20,11 @@
 alias brc='. ~/.bashrc'
 
 alias bri='brew info'
-alias bru='brew update; brew upgrade; brew doctor'
+#alias bru='brew update; brew upgrade; brew doctor'
+alias bup='brew update && echo "~~~~~~~~" && brew upgrade --dry-run'
+alias bup!='brew upgrade'
+alias bcl='brew cleanup'
+alias bdr='brew doctor'
 
 alias cd..='cd ..'
 
@@ -487,7 +491,7 @@ alias per='pipenv run'
 alias perd='pipenv run django'
 alias perf='pipenv run pip freeze'
 alias perm='pipenv run manage'
-alias perv='pipenv --rm'
+alias pe.rm='pipenv --rm'
 alias perp='pipenv run python'
 alias pers='pipenv run server'
 alias persh='pipenv run shell'
