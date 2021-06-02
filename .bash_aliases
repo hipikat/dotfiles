@@ -23,6 +23,7 @@ alias bri='brew info'
 #alias bru='brew update; brew upgrade; brew doctor'
 alias bup='brew update && echo "~~~~~~~~" && brew upgrade --dry-run'
 alias bup!='brew upgrade'
+alias Bup!='brew unpin bash pyenv vim && brew upgrade && brew pin bash pyenv vim'
 alias bcl='brew cleanup'
 alias bdr='brew doctor'
 
@@ -79,18 +80,21 @@ function dcm.bp() {
     docker-compose exec $@ npm run watch:build:prod
 }
 alias dcmr='docker-compose run'
+alias dcmr.p='docker-compose run --service-ports'
 alias dcmr.rm='docker-compose run --rm'
+alias dcmr.prm='docker-compose run --service-ports --rm'
 alias dcmu='docker-compose up'
 alias dcmu.b='docker-compose up --build'
-alias dcmu.d='docker-compose up -d'
+alias dcmu.d='docker-compose up --detach'
+alias dcmu.bd='docker-compose up --build --detach'
 alias dcmd='docker-compose down'
-function dcm.m() {
+function dcm-m() {
     docker-compose exec $@ pipenv run manage migrate
 }
-function dcm.mm() {
+function dcm-mm() {
     docker-compose exec $@ pipenv run manage makemigrations
 }
-function dcm.mmm() {
+function dcm-mmm() {
     docker-compose exec $@ pipenv run manage makemigrations
     docker-compose exec $@ pipenv run manage migrate
 }

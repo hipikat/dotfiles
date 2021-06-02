@@ -490,10 +490,12 @@ if type -ap pyenv &>/dev/null; then
     export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
     export PATH="$PYENV_ROOT/bin:$PATH"
     #eval "$(pyenv init - --no-rehash)"
-    eval "$(pyenv init --path --no-rehash)"
+    eval "$(pyenv init - --path --no-rehash)"
+    eval "$(pyenv virtualenv-init - --path --no-rehash)"
 fi
 
 # Virtualenvwrapper
+#if ! pyenv virtualenvwrapper
 if ! pyenv virtualenvwrapper 2>/dev/null
     then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
 fi
