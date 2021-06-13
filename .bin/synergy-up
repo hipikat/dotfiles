@@ -40,8 +40,8 @@ function _synergys() {
     killall -9 synergys &>/dev/null
     sleep 0.125
     run "/Applications/Synergy.app/Contents/MacOS/synergys \
-        --address :24800 --${daemon_prefix}daemon --no-tray --name $HOSTNAME \
-        --enable-drag-drop -c $HOME/.synergy/$1.conf"
+        --address :24800 --${daemon_prefix}daemon --no-tray --name $server.$location \
+        --enable-drag-drop -c $HOME/.synergy/$location-$server.conf"
 }
 
 # Client - takes server hostname
