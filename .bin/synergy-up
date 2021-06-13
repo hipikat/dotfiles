@@ -52,7 +52,7 @@ function _synergyc() {
 }
 
 # If we're on the home network
-if [[ $location = "home" ]] && [[ $network = "Wowee!" ]]; then
+if [[ $location = "home" ]] && [[ $network =~ ^Wowee ]]; then
     echo "We at home"
 
     if [[ $server = "lemon" ]]; then
