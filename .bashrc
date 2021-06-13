@@ -494,9 +494,9 @@ fi
 # Pyenv
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 if type -P pyenv &>/dev/null; then
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-    pyenv virtualenvwrapper
+    eval "$(pyenv init -)" &>/dev/null
+    eval "$(pyenv virtualenv-init -)" &>/dev/null
+    pyenv virtualenvwrapper &>/dev/null
 fi
 
 # Nodeenv
