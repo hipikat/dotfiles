@@ -1,89 +1,74 @@
-# Change to the Weboffice Network Location
-#scselect 'Website Office (Wired)'
+# !/usr/bin/env bash
+# Bring synergy up
 
+# I think we might need this for cron??
+#if [ -z "$HOME" ]; then
+#    HOME=$( cd && pwd )
+#fi
 
-# Disable Wi-Fi
-#networksetup -setairportpower en0 off
-
-
-# Setup
-if [ -z "$HOME" ]; then
-    HOME=$( cd && pwd )
-fi
-mkdir -p "$HOME/var/log"
-
-
-# Magic removal
-SERVER_HOSTNAME="is-m-00068"
-
-#MIDDLE_HOST="hpk.io"
-
-MIDDLE_USER="00047925"
-MIDDLE_HOST="cadmus.its.uwa.edu.au"
-
-#MIDDLE_USER="awright"
-#MIDDLE_HOST="is-nix-156.is.uwa.edu.au"
-
-MIDDLE_DOWN_PORT=24808
-MIDDLE_PRIVATE_KEY="$HOME/.ssh/id_rsa"
-SYNERGYS_CONF="$HOME/.synergy-kjm.conf"
-
-
-# If we're on Bellus (2015 MBP)
-if [ `hostname` = "$SERVER_HOSTNAME" ]; then
-
-  # We're the new Synergy server - kill all existing servers
-  killall -9 synergys
-
-    # Kill any existing upstream ssh tunnels
-    old_tunnel_pids=$( ps aux | grep ssh | grep "$MIDDLE_DOWN_PORT:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
-  if [ -n "$old_tunnel_pids" ]; then
-        for pid in "$old_tunnel_pids"; do
-            kill -9 "$pid"
-        done
-    fi
-
-    # Give the old processes some time to die
-  sleep 3
-
-  # Launch a new server
-  /Applications/Synergy.app/Contents/MacOS/synergys \
-    --address :24800 --daemon --no-tray \
-        --log "$HOME/var/log/synergys.log" --debug INFO \
-    --name "$SERVER_HOSTNAME" --enable-drag-drop \
-    -c "$SYNERGYS_CONF"
-
-    # Set up remote port forwarding over ssh,
-    # from (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT to localhost:24800
-    #nohup ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
-    nohup sshpass -p "$MIDDLE_PASS" ssh -fN -R "$MIDDLE_DOWN_PORT:127.0.0.1:24800" \
-        -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_USER@$MIDDLE_HOST" &>/dev/null
-
+location=$1
+server=$2
+if [[ "$3" = "debug" ]]; then
+    daemon_prefix="no-"
 else
-
-  # We're a client - kill old clients
-    killall -9 synergyc
-
-  # Kill old ssh tunnels if they're present
-  old_tunnel_pids=$( ps aux | grep ssh | grep "24800:" | sed 's/  */ /g' | cut -d ' ' -f 2 )
-  if [ -n "$old_tunnel_pids" ]; then
-      for pid in $old_tunnel_pids; do
-          kill -9 "$pid"
-      done
-  fi
-
-    # Wait for old processes to die
-  sleep 3
-
-    # Establish a tunnel over ssh, from localhost:24800,
-    # to (localhost on $MIDDLE_HOST):$MIDDLE_DOWN_PORT
-    #nohup ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
-    nohup sshpass -p "$MIDDLE_PASS" ssh -fN -L "24800:127.0.0.1:$MIDDLE_DOWN_PORT" \
-        -i "$MIDDLE_PRIVATE_KEY" \
-        "$MIDDLE_USER@$MIDDLE_HOST"
-
-  /Applications/Synergy.app/Contents/MacOS/synergyc \
-      --daemon --no-tray --debug INFO --enable-drag-drop \
-      127.0.0.1:24800
+    daemon_prefix=""
 fi
+
+network=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ SSID:/ {print $2}')
+
+
+# Command proxy - all shell commands should be passed in here; they will be
+# printed and then only evaluabed if we weren't passed a --dry-run flag
+function run() {
+    local cmd=$(echo $1)
+    printf "\n\e[0;37m"
+    if [ -z $PCT_RUN_PREFIX ]; then
+        printf "> "
+    else
+        printf $"$PCT_RUN_PREFIX"
+    fi  
+    printf "$cmd\e[0m\n"
+
+    if [ "$3" != "debug" ]; then
+        eval $cmd
+    fi  
+}
+
+
+# Server - takes filename in ~/.synergy/<filename>.conf
+function _synergys() {
+    killall -9 synergys &>/dev/null
+    sleep 0.125
+    run "/Applications/Synergy.app/Contents/MacOS/synergys \
+        --address :24800 --${daemon_prefix}daemon --no-tray --name $HOSTNAME \
+        --enable-drag-drop -c $HOME/.synergy/$1.conf"
+}
+
+# Client - takes server hostname
+function _synergyc() {
+    killall -9 synergyc &>/dev/null
+    run "/Applications/Synergy.app/Contents/MacOS/synergyc \
+        --${daemon_prefix}daemon --no-tray --enable-drag-drop \ $1"
+}
+
+# If we're on the home network
+if [[ $location = "home" ]] && [[ $network = "Wowee!" ]]; then
+    echo "We at home"
+
+    if [[ $server = "lemon" ]]; then
+        if [[ $(hostname) = "lemon.local" ]]; then
+            echo "We the lemon server"
+            _synergys home-lemon
+        else
+            echo "We a slave to lemon"
+            _synergyc lemon.home
+        fi
+    elif [[ $server = "pomelo" ]]; then
+        if [[ $(hostname) = "is1005299.lan" ]]; then
+            _synergys pomelo-home
+        else
+            _synergyc is1005299.lan
+        fi
+    fi
+fi
+

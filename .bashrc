@@ -491,29 +491,17 @@ fi
 ### Environment manipulators
 ##########################################
 
-# Pyenv shims
-if type -ap pyenv &>/dev/null; then
-    # You should install 'coreutils' with Homebrew, and make sure GNU readlink
-    # is on your path. (readlink '-f' doesn't exist with default OS X readlink.)
-    export PYENV_ROOT=$(dirname $(dirname $(readlink -f $(type -ap pyenv | head -n 1))))
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    #eval "$(pyenv init - --no-rehash)"
-    eval "$(pyenv init - --path --no-rehash)"
-    eval "$(pyenv virtualenv-init - --path --no-rehash)"
+# Pyenv
+if type -P pyenv &>/dev/null; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    pyenv virtualenvwrapper &>/dev/null
 fi
-
-# Virtualenvwrapper
-#if ! pyenv virtualenvwrapper
-if ! pyenv virtualenvwrapper 2>/dev/null
-    then . /usr/local/bin/virtualenvwrapper.sh 2>/dev/null
-fi
-
 
 # Nodeenv
 if type -ap nodenv &>/dev/null; then
     eval "$(nodenv init -)"
 fi
-
 
 # Node Version Manager (NVM)
 #if [ -d ~/.nvm ]; then

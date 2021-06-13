@@ -1,6 +1,4 @@
-# Change to the Weboffice Network Location
-#scselect 'Website Office (Wired)'
-
+# Synergy config for home
 
 # Disable Wi-Fi
 #networksetup -setairportpower en0 off
