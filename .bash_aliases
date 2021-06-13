@@ -226,6 +226,13 @@ function gad() {
         git add "$@"
     fi
 }
+function gAd() {
+    if [ "$#" -eq "0" ]; then
+        git add -A .
+    else
+        git add -A "$@"
+    fi
+}
 function _git_clone_github() {
     # TODO: If '/' not in $1, use "$1/$1"
     git clone git@github.com:$1.git ${@:2}
@@ -262,6 +269,11 @@ function gam() {
     else
       git commit --amend -m "@"
     fi
+}
+function gbru() {
+    branch=$(git symbolic-ref HEAD)
+    branch=${branch##refs/heads/}
+    git branch --set-upstream-to=$1/$branch $branch
 }
 alias gbl='git blame'
 alias gbr='git branch --color=always'
@@ -313,6 +325,23 @@ alias gsh='git show'
 alias gst='git -c color.status=always status'
 alias gstsh='git stash'
 alias gta='git tag'
+alias gwt='git worktree'
+alias gwtrm='git worktree remove'
+alias gwtl='git worktree list'
+function gwta() {
+    if [ -z $2 ]; then
+        local dir="../${1##*/}"
+        local branch=$1
+    else
+        local dir="../${2##*/}"
+        local branch=$2
+    fi
+
+    if [[ "${branch%%/*}" == "remotes" ]]; then
+        local track="--track -b ${branch##*/}"
+    fi
+    git worktree add $track $dir $branch
+}
 
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
@@ -485,6 +514,7 @@ alias owng='_own g'             # Own group flag on files
 alias ownur='_own ur'           # Own user flag on files, recursively
 alias owngr='_own gr'           # Own group flag on files, recursively
 
+alias pct.='pipenv run picata'
 alias peg='pipenv graph'
 alias pei='pipenv install'
 alias pei.='pipenv install --python `pyenv which python`'
@@ -500,6 +530,7 @@ alias perp='pipenv run python'
 alias pers='pipenv run server'
 alias persh='pipenv run shell'
 alias pesh='pipenv shell'
+
 
 alias pye='pyenv'
 alias pyei='pyenv install'

@@ -122,6 +122,12 @@ On_ICyan='\[\e[0;106m\]'    # Cyan
 On_IWhite='\[\e[0;107m\]'   # White
 
 
+### Emoji
+export EMJ_DOVE='\U1F54A'
+export EMJ_LIZARD='\U1F98E'
+export EMJ_SHELL='\U1F41A'
+
+
 ### Environment
 ##########################################
 export PAGER='less'
@@ -129,6 +135,8 @@ export EDITOR='vim'
 export VISUAL="${EDITOR}"
 export FCEDIT="${EDITOR}"
 export CVSEDITOR="${EDITOR}"
+export USE_EMOJI=true
+export PCT_RUN_PREFIX="$EMJ_SHELL "
 
 # Stop problems with ghost '._' files on OS X
 export COPYFILE_DISABLE=true
