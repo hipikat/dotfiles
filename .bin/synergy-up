@@ -48,7 +48,7 @@ function _synergys() {
 function _synergyc() {
     killall -9 synergyc &>/dev/null
     run "/Applications/Synergy.app/Contents/MacOS/synergyc \
-        --${daemon_prefix}daemon --no-tray --enable-drag-drop \ $1"
+        --${daemon_prefix}daemon --no-tray --enable-drag-drop $1"
 }
 
 # If we're on the home network
