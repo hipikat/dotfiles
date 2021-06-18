@@ -14,7 +14,14 @@ else
     daemon_prefix=""
 fi
 
-network=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ SSID:/ {print $2}')
+
+airport_bin="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
+if $airport_bin -I | awk '/ SSID:/ {print $2}' | grep '^Wowee' &>/dev/null; then
+    network="home"
+elif ifconfig | grep '192\.168\.125\.58' &>/dev/null; then
+    network="work"
+fi
+
 
 
 # Command proxy - all shell commands should be passed in here; they will be
@@ -52,10 +59,9 @@ function _synergyc() {
 }
 
 # If we're on the home network
-if [[ $location = "home" ]] && [[ $network =~ ^Wowee ]]; then
+if [[ "$network" = "home" ]]; then
     echo "We at home"
-
-    if [[ $server = "lemon" ]]; then
+    if [[ $server = "lemon3" ]]; then
         if [[ $(hostname) = "lemon.local" ]]; then
             echo "We the lemon server"
             _synergys home-lemon
@@ -65,10 +71,19 @@ if [[ $location = "home" ]] && [[ $network =~ ^Wowee ]]; then
         fi
     elif [[ $server = "pomelo" ]]; then
         if [[ $(hostname) = "is1005299.lan" ]]; then
-            _synergys pomelo-home
+            _synergys home-pomelo
         else
             _synergyc is1005299.lan
         fi
+    fi
+elif [[ "$network" = "work" ]]; then
+    echo "We at work"
+    if [[ $(hostname) = "is1005299.local" ]]; then
+        echo "We the pomelo server"
+        _synergys work
+    else
+        echo "We a slave to pomelo"
+        _synergyc is1005299.local
     fi
 fi
 
