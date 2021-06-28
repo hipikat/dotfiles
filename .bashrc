@@ -1,9 +1,7 @@
 ###
 # .bashrc
-#
-# Originally packaged under the BSD 2-Clause License at
-# https://github.com/hipikat/dotfiles by
-# Adam Wright <adam@hipikat.org>
+# Ada Wright <ada@hpk.io>
+# Find me at https://github.com/hipikat/dotfiles
 ###
 
 
@@ -24,12 +22,14 @@ if ifconfig &> /dev/null; then
 fi
 export GOPATH=$HOME/go
 
-# weird man bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
+# Weird man bug fix
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=889608
 export MAN_DISABLE_SECCOMP=1
 
-# pipenv Issue - it falsely assumes Homebrew's Python to be in a virtualenv
+# Pipenv Issue - it falsely assumes Homebrew's Python to be in a virtualenv
 # https://github.com/pypa/pipenv/issues/4316
 export PIPENV_IGNORE_VIRTUALENVS=1
+#export PIPENV_VENV_IN_PROJECT=1
 
 
 ### Machine information
