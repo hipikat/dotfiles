@@ -18,7 +18,8 @@ fi
 airport_bin="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 if $airport_bin -I | awk '/ SSID:/ {print $2}' | grep '^Wowee' &>/dev/null; then
     network="home"
-elif ifconfig | grep '192\.168\.125\.58' &>/dev/null; then
+elif ifconfig | grep '192\.168\.125\.58' &>/dev/null || $airport_bin -I | awk '/ SSID:/ {print $2}' | grep 'pomelo' &>/dev/null; then
+    echo "we at work"
     network="work"
 fi
 
@@ -83,7 +84,6 @@ elif [[ "$network" = "work" ]]; then
         _synergys work
     else
         echo "We a slave to pomelo"
-        _synergyc is1005299.local
+        _synergyc pomelo.lw
     fi
 fi
-

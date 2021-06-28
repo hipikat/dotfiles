@@ -1,4 +1,5 @@
 bash
+colordiff
 coreutils
 ctags
 docker-machine
@@ -9,6 +10,7 @@ gettext
 git
 gnu-sed
 gnu-tar
+gs
 jq
 mkcert
 mosh

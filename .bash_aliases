@@ -1,6 +1,7 @@
 ###
 # .bash_aliases
 #
+# 0.    Setup
 # 1.    Convenience aliases
 # 1.1.  Aliases affecting default program behaviour
 # 2.    Emulate missing Gnu Coreutils
@@ -10,33 +11,68 @@
 # 6.    Operating system consistency
 # 10.   Functions
 #
-# Originally packaged under the BSD 2-Clause License at
-# https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
+# By Ada Wright <ada@hpk.io>
+# https://github.com/hipikat/dotfiles 
+# Packaged under the BSD 2-Clause License
 ###
+
+
+### 0. Setup
+##########################################
+
+# Colours
+NC='\e[0m'          # No colour
+GREY='\e[0;37m'
+
+# Emoji
+EMJ_SHELL='\U1F41A'
+EMJ_SNAKE='\U1F40D'
+
+
+# Command proxy - all shell commands should be passed in here; they will be
+# printed and then only evaluabed if we weren't passed a --dry-run flag
+SHELL__run_PREFIX="$EMJ_SHELL "
+function _run() {
+    printf "\n$GREY"
+    printf $"$SHELL__run_PREFIX"
+    echo "$@"
+    printf "$NC"
+    eval $@
+}
+
 
 
 ### 1. Convenience alises
 ##########################################
-alias brc='. ~/.bashrc'
+alias src='_run source ~/.bashrc'
 
-alias bri='brew info'
-#alias bru='brew update; brew upgrade; brew doctor'
-alias bup='brew update && echo "~~~~~~~~" && brew upgrade --dry-run'
-alias bup!='brew upgrade'
-alias Bup!='brew unpin bash pyenv vim && brew upgrade && brew pin bash pyenv vim'
-alias bcl='brew cleanup'
-alias bdr='brew doctor'
+# Homebrew - br*
+alias brc='_run brew cleanup'
+alias brd='_run brew doctor'
+alias bri='_run brew install'
+alias brif='_run brew info'
+alias brl='_run brew list'
+alias brlg='_run "brew list | grep -i"'
+alias bru='_run brew update && _run brew upgrade --dry-_run'
+alias bru!='_run brew upgrade'
+alias brU!='_run brew unpin bash pyenv vim && _run brew upgrade && _run brew pin bash pyenv vim'
+alias brun='_run brew uninstall'
+alias brs='_run brew search'
 
 alias cd..='cd ..'
 
 alias clr='clear'
 
-compresspdf() {
-  echo 'Usage: compresspdf [input file] [output file] [screen|ebook|printer|prepress]'
-  gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
+compress-pdf() {
+    if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+        echo 'Usage: compresspdf INPUT_FILE OUTPUT_FILE [screen|ebook|printer|prepress]'
+    else
+        _run gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
+    fi
 }
 
-alias ccat='pygmentize -O style=monokai -f console256 -g'
+# Colourise cat
+alias cct='pygmentize -O style=monokai -f console256 -g'
 
 alias cpr='cp -r'
 
@@ -44,119 +80,125 @@ alias cpr='cp -r'
 alias ctw='cut -c1-$(tput cols)'
 
 function dif() {
-    colordiff -w "$@" | less -R
+    _run colordiff -w "$@" | less -R
 }
-alias dif3='dif -C3'
+alias dif3='_run dif -C3'
 
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
-alias dis='dispense'
+alias dis='_run dispense'
 
-alias dfh='df -h'
+alias dfh='_run df -h'
 
 #alias dja='_django-admin'
 alias dja='django-admin'
 
-function docker-rmi-dangling() {
-    docker rmi $(docker images --filter dangling=true -q)
-}
 
 ###
 # Docker
-alias dat='docker attach'
-alias dbl='docker build'
-
-
-alias dcm='docker-compose'
-alias dcmb='docker-compose build'
-alias dcmex='docker-compose exec'
-function dcm.b() {
-    docker-compose exec $@ npm run watch:build
+alias dat='_run docker attach'
+alias dbl='_run docker build'
+function dbl() {
+    _run docker build --tag "$1" ${1:.}
 }
-function dcm.bd() {
-    docker-compose exec $@ npm run watch:build:debug
+#alias dbl.t='_run docker build --target'
+function dblt() {
+    local tag="$1"
+    local target="${2:-$tag}"
+    local path="${3:-.}"
+    _run docker build --tag "$tag" --target "$target" $path
 }
-function dcm.bp() {
-    docker-compose exec $@ npm run watch:build:prod
-}
-alias dcmr='docker-compose run'
-alias dcmr.p='docker-compose run --service-ports'
-alias dcmr.rm='docker-compose run --rm'
-alias dcmr.prm='docker-compose run --service-ports --rm'
-alias dcmu='docker-compose up'
-alias dcmu.b='docker-compose up --build'
-alias dcmu.d='docker-compose up --detach'
-alias dcmu.bd='docker-compose up --build --detach'
-alias dcmd='docker-compose down'
+alias dcm='_run docker-compose'
+alias dcmb='_run docker-compose build'
+alias dcmx='_run docker-compose exec'
+#function dcm.b() {
+#    _run docker-compose exec $@ npm run watch:build
+#}
+#function dcm.bd() {
+#    docker-compose exec $@ npm run watch:build:debug
+#}
+#function dcm.bp() {
+#    docker-compose exec $@ npm run watch:build:prod
+#}
+alias dcmr='_run docker-compose run'
+alias dcmr.p='_run docker-compose run --service-ports'
+alias dcmr.rm='_run docker-compose run --rm'
+alias dcmr.prm='_run docker-compose run --service-ports --rm'
+alias dcmu='_run docker-compose up'
+alias dcmu.b='_run docker-compose up --build'
+alias dcmu.d='_run docker-compose up --detach'
+alias dcmu.bd='_run docker-compose up --build --detach'
+alias dcmd='_run docker-compose down'
 function dcm-m() {
-    docker-compose exec $@ pipenv run manage migrate
+    _run docker-compose exec $@ pipenv run manage migrate
 }
 function dcm-mm() {
-    docker-compose exec $@ pipenv run manage makemigrations
+    _run docker-compose exec $@ pipenv run manage makemigrations
 }
 function dcm-mmm() {
-    docker-compose exec $@ pipenv run manage makemigrations
-    docker-compose exec $@ pipenv run manage migrate
+    _run docker-compose exec $@ pipenv run manage makemigrations
+    _run docker-compose exec $@ pipenv run manage migrate
 }
 
-alias dcn='docker container'
-alias dcns='docker container ls'
-alias dex='docker exec'
-alias dexit='docker exec -it'
-function dexsh() {
-  docker exec -it $@ /bin/bash
+alias dcn='_run docker container'
+alias dcns='_run docker container ls'
+alias dpl='_run docker pull'
+alias dx='_run docker exec'
+alias dx.it='_run docker exec -it'
+function dxsh() {
+  _run docker exec -it $@ /bin/bash
 }
-alias dexsh.="dexsh --user=$(whoami)"
-alias dexsh.src="dexsh. -v $(pwd)/src:/app/src"
-alias dim='docker image'
-alias dims='docker images'
-alias dimi='docker image inspect'
-alias dimrm='docker image rm'
-# (kill all)
-alias dka="docker ps | awk {' print \$1 '} | tail -n+2 > tmp.txt; for line in \$(cat tmp.txt); do docker kill \$line; done; rm tmp.txt"
+alias dxsh.="dxsh --user=$(whoami)"
+alias dxsh-mount-src="dxsh. -v $(pwd)/src:/app/src"
+alias dim='_run docker image'
+alias dims='_run docker images'
+alias dimi='_run docker image inspect'
+alias dimrm='_run docker image rm'
+function dim-rm-dangling() {
+    _run docker rmi $(docker images --filter dangling=true -q)
+}
 
-alias dmac='docker-machine'
-alias dmacc='docker-machine create'
-alias dmacc.vb='docker-machine create -d virtualbox'
-alias dmace='docker-machine env'
+alias dmac='_run docker-machine'
+alias dmacc='_run docker-machine create'
+alias dmacc.vb='_run docker-machine create -d virtualbox'
+alias dmace='_run docker-machine env'
 
-alias dntls='docker network ls'
-alias dnti='docker network inspect'
-alias dntrm='docker network rm'
-alias dntcr='docker network create'
-alias dntco='docker network connect'
+alias dntl='_run docker network ls'
+alias dnti='_run docker network inspect'
+alias dntrm='_run docker network rm'
+alias dntc='_run docker network create'
+alias dntco='_run docker network connect'
 
-alias dps='docker ps'
-alias drn='docker run'
-alias drnit='docker run -it'
-alias drnit.rm='docker run -it --rm'
-alias dsi='docker system info'
-alias dsp='docker system prune'
-alias dsp!='yes | docker system prune'
-alias dst='docker start'
+alias dps='_run docker ps'
+alias drn='_run docker run'
+alias drn.it='_run docker run -it'
+alias drn.itrm='_run docker run -it --rm'
+alias dsi='_run docker system info'
+alias dsp='_run docker system prune'
+alias dsp!='_run docker system prune --force'
+alias dst='_run docker start'
 function dstat() {
-  docker start $@
-  docker attach $@
+  _run docker start $@
+  _run docker attach $@
 }
 function drnsh() {
-  docker run -it $@ /bin/bash
+  _run docker run -it $@ /bin/bash
 }
 alias drnsh.="drnsh --user=$(whoami)"
-alias drnsh.src="drnsh. -v $(pwd)/src:/app/src"
-alias dvi="docker volume inspect"
-alias dvls="docker volume ls"
-alias dvrm="docker volume rm"
+alias drnsh.mount-src="drnsh. -v $(pwd)/src:/app/src"
+alias dvi="_run docker volume inspect"
+alias dvl="_run docker volume ls"
+alias dvrm="_run docker volume rm"
 
 
 # Digital ocean api
-function do.api() {
+function do-api() {
     curl -s \
       -X GET \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
       "https://api.digitalocean.com/v2/$@" | jq -C | less -F
 }
-alias dom='docker-machine'
 function dom.create() {
     docker-machine create --driver digitalocean \
         --digitalocean-access-token $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=") \
@@ -193,9 +235,9 @@ function __grep() {
     # If grepping recursively, and just a search term is
     # given, defualt to searching the current directory.
     if [[ "$#" -eq "3" && $1 == *"r"* ]]; then
-        grep --color=always "$@" ./
+        _run grep --color=always "$@" ./
     else
-        grep --color=always "$@"
+        _run grep --color=always "$@"
     fi
 }
 alias g='_grep -I'          # I: ignores binary files
@@ -203,13 +245,16 @@ alias gn='_grep -In'        # n: print line numbers
 alias gi='_grep -Ii'        # i: case insensitive
 alias giv='_grep -Iiv'      # v: invert matching
 alias gr='_grep -Ir'        # r: recursive
+alias grn='_grep -Irn'
+alias grnn='_grep -Ir --exclude-dir=node_modules'
+alias grnnn='_grep -Irn --exclude-dir=node_modules'
 alias gv='_grep -Iv'
 alias gin='_grep -Iin'
 alias grn='_grep -Irn'
 alias gir='_grep -Iri'
-alias girnn='__grep -Iri --exclude-dir=node_modules'
 alias girv='_grep -Iriv'
 alias girn='__grep -Irin'
+alias girnn='__grep -Iri --exclude-dir=node_modules'
 alias girnnn='__grep -Irin --exclude-dir=node_modules'
 alias glb='grep --line-buffered'    # Stream into pipes
 
@@ -726,6 +771,8 @@ alias tren5='tre -L 5 -I node_modules'
 
 
 alias tlf='tail -F'
+
+alias trf='terraform'
 
 function typ() {
     #type_p_out=$(type -p "$@")
