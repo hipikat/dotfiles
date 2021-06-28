@@ -81,8 +81,11 @@ function dcm.bp() {
 }
 alias dcmr='docker-compose run'
 alias dcmr.p='docker-compose run --service-ports'
+alias dcmr.pn='docker-compose run --service-ports --name'
 alias dcmr.rm='docker-compose run --rm'
+alias dcmr.rmn='docker-compose run --rm --name'
 alias dcmr.prm='docker-compose run --service-ports --rm'
+alias dcmr.prmn='docker-compose run --service-ports --rm --name'
 alias dcmu='docker-compose up'
 alias dcmu.b='docker-compose up --build'
 alias dcmu.d='docker-compose up --detach'
