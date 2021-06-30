@@ -6,8 +6,7 @@
 #    HOME=$( cd && pwd )
 #fi
 
-location=$1
-server=$2
+setup=$1
 if [[ "$3" = "debug" ]]; then
     daemon_prefix="no-"
 else
@@ -20,7 +19,7 @@ if $airport_bin -I | awk '/ SSID:/ {print $2}' | grep '^Wowee' &>/dev/null; then
     network="home"
 elif ifconfig | grep '192\.168\.125\.58' &>/dev/null || $airport_bin -I | awk '/ SSID:/ {print $2}' | grep 'pomelo' &>/dev/null; then
     echo "we at work"
-    network="work"
+    network="lw"
 fi
 
 
@@ -48,8 +47,8 @@ function _synergys() {
     killall -9 synergys &>/dev/null
     sleep 0.125
     run "/Applications/Synergy.app/Contents/MacOS/synergys \
-        --address :24800 --${daemon_prefix}daemon --no-tray --name $server.$location \
-        --enable-drag-drop -c $HOME/.synergy/$location-$server.conf"
+        --address :24800 --${daemon_prefix}daemon --no-tray --name $1 \
+        --enable-drag-drop -c $HOME/.synergy/$setup.conf"
 }
 
 # Client - takes server hostname
@@ -62,26 +61,26 @@ function _synergyc() {
 # If we're on the home network
 if [[ "$network" = "home" ]]; then
     echo "We at home"
-    if [[ $server = "lemon" ]]; then
+    if [[ $setup = "bedroom-lemon-topright" ]]; then
         if [[ $(hostname) = "lemon.local" ]]; then
             echo "We the lemon server"
-            _synergys home-lemon
+            _synergys lemon
         else
             echo "We a slave to lemon"
             _synergyc lemon.home
         fi
-    elif [[ $server = "pomelo+lemon-left" ]]; then
+    elif [[ $setup = "kitchen-pomelo-right" ]]; then
         if [[ $(hostname) = "is1005299.lan" ]]; then
-            _synergys home-pomelo+lemon-left
+            _synergys pomelo
         else
             _synergyc is1005299.lan
         fi
     fi
-elif [[ "$network" = "work" ]]; then
+elif [[ "$network" = "lw" ]]; then
     echo "We at work"
     if [[ $(hostname) = "is1005299.local" ]]; then
         echo "We the pomelo server"
-        _synergys work
+        _synergys pomelo work
     else
         echo "We a slave to pomelo"
         _synergyc pomelo.lw
