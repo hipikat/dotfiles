@@ -62,7 +62,7 @@ function _synergyc() {
 # If we're on the home network
 if [[ "$network" = "home" ]]; then
     echo "We at home"
-    if [[ $server = "lemon3" ]]; then
+    if [[ $server = "lemon" ]]; then
         if [[ $(hostname) = "lemon.local" ]]; then
             echo "We the lemon server"
             _synergys home-lemon
@@ -70,9 +70,9 @@ if [[ "$network" = "home" ]]; then
             echo "We a slave to lemon"
             _synergyc lemon.home
         fi
-    elif [[ $server = "pomelo" ]]; then
+    elif [[ $server = "pomelo+lemon-left" ]]; then
         if [[ $(hostname) = "is1005299.lan" ]]; then
-            _synergys home-pomelo
+            _synergys home-pomelo+lemon-left
         else
             _synergyc is1005299.lan
         fi
