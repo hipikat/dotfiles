@@ -73,7 +73,7 @@ if [[ "$network" = "home" ]]; then
         if [[ $(hostname) = "is1005299.lan" ]]; then
             _synergys pomelo
         else
-            _synergyc is1005299.lan
+            _synergyc pomelo.home
         fi
     fi
 elif [[ "$network" = "lw" ]]; then
