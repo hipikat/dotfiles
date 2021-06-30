@@ -323,26 +323,26 @@ function gbru() {
     branch=${branch##refs/heads/}
     git branch --set-upstream-to=$1/$branch $branch
 }
-alias gbl='git blame'
-alias gbr='git branch --color=always'
-alias gbra='git branch --color=always -a'
-alias gbrav='git branch --color=always -av'
-alias gbrd='git branch --color=always -d'
-alias gbrD='git branch --color=always -D'
-alias gbrv='git branch --color=always -v'
-alias gch='git checkout'
-alias gchb='git checkout -b'
-alias gcht='git checkout -t'
-alias gcl='git clone'
+alias gbl='_run git blame'
+alias gbr='_run git branch --color=always'
+alias gbra='_run git branch --color=always -a'
+alias gbrav='_run git branch --color=always -av'
+alias gbrd='_run git branch --color=always -d'
+alias gbrD='_run git branch --color=always -D'
+alias gbrv='_run git branch --color=always -v'
+alias gch='_run git checkout'
+alias gchb='_run git checkout -b'
+alias gcht='_run git checkout -t'
+alias gcl='_run git clone'
 alias gclgh='_git_clone_github'
 alias gclmy='_git_clone_my_github'
-alias gco='git commit'
+alias gco='_run git commit'
 alias gcop='_git_commit_n_push'
-alias gcoa='git commit -a'
+alias gcoa='_run git commit -a'
 alias gcoap='_git_commit_n_push -a'
-alias gcom='git commit -m'
+alias gcom='_run git commit -m'
 alias gcomp='_git_commit_n_push -m'
-alias gcoam='git commit -am'
+alias gcoam='_run git commit -am'
 alias gcoAm='git add -A; git commit -am'
 alias gcoamp='_git_commit_n_push -am'
 alias gcoAmp='git add -A; _git_commit_n_push -am'
@@ -377,13 +377,10 @@ alias gwt='git worktree'
 alias gwtrm='git worktree remove'
 alias gwtl='git worktree list'
 function gwta() {
-    if [ -z $2 ]; then
-        local dir="../${1##*/}"
-        local branch=$1
-    else
-        local dir="../${2##*/}"
-        local branch=$2
-    fi
+    # Check out a git worktree in a sibling directory
+    # Usage: gwta BRANCH [DIR_NAME]
+    local branch=$1
+    local dir="../${2:-$1}"
 
     if [[ "${branch%%/*}" == "remotes" ]]; then
         local track="--track -b ${branch##*/}"
@@ -572,6 +569,7 @@ alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
 alias perd='pipenv run django'
 alias perf='pipenv run pip freeze'
+alias perfl='_run "pipenv run pip freeze | wc -l"'
 alias perm='pipenv run manage'
 alias pe.rm='pipenv --rm'
 alias perp='pipenv run python'
@@ -591,7 +589,8 @@ alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
 alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
 alias pg_ctl-mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
 
-alias pif='pip freeze'
+alias pif='_run pip freeze'
+alias pifl='_run pip freeze | wc -l'
 
 alias pmn='python manage.py'
 alias pmsh='python manage.py shell'
@@ -775,7 +774,11 @@ alias tren5='tre -L 5 -I node_modules'
 
 alias tlf='tail -F'
 
-alias trf='terraform'
+alias trf='_run terraform'
+alias trfi='_run terraform init'
+alias trfp='_run terraform plan'
+alias trfP='_run terraform plan -out'
+alias trfa='_run terraform apply'
 
 function typ() {
     #type_p_out=$(type -p "$@")
