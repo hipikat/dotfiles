@@ -69,7 +69,7 @@ if [[ "$network" = "home" ]]; then
             echo "We a slave to lemon"
             _synergyc lemon.home
         fi
-    elif [[ $setup = "kitchen-pomelo-right" ]]; then
+    elif [[ $setup =~ -pomelo- ]]; then
         if [[ $(hostname) = "is1005299.lan" ]]; then
             _synergys pomelo
         else
