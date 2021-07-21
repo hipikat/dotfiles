@@ -73,6 +73,8 @@ compress-pdf() {
 
 # Colourise cat
 alias cct='pygmentize -O style=monokai -f console256 -g'
+# Colourise standard input
+alias csi='pygmentize -O style=monokai -f console256 -l'
 
 alias cpr='cp -r'
 
@@ -223,6 +225,10 @@ function fty() {
 
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
+
+# Format Python
+alias fmp='black --diff . | csi python | les'
+alias fmp!='black .'
 
 # Grep shortcuts
 function _grep() {
