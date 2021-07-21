@@ -98,11 +98,11 @@ alias dja='django-admin'
 # Docker
 alias dat='_run docker attach'
 alias dbl='_run docker build'
-function dbl() {
+function dbl.t() {
     _run docker build --tag "$1" ${1:.}
 }
 #alias dbl.t='_run docker build --target'
-function dblt() {
+function dbl.tt() {
     local tag="$1"
     local target="${2:-$tag}"
     local path="${3:-.}"
