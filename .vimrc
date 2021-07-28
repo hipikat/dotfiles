@@ -195,7 +195,11 @@ map <leader># :set nu!<CR>
 set scrolloff=3         " Keep context around the cursor
 set showcmd             " Show command being typed in normal mode
 " Toggle display of tabs and line endings
-set listchars=tab:>-,trail:·,eol:$
+" -- Sons of bitches broke the tab style in:
+"  VIM - Vi IMproved 8.2 (2019 Dec 12, compiled Jul 22 2021 12:58:47)
+"  macOS version - x86_64
+"  Included patches: 1-3200
+"set listchars=tab:>-,trail:·,eol:$
 nmap <silent> <leader>w :set nolist!<CR>
 " Toggle spell-check
 nmap <silent> <leader>s :set spell!<CR>

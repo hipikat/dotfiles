@@ -3,3 +3,4 @@
 nohup.out
 .config/configstore/
 .config/.mono
+.config/yarn/global/node_modules/
