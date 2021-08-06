@@ -25,7 +25,7 @@ screen      # 10
 at 5 stuff "cd ~/Desktop^Mclear^M"
 at 6 stuff "cd ~/Downloads^Mclear^M"
 at 7 stuff "cd ~/.dotfiles^Mclear^M"
-at 8 stuff "cd ~/.dotfiles^Mvim .bashrc .bash_aliases^M"
+at 8 stuff "cd ~/.dotfiles^M"
 at 9 stuff "cd ~/.ssh^M"
 at 10 stuff "cd /etc^M"
 
