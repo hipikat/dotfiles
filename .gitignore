@@ -3,3 +3,5 @@
 nohup.out
 .config/configstore/
 .config/.mono
+.vim/pack/kite
+.config/nvim/pack/kite
