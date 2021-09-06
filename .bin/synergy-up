@@ -6,6 +6,11 @@
 #    HOME=$( cd && pwd )
 #fi
 
+
+#WORK_IP="192.168.125.58"
+WORK_IP="192.168.25.55"
+
+
 setup=$1
 if [[ "$3" = "debug" ]]; then
     daemon_prefix="no-"

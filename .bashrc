@@ -10,6 +10,7 @@
 if [ -z "$USER" ]; then
     export USER=`whoami`
 fi
+declare -a paths
 
 
 ### Globals
@@ -32,6 +33,7 @@ export PIPENV_IGNORE_VIRTUALENVS=1
 #export PIPENV_VENV_IN_PROJECT=1
 
 
+
 ### Machine information
 ##########################################
 if [ "$(uname)" == "Darwin" ]; then
@@ -42,6 +44,25 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     export BASIC_MACHINE_TYPE="Windows"
 fi
+
+
+### Software config
+##########################################
+
+#if [ $BASIC_MACHINE_TYPE ]; then
+#    export bamboo.home="/Users/ada/Bamboo"
+#fi
+
+#if [[ -x /usr/libexec/java_home ]]; then
+#  export JAVA_HOME=$( /usr/libexec/java_home --version 11 )
+#fi
+
+# Specifically defined for Bamboo 7
+# Requires `brew install openjdk@8`
+if [ -d /Library/Java/JavaVirtualMachines/openjdk-8.jdk/Contents/Home/jre ]; then
+    export JRE_HOME=/Library/Java/JavaVirtualMachines/openjdk-8.jdk/Contents/Home/jre
+fi
+paths+=( ~/Applications/atlassian-bamboo-7.2.5/bin )
 
 
 ### Constants
@@ -210,10 +231,10 @@ fi
 
 ### The shell PATH
 ##########################################
-declare -a paths
 # Added to the front of $PATH, if not already included, in order
 paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
 paths+=( ~/.local/bin )
+#paths+=( /usr/local/opt/openjdk@8/bin )
 paths+=( ~/go/src/github.com/docker/swarmkit/bin )
 paths+=( /usr/local/heroku/bin )
 paths+=( /usr/local/opt/coreutils/libexec/gnubin )
