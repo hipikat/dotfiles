@@ -521,16 +521,16 @@ if type -P pyenv &>/dev/null; then
 fi
 
 # Nodeenv
-if type -ap nodenv &>/dev/null; then
-    eval "$(nodenv init -)"
-fi
+#if type -ap nodenv &>/dev/null; then
+#    eval "$(nodenv init -)"
+#fi
 
 # Node Version Manager (NVM)
-#if [ -d ~/.nvm ]; then
-#  export NVM_DIR="$HOME/.nvm"
-#  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                    # Load NVM
-#  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Load NVM bash_completion
-#fi
+if [ -d ~/.nvm ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 # Whatever rbenv is
 if which rbenv &> /dev/null; then
@@ -552,3 +552,4 @@ fi
 ### Run directory-context hooks (e.g. Autoenv scripts)
 ##########################################
 cd $(pwd)
+
