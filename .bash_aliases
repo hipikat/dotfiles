@@ -110,9 +110,6 @@ function dbl.tt() {
     local path="${3:-.}"
     _run docker build --tag "$tag" --target "$target" $path
 }
-alias dcm='_run docker-compose'
-alias dcmb='_run docker-compose build'
-alias dcmx='_run docker-compose exec'
 #function dcm.b() {
 #    _run docker-compose exec $@ npm run watch:build
 #}
@@ -129,7 +126,10 @@ alias dcmr.rm='_run docker-compose run --rm'
 alias dcmr.rmn='docker-compose run --rm --name'
 alias dcmr.prm='_run docker-compose run --service-ports --rm'
 alias dcmr.prmn='docker-compose run --service-ports --rm --name'
+alias dcm='_run docker-compose'
+alias dcmb='_run docker-compose build'
 alias dcmu='_run docker-compose up'
+alias dcmx='_run docker-compose exec'
 alias dcmu.b='_run docker-compose up --build'
 alias dcmu.d='_run docker-compose up --detach'
 alias dcmu.bd='_run docker-compose up --build --detach'
@@ -372,6 +372,9 @@ alias gre='git remote'
 alias grev='git remote -v'
 alias grer='git remote rename'
 alias grerm='git remote remove'
+alias grl='git rev-list'
+alias grlc='git rev-list --count'
+alias grlca='git rev-list --count --all'
 alias grm='git rm'
 alias grmc='git rm --cached'
 alias grs='git reset'
@@ -516,6 +519,7 @@ alias npig='npm install --global'
 alias npl='npm list'
 alias npl0='npm list --depth=0'
 alias npl1='npm list --depth=1'
+alias npl!='npm list --depth=9999'
 alias npu='npm update'
 alias npua='npm update --dev'
 alias npud='npm --depth=9999 update'

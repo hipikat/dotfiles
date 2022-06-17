@@ -58,7 +58,7 @@ filetype plugin indent on    " required
 """ Display
 """"""""""""""""""""""""""""""""""""""""
 set t_Co=256
-colorscheme peachpuff
+colorscheme default
 
 
 """""" unclean .....

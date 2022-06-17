@@ -557,6 +557,11 @@ create-directus-project@^9.0.0-rc.83:
     fs-extra "^10.0.0"
     ora "^5.4.0"
 
+create-next-app@^12.0.10:
+  version "12.0.10"
+  resolved "https://registry.yarnpkg.com/create-next-app/-/create-next-app-12.0.10.tgz#9a44c09f4915f39296d910ad7d5ef8b6dcdf81dc"
+  integrity sha512-HUmEobV6L//vZCImnD+fodaN5JZJpYtLq2qWr8x9gNumfHZ7w/Z9kjDUK/Y8vPFt6fAkTIzrTCbT1K2Vh7gsog==
+
 cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"

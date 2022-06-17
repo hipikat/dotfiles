@@ -235,6 +235,7 @@ fi
 paths+=( ~/.bin ~/bin ~/Dropbox/bin ~/Documents/Dropbox/bin )
 paths+=( ~/.local/bin )
 #paths+=( /usr/local/opt/openjdk@8/bin )
+paths+=( ~/Library/Python/3.9/bin )
 paths+=( ~/go/src/github.com/docker/swarmkit/bin )
 paths+=( /usr/local/heroku/bin )
 paths+=( /usr/local/opt/coreutils/libexec/gnubin )

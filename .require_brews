@@ -11,7 +11,7 @@ git
 gnu-sed
 gnu-tar
 gs
-htmltidy
+tidy-html5
 jq
 mkcert
 mosh
