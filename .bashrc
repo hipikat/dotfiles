@@ -323,6 +323,13 @@ fi
 bash_interactive_mode=""
 
 function set_ps1_strings() {
+    # Check if VIRTUAL_ENV_PROMPT is set and update PS1 accordingly,
+    # unless another tool like Hatch or Poetry has already activated and modified $PS1
+    if [[ -n "$VIRTUAL_ENV_PROMPT" && "$PS1" != "(${VIRTUAL_ENV_PROMPT})"* ]]; then
+        PS1_VENV="(${VIRTUAL_ENV_PROMPT}) "
+    else
+        PS1_VENV=""
+    fi
 
     # Window number with Unicode 'right curly bracket middle piece',
     # when running under GNU Screen
@@ -441,8 +448,11 @@ else
     PS1+="$Yellow"
 fi
 
+# Check if VIRTUAL_ENV_PROMPT is set and update PS1 accordingly
+PS1+="$BCyan\$PS1_VENV"
+
 #PS1+="$(echo \"$Green\")"
-PS1+="\$PS1_USERNAME"
+PS1+="$Green\$PS1_USERNAME"
 
 # Green '@' symbol, if not root
 PS1+="\$(if [ "$EUID" != "0" ]; then echo \"$Green@\"; fi)"
@@ -459,6 +469,7 @@ PS1+=`echo -e "\xC2\xA7"`
 
 # End prompt
 PS1+="$Color_Off "
+
 
 ### Continuation prompt
 PS2="$Green"
