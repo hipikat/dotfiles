@@ -566,6 +566,7 @@ fi
 ##########################################
 cd $(pwd)
 eval "$(direnv hook bash)"
+direnv reload
 
 
 
