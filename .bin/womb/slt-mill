@@ -1,9 +1,0 @@
-#!/bin/bash
-# TODO: check which services are actually running first
-
-supervisorctl stop salt-minion
-supervisorctl stop salt-master
-cd /opt/salt/salt &&\
-    find ./ -name “*.pyc” -exec rm {} \;
-supervisorctl start salt-master
-supervisorctl start salt-minion

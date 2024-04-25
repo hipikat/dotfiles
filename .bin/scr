@@ -8,10 +8,6 @@
 # if such a file exists. Calling without parameters is equivalent to
 # calling `scr default`. The search for sessions is case-insensitive.
 #
-########################################################################
-# Originally packaged under the BSD 2-Clause License at
-# https://github.com/hipikat/dotfiles by Adam Wright <adam@hipikat.org>
-#
 # TODO: Prompt for which screen to resume if [ ! -f ~/.screen/default ]
 # TODO: Prompt if multiple screens match given session_name
 
@@ -21,7 +17,7 @@ command_options=
 
 # If more than one argument given, just pass it to `screen` and bow out
 if [ $# -ge 2 ] || [ "${1:0:1}" == '-' ]; then
-   screen "$@" 
+   screen "$@"
    exit $?
 fi
 

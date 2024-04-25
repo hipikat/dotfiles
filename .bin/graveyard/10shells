@@ -1,3 +1,0 @@
-#!/bin/bash
-
-scr -S "$1" -c ~/.screen/10shells

@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Concatenate and echo the contents of .pub files in a directory (default: '.')
+#
 
 find_in_dir='.'
 

@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Find git repos under the current directory and `git status --short` in them
+#
 
 for file in `find . -name '.git' -type d`; do
     echo '--' ${file%/*}

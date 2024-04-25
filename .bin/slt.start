@@ -1,4 +1,0 @@
-#!/bin/bash
-
-systemctl start salt-master
-systemctl start salt-minion

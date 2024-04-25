@@ -1,4 +1,0 @@
-#!/bin/bash
-
-SetFile -a v "./$@"
-rm ~/Hidden/"$@"

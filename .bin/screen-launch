@@ -1,6 +1,0 @@
-#!/bin/bash
-
-if [ -f /home/hipikat/.bashrc ]; then
-    . /home/hipikat/.bashrc
-fi
-screen -S "$1" -d -m -s /bin/bash -c /home/hipikat/.screen/"$1"

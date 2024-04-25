@@ -1,6 +1,6 @@
 ""
-" .vimrc - Adam Wright <adam@hipikat.org>
-" 
+" .vimrc - Ada Wright <ada@hpk.io>
+"
 " TODO: Finish exploring suggested bundles from:
 " http://sontek.net/blog/detail/turning-vim-into-a-modern-python-ide
 """"""""""""""""""""""""""""""""""""""""""
@@ -78,7 +78,7 @@ syntax on
 
 
 " let Vundle manage Vundle
-" required! 
+" required!
 "Bundle 'gmarik/vundle'
 
 " :BundleList          - list configured bundles
@@ -94,13 +94,13 @@ syntax on
 "call pathogen#infect()
 "call pathogen#helptags()
 
-syntax on                     " Syntax highlighting 
+syntax on                     " Syntax highlighting
 "filetype indent off
 
 """"
 
 " Don't let Pyflakes use the Quickfix window
-let g:pyflakes_use_quickfix = 1 
+let g:pyflakes_use_quickfix = 1
 
 
 " Remap , (repeat f, t, F or T in opposite direction) to default leader
@@ -135,7 +135,7 @@ let g:SuperTabDefaultCompletionType = "context"
 
 set completeopt=menuone,longest,preview
 
-if version >= 700 
+if version >= 700
   "let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
   "highlight   clear
   highlight   Pmenu         ctermfg=0 ctermbg=2
@@ -189,7 +189,7 @@ set expandtab           " Use spaces for tabs; Use CTRL-V<Tab> for tabs
 """
 " Display
 set laststatus=2        " Last window always has a status line
-set ruler               " Labels line and column position 
+set ruler               " Labels line and column position
 set number              " Show line numbers
 map <leader># :set nu!<CR>
 set scrolloff=3         " Keep context around the cursor

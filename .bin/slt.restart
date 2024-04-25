@@ -1,6 +1,0 @@
-#!/bin/bash
-
-systemctl stop salt-master
-systemctl stop salt-minion
-systemctl start salt-master
-systemctl start salt-minion
