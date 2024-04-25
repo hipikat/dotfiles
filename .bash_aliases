@@ -427,6 +427,21 @@ if type __git_complete &>/dev/null; then
     __git_complete gta _git_tag
 fi
 
+# Hatch
+alias htb='hatch build'
+alias htc='hatch clean'
+alias htco='hatch config'
+alias htd='hatch dep'
+alias hte='hatch env'
+alias htf='hatch format'
+alias htp='hatch publish'
+alias htpr='hatch project'
+alias htpy='hatch python'
+alias htr='hatch run'
+alias htsh='hatch shell'
+alias hts='hatch status'
+alias htv='hatch version'
+
 # History
 alias hs='history'
 alias hsg='history | grep -i'
@@ -449,7 +464,7 @@ alias hsn='history -n'          # Append new lines from the history file to hist
 
 
 # HTTPie - a CLI, cURL-like tool for humans
-alias htp='http --pretty all'
+#alias htp='http --pretty all'
 
 # Iptables
 alias ipt='iptables'
@@ -485,6 +500,8 @@ alias k8='kubectl'
 
 
 alias les='less --quit-if-one-screen'
+
+alias mame='/Applications/mame0236-x86/mame'
 
 # Make a directory and change into it
 function mkcd() {
@@ -810,6 +827,18 @@ alias ufwsv='ufw status verbose'
 
 alias upd='updatedb'
 alias upt='uptime'
+
+alias vg='vagrant'
+alias vgu='vagrant up'
+alias vgp='vagrant provision'
+alias vgsh='vagrant ssh'
+alias vgd='vagrant destroy'
+alias vgd.f='vagrant destroy -f'
+alias vgh='vagrant halt'
+alias vgr='vagrant reload'
+alias vgc='vagrant config'
+alias vgi='vagrant ssh-config'
+alias vgs='vagrant status'
 
 alias wcc='wc -c'
 alias wcl='wc -l'
