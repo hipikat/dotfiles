@@ -376,6 +376,13 @@ alias grm='git rm'
 alias grmc='git rm --cached'
 alias grs='git reset'
 alias gsh='git show'
+function gsh.grep() {
+  local grep_string="$1"
+  git log --grep="$grep_string" --pretty=format:"%H %s" | while read -r hash msg; do
+    echo -e "\nCommit: $hash\nMessage: $msg\n"
+    git show --color=always "$hash"
+  done | less -R
+}
 alias gst='git -c color.status=always status'
 alias gstsh='git stash'
 alias gta='git tag'

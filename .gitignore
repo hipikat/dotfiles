@@ -6,3 +6,6 @@ nohup.out
 .config/yarn/global/node_modules/
 .vim/pack/kite
 .config/nvim/pack/kite
+
+.bin/just
+.bin/rt.*

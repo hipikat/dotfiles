@@ -1,0 +1,36 @@
+
+# Source default screen settings
+source .screenrc
+
+# Create shell screens
+chdir /home/ada.wright/git/vagrant
+screen      # 0
+scrollback 100000
+at 0 stuff "git status^M"
+
+chdir /home/ada.wright/git/puppet
+screen      # 1
+scrollback 100000
+at 1 stuff "git status^M"
+
+chdir /home/ada.wright/git/mas
+screen      # 2
+
+screen      # 3 - selected by default
+scrollback 100000
+at 3 stuff "git status^M"
+
+screen      # 4
+screen      # 5
+
+chdir /home/ada.wright
+screen      # 6
+screen      # 7
+screen      # 8
+screen      # 9
+at 9 stuff "vim -n .bashrc .bash_aliases^M"
+
+screen      # 10
+at 10 stuff "cntlm -v -c ./.cntlm.conf^M"
+
+select 3
