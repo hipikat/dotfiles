@@ -340,8 +340,11 @@ alias gch='_run git checkout'
 alias gchb='_run git checkout -b'
 alias gcht='_run git checkout -t'
 alias gcl='_run git clone'
-alias gclgh='_git_clone_github'
-alias gclmy='_git_clone_my_github'
+alias gcl.gh='_git_clone_github'
+alias gcl.my='_git_clone_my_github'
+alias gcln='_run git clean -n'
+alias gcln.i='_run git clean -i'
+alias gcln.f='_run git clean -f'
 alias gco='_run git commit'
 alias gcop='_git_commit_n_push'
 alias gcoa='_run git commit -a'
@@ -378,7 +381,14 @@ alias grs='git reset'
 alias gsh='git show'
 function gsh.grep() {
   local grep_string="$1"
-  git log --grep="$grep_string" --pretty=format:"%H %s" | while read -r hash msg; do
+  git log --grep="$grep_string" --regexp-ignore-case --pretty=format:"%H %s" | while read -r hash msg; do
+    echo -e "\nCommit: $hash\nMessage: $msg\n"
+    git show --color=always "$hash"
+  done | less -R
+}
+function gsh.author() {
+  local author_string="$1"
+  git log --author="$author_string" --pretty=format:"%H %s" | while read -r hash msg; do
     echo -e "\nCommit: $hash\nMessage: $msg\n"
     git show --color=always "$hash"
   done | less -R
@@ -483,6 +493,8 @@ alias j.='jqc.'
 #function les() {
 #    $(history -p \!\!) | less
 #}
+
+alias jst.md='just --command-color purple --highlight -f justfile.masdash'
 
 
 function k8-create-dashboard-token() {
@@ -734,7 +746,22 @@ function slt-run() {
     salt-run --force-color "${@}"
 }
 
-alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias ssh-ffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias ssh-vagrant='ssh -i ~/.vagrant.d/insecure_private_key -o UserKnownHostsFile=/dev/null'
+function ssh-clean_known_hosts() {
+    local known_hosts_file="$HOME/.ssh/known_hosts"
+    
+    if [ -f "$known_hosts_file" ]; then
+        cp "$known_hosts_file" "${known_hosts_file}.bak"
+
+        # Remove entries matching private IP address patterns
+        grep -vE '^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)' "$known_hosts_file.bak" > "$known_hosts_file"
+        
+        echo "Private IP entries removed from $known_hosts_file."
+    else
+        echo "No known_hosts file found."
+    fi
+}
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
@@ -817,6 +844,9 @@ alias ufwsv='ufw status verbose'
 
 alias upd='updatedb'
 alias upt='uptime'
+
+alias vg='vagrant'
+alias vg.md='vagrant --app=mas_dash'
 
 alias wcc='wc -c'
 alias wcl='wc -l'
