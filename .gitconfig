@@ -1,0 +1,7 @@
+[user]
+	name = Ada Wright
+	email = ada@hpk.io
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main

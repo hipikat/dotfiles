@@ -1,0 +1,21 @@
+#!/bin/sh
+
+backup_databases() {
+    local date_suffix=$(date +%Y-%m-%d-%H%M)
+    local db_prefixes="dev $@"
+    local prefix_string=$(echo "$@" | tr ' ' '-')
+    local backup_file="masdash-${date_suffix}+${prefix_string}.gz"
+
+    for db in $db_prefixes; do
+        PGPASSWORD="MasDash4AH293KA02" pg_dump -Fc -U MasDashUser -d masdash_$db > masdash_${db}.dump
+    done
+
+    tar -czf ${backup_file} *.dump
+
+    rm *.dump
+
+    echo "Backup completed: ${backup_file}"
+}
+
+backup_databases "$@"
+

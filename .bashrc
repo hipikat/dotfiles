@@ -30,7 +30,7 @@ export MAN_DISABLE_SECCOMP=1
 # Pipenv Issue - it falsely assumes Homebrew's Python to be in a virtualenv
 # https://github.com/pypa/pipenv/issues/4316
 export PIPENV_IGNORE_VIRTUALENVS=1
-#export PIPENV_VENV_IN_PROJECT=1
+export PIPENV_VENV_IN_PROJECT=1
 
 
 
@@ -243,8 +243,9 @@ paths+=( /usr/local/opt/gnu-tar/libexec/gnubin )
 #paths+=( /usr/local/opt/ruby/bin )
 paths+=( /usr/local/sbin /usr/local/bin )
 paths+=( /usr/local/mysql/bin )
-paths+=( /usr/games /foo/bar /bar/foo )
-paths+=( ~/.rvm/bin )
+paths+=( ~/Library/Python/3.9/bin )
+paths+=( /usr/games )
+#paths+=( ~/.rvm/bin )
 #paths+=( /Applications/Xcode.app/Contents/Developer/usr/bin )
 paths+=( /Applications/FontForge.app/Contents/Resources/opt/local/bin )
 paths+=( /Developer/Tools )
@@ -322,6 +323,13 @@ fi
 bash_interactive_mode=""
 
 function set_ps1_strings() {
+    # Check if VIRTUAL_ENV_PROMPT is set and update PS1 accordingly,
+    # unless another tool like Hatch or Poetry has already activated and modified $PS1
+    if [[ -n "$VIRTUAL_ENV_PROMPT" && "$PS1" != "(${VIRTUAL_ENV_PROMPT})"* ]]; then
+        PS1_VENV="(${VIRTUAL_ENV_PROMPT}) "
+    else
+        PS1_VENV=""
+    fi
 
     # Window number with Unicode 'right curly bracket middle piece',
     # when running under GNU Screen
@@ -440,8 +448,11 @@ else
     PS1+="$Yellow"
 fi
 
+# Check if VIRTUAL_ENV_PROMPT is set and update PS1 accordingly
+PS1+="$BCyan\$PS1_VENV"
+
 #PS1+="$(echo \"$Green\")"
-PS1+="\$PS1_USERNAME"
+PS1+="$Green\$PS1_USERNAME"
 
 # Green '@' symbol, if not root
 PS1+="\$(if [ "$EUID" != "0" ]; then echo \"$Green@\"; fi)"
@@ -458,6 +469,7 @@ PS1+=`echo -e "\xC2\xA7"`
 
 # End prompt
 PS1+="$Color_Off "
+
 
 ### Continuation prompt
 PS2="$Green"
@@ -513,11 +525,12 @@ fi
 ##########################################
 
 # Pyenv
-export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 if type -P pyenv &>/dev/null; then
-    eval "$(pyenv init -)" &>/dev/null
-    eval "$(pyenv virtualenv-init -)" &>/dev/null
-    pyenv virtualenvwrapper &>/dev/null
+    export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+    eval "$(pyenv init - 2>/dev/null)"
+    eval "$(pyenv virtualenv-init - 2>/dev/null)"
+    #eval "$(pyenv virtualenvwrapper_lazy 2>/dev/null)"
+    pyenv virtualenvwrapper 2>/dev/null
 fi
 
 # Nodeenv
@@ -552,4 +565,14 @@ fi
 ### Run directory-context hooks (e.g. Autoenv scripts)
 ##########################################
 cd $(pwd)
+eval "$(direnv hook bash)"
+direnv reload
+
+
+
+# Appending new library paths for Python installation with pyenv
+export LDFLAGS="$LDFLAGS -L/usr/local/opt/readline/lib -L/usr/local/opt/openssl@3/lib -L/usr/local/opt/sqlite/lib -L/usr/local/opt/zlib/lib -L/usr/local/opt/tcl-tk/lib"
+export CPPFLAGS="$CPPFLAGS -I/usr/local/opt/readline/include -I/usr/local/opt/openssl@3/include -I/usr/local/opt/sqlite/include -I/usr/local/opt/zlib/include -I/usr/local/opt/tcl-tk/include"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/local/opt/readline/lib/pkgconfig:/usr/local/opt/openssl@3/lib/pkgconfig:/usr/local/opt/sqlite/lib/pkgconfig:/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/tcl-tk/lib/pkgconfig"
+export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 
