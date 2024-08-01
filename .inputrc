@@ -1,1 +1,21 @@
+# Readline configuration
+
+# Ignore case for completion
 set completion-ignore-case on
+
+# Show all possibilities for ambiguous completions
+set show-all-if-ambiguous on
+
+# Use visible bell instead of audible bell
+set bell-style visible
+
+# Case-insensitive history search
+set completion-ignore-case on
+set completion-map-case on
+
+# Increase history size
+set history-size 10000
+
+# Auto-complete on space
+set show-all-if-unmodified on
+

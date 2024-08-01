@@ -44,18 +44,31 @@ function _run() {
 
 ### 1. Convenience alises
 ##########################################
-alias src='_run source ~/.bashrc'
+alias s.bashrc='_run source ~/.bashrc'
+alias s.deactivate='_run source deactivate'
+
+
+any_movie() {
+    # TODO: check for zero matches
+    if [ "$#" -ge 1 ]; then
+        open "`find . -type f \( -iname \*.mp4 -o -iname \*.avi -o -iname \*.flv -o -iname \*.wmv \) | shuf | grep -i "$@" | tail -n 1`"
+    else
+        open "`find . -type f \( -iname \*.mp4 -o -iname \*.avi -o -iname \*.flv -o -iname \*.wmv \) | shuf | tail -n 1`"
+    fi
+}
+
 
 # Homebrew - br*
+alias brar='_run brew autoremove'
 alias brc='_run brew cleanup'
 alias brd='_run brew doctor'
 alias bri='_run brew install'
 alias brif='_run brew info'
 alias brl='_run brew list'
 alias brlg='_run "brew list | grep -i"'
-alias bru='_run brew update && _run brew upgrade --dry-run'
-alias bru!='_run brew upgrade'
-alias brU!='_run brew unpin bash pyenv vim && _run brew upgrade && _run brew pin bash pyenv vim'
+alias bru='_run brew upgrade --dry-run'
+alias bru!='_run brew upgrade ; _run brew autoremove ; _run brew cleanup && _run brew doctor'
+alias brU!='_run brew unpin bash pyenv nvim vim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup ; _run brew doctor ; _run brew pin bash pyenv nvim vim'
 alias brun='_run brew uninstall'
 alias brs='_run brew search'
 
@@ -218,6 +231,17 @@ function dom.create() {
 }
 alias dom.rm='docker-machine rm -y -f'
 
+alias dve='source deactivate'
+
+
+echo.PATHs () {
+    paths=(${PATH//:/ })
+    for path_i in "${!paths[@]}"; do
+        echo "${paths[path_i]}"
+    done
+}
+
+
 # Fake TTY
 function fty() {
     script -qfec "$(printf "%q " "$@")"
@@ -331,57 +355,57 @@ function gbru() {
 }
 alias gbl='_run git blame'
 alias gbr='_run git branch --color=always'
-alias gbra='_run git branch --color=always -a'
-alias gbrav='_run git branch --color=always -av'
-alias gbrd='_run git branch --color=always -d'
-alias gbrD='_run git branch --color=always -D'
-alias gbrv='_run git branch --color=always -v'
+alias gbr.a='_run git branch --color=always -a'
+alias gbr.av='_run git branch --color=always -av'
+alias gbr.d='_run git branch --color=always -d'
+alias gbr.D='_run git branch --color=always -D'
+alias gbr.v='_run git branch --color=always -v'
 alias gch='_run git checkout'
-alias gchb='_run git checkout -b'
-alias gcht='_run git checkout -t'
+alias gch.b='_run git checkout -b'
+alias gch.t='_run git checkout -t'
 alias gcl='_run git clone'
-alias gclgh='_git_clone_github'
-alias gclmy='_git_clone_my_github'
+alias gcl-gh='_git_clone_github'
+alias gcl-my='_git_clone_my_github'
 alias gco='_run git commit'
-alias gcop='_git_commit_n_push'
-alias gcoa='_run git commit -a'
-alias gcoap='_git_commit_n_push -a'
-alias gcom='_run git commit -m'
-alias gcomp='_git_commit_n_push -m'
-alias gcoam='_run git commit -am'
-alias gcoAm='git add -A; git commit -am'
-alias gcoamp='_git_commit_n_push -am'
-alias gcoAmp='git add -A; _git_commit_n_push -am'
+alias gco.p='_git_commit_n_push'
+alias gco.a='_run git commit -a'
+alias gco.ap='_git_commit_n_push -a'
+alias gco.m='_run git commit -m'
+alias gco.mp='_git_commit_n_push -m'
+alias gco.am='_run git commit -am'
+alias gco.Am='git add -A; git commit -am'
+alias gco.amp='_git_commit_n_push -am'
+alias gco.Amp='git add -A; _git_commit_n_push -am'
 alias gcp='git cherry-pick'
-alias gcpn='git cherry-pick -n'
+alias gcp.n='git cherry-pick -n'
 alias gdi='git diff --color=always'
-alias gdic='git diff --color=always --cached'
-alias gdico='_git_diff_commit'
+alias gdi.c='git diff --color=always --cached'
+alias gdi.co='_git_diff_commit'
 alias gfe='git fetch'
 alias glo='git log'
-alias gloa='_git_log_author'
-alias gloas='_git_log_author_stat'
-alias glos='git log --stat'
+alias glo.a='_git_log_author'
+alias glo.as='_git_log_author_stat'
+alias glo.s='git log --stat'
 alias gmr='git merge'
 alias gmv='git mv'
 alias gpl='git pull'
 alias gps='git push'
-alias gpsu='git push --set-upstream'
-alias grea='git remote add'
+alias gps.u='git push --set-upstream'
+alias gre.a='git remote add'
 alias gre='git remote'
-alias grev='git remote -v'
-alias grer='git remote rename'
-alias grerm='git remote remove'
+alias gre.v='git remote -v'
+alias gre.r='git remote rename'
+alias gre.rm='git remote remove'
 alias grm='git rm'
-alias grmc='git rm --cached'
+alias grm.c='git rm --cached'
 alias grs='git reset'
 alias gsh='git show'
 alias gst='git -c color.status=always status'
-alias gstsh='git stash'
+alias gst.sh='git stash'
 alias gta='git tag'
 alias gwt='git worktree'
-alias gwtrm='git worktree remove'
-alias gwtl='git worktree list'
+alias gwt.rm='git worktree remove'
+alias gwt.l='git worktree list'
 function gwta() {
     # Check out a git worktree in a sibling directory
     # Usage: gwta BRANCH [DIR_NAME]
@@ -397,33 +421,33 @@ function gwta() {
 if type __git_complete &>/dev/null; then
     __git_complete gad _git_add
     __git_complete gbr _git_branch
-    __git_complete gbra _git_branch
-    __git_complete gbrav _git_branch
+    __git_complete gbr.a _git_branch
+    __git_complete gbr.av _git_branch
     __git_complete gch _git_checkout
     __git_complete gcl _git_clone
     __git_complete gco _git_commit
-    __git_complete gcop _git_commit
-    __git_complete gcoa _git_commit
-    __git_complete gcoap _git_commit
-    __git_complete gcom _git_commit
-    __git_complete gcomp _git_commit
-    __git_complete gcoam _git_commit
-    __git_complete gcoamp _git_commit
-    __git_complete gcoAmp _git_commit
+    __git_complete gco.p _git_commit
+    __git_complete gco.a _git_commit
+    __git_complete gco.ap _git_commit
+    __git_complete gco.m _git_commit
+    __git_complete gco.mp _git_commit
+    __git_complete gco.am _git_commit
+    __git_complete gco.amp _git_commit
+    __git_complete gco.Amp _git_commit
     __git_complete gdi _git_diff
-    __git_complete gdic _git_diff
+    __git_complete gdi.c _git_diff
     __git_complete gfe _git_fetch
     __git_complete glo _git_log
     __git_complete gmr _git_merge
     __git_complete gpl _git_pull
     __git_complete gps _git_push
     __git_complete gre _git_remote
-    __git_complete grev _git_remote
+    __git_complete gre.v _git_remote
     __git_complete grm _git_rm
-    __git_complete grmc _git_rmc
-    __git_complete gshw _git_show
+    __git_complete grm.c _git_rmc
+    __git_complete gsh.w _git_show
     __git_complete gst _git_status
-    __git_complete gstsh _git_stash
+    __git_complete gst.sh _git_stash
     __git_complete gta _git_tag
 fi
 
@@ -446,6 +470,27 @@ alias htv='hatch version'
 alias hs='history'
 alias hsg='history | grep -i'
 alias hsn='history -n'          # Append new lines from the history file to history
+hs.unique() {
+    # Append session history to the file and reload it to ensure it's up-to-date
+    history -a
+    history -c
+    history -r
+
+    declare -A cmd_map  # Create an associative array to store the last instance of each command
+
+    # Read through the output of the updated `history` command
+    while IFS= read -r line; do
+        # Extract the command part by cutting everything after the first three fields
+        cmd=$(echo "$line" | cut -d' ' -f4-)
+        # Store the command in the associative array with the whole line as the value
+        cmd_map["$cmd"]="$line"
+    done < ~/.bash_history
+
+    # Now output the last instance of each command
+    for line in "${cmd_map[@]}"; do
+        echo "$line"
+    done | sort -k2  # Optionally sort the results by the timestamp, which is the second field
+}
 
 
 #function hsg() {
@@ -480,6 +525,10 @@ alias jqc='jq -C'
 alias jqc.='jq -C .'
 alias j='jqc'
 alias j.='jqc.'
+
+alias jst='just --color always --command-color cyan'
+alias jst!='jst --no-deps'
+
 #function jl() {
 #    j "$@" | less
 #}
@@ -499,7 +548,10 @@ function k8-create-dashboard-token() {
 alias k8='kubectl'
 
 
-alias les='less --quit-if-one-screen'
+#alias les='less --quit-if-one-screen'
+function les() {
+  script -q /dev/null $@ | less -R
+}
 
 alias mame='/Applications/mame0236-x86/mame'
 
@@ -541,6 +593,8 @@ alias npo='npm outdated'
 alias npr='npm run'
 alias nps='npm show'
 
+alias nvim='nvim -p'      # Open files in tabs
+
 # Common chown/chgrp shortcuts
 function _own() {
 
@@ -554,7 +608,7 @@ function _own() {
     else
         ch_name=`whoami`
     fi
-   
+
     # Set options ('r' is for 'recursive')
     ch_ops=
     if [[ $1 =~ .*r.* ]]; then
@@ -607,13 +661,18 @@ alias pers='pipenv run server'
 alias persh='pipenv run shell'
 alias pesh='pipenv shell'
 
+alias pd.r='pdm run'
+function __pdm_venv_activate() {
+    eval "$(pdm venv activate | sed 's/^source/source /; s/^.*$/&/')"
+}
+alias pd.va=__pdm_venv_activate
+
 
 alias pye='pyenv'
 alias pyei='pyenv install'
 alias pyev='pyenv version'
 alias pyevs='pyenv versions'
 alias pyel='pyenv install -list | less'
-alias depe='deactivate ; exit'
 
 alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
 alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
@@ -656,6 +715,10 @@ alias scrx='screen -x'
 # Useful Sed filters
 alias sed-fail="sed -n -e '/\[\(CRITICAL\|WARNING\) *\]/,/\[\(DEBUG\|INFO\) *\]/ { /\[\(DEBUG\|INFO\) *\]/b; p }'"
 
+
+set_WINDOW() {
+    export WINDOW=$(screen -Q number)
+}
 
 
 # Show a command
@@ -840,6 +903,7 @@ alias vgc='vagrant config'
 alias vgi='vagrant ssh-config'
 alias vgs='vagrant status'
 
+
 alias wcc='wc -c'
 alias wcl='wc -l'
 alias wcw='wc -w'
@@ -974,6 +1038,8 @@ if [ "$TERM" != "dumb" ]; then
     fi
 fi
 
+
+
 # Some more ls aliases
 #alias lv='l -l'            # ls (visible, vertical & verbose)
 #alias les='l | less'        # List piped through less
@@ -983,8 +1049,10 @@ alias las='l -a | less'     # List all piped through less
 #function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
 function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 
+
 # supervisor
 alias sv='sudo supervisorctl'
+
 
 # l == ls -l ... (but filtering out junk files)
 function l() {

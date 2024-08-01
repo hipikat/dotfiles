@@ -279,15 +279,6 @@ fi
 export VIM_APP_DIR=/usr/local/Cellar/macvim/8.1-153/
 
 
-# Echo each element of $PATH to a new line
-echo_paths () {
-    paths=(${PATH//:/ })
-    for path_i in "${!paths[@]}"; do
-        echo "${paths[path_i]}"
-    done
-}
-export -f echo_paths
-
 
 ### I don't even
 ##########################################
@@ -325,7 +316,7 @@ bash_interactive_mode=""
 function set_ps1_strings() {
     # Check if VIRTUAL_ENV_PROMPT is set and update PS1 accordingly,
     # unless another tool like Hatch or Poetry has already activated and modified $PS1
-    if [[ -n "$VIRTUAL_ENV_PROMPT" && "$PS1" != "(${VIRTUAL_ENV_PROMPT})"* ]]; then
+    if [[ -n "$VIRTUAL_ENV" && -n "$VIRTUAL_ENV_PROMPT" && "$PS1" != *"(${VIRTUAL_ENV_PROMPT})"* ]]; then
         PS1_VENV="(${VIRTUAL_ENV_PROMPT}) "
     else
         PS1_VENV=""
@@ -472,9 +463,12 @@ PS1+="$Color_Off "
 
 
 ### Continuation prompt
-PS2="$Green"
-PS2+=`echo -e " \xE2\x8E\xB1"`       # Upper-right curly bracket section
-PS2+="$Color_Off "
+upper_right_or_lower_left_parenthesis='\xE2\x8E\xB1'
+if [ "$TERM_PROGRAM" == "vscode" ]; then
+    PS2="$(printf '%b ' "$upper_right_or_lower_left_parenthesis")"
+else
+    PS2="${Green}$(printf '%b' "$upper_right_or_lower_left_parenthesis")${Color_Off} "
+fi
 
 
 ### Command-line aliases
@@ -564,9 +558,12 @@ fi
 
 ### Run directory-context hooks (e.g. Autoenv scripts)
 ##########################################
-cd $(pwd)
+cd "$(pwd)"
+#if [ "$TERM_PROGRAM" != "vscode" ]; then
 eval "$(direnv hook bash)"
-direnv reload
+direnv reload &>/dev/null
+#fi
+# source deactivate &>/dev/null
 
 
 
@@ -576,3 +573,6 @@ export CPPFLAGS="$CPPFLAGS -I/usr/local/opt/readline/include -I/usr/local/opt/op
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/local/opt/readline/lib/pkgconfig:/usr/local/opt/openssl@3/lib/pkgconfig:/usr/local/opt/sqlite/lib/pkgconfig:/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/tcl-tk/lib/pkgconfig"
 export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 
+
+
+#bind 'Tab: menu-complete'
