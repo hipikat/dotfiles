@@ -855,6 +855,10 @@ function slt-run() {
 }
 
 alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+ssh-keygen-default() {
+  comment="$USER@$(hostname | cut -d '.' -f 1)-$(date +%F)"
+  ssh-keygen -t rsa -b 4096 -C "$comment"
+}
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
