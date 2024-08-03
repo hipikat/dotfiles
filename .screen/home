@@ -24,8 +24,8 @@ screen      # 10
 
 at 5 stuff "cd ~/Desktop^Mclear^M"
 at 6 stuff "cd ~/Downloads^Mclear^M"
-at 7 stuff "cd ~/.dotfiles^Mclear^M"
-at 8 stuff "cd ~/.dotfiles^M"
+at 7 stuff "cd ~/.dotfiles^Mnvim -n .bashrc .bash_aliases ~/config/nvim/init.lua^M"
+at 8 stuff "cd ~/.dotfiles^Mclear^M"
 at 9 stuff "cd ~/.ssh^M"
 at 10 stuff "cd /etc^M"
 

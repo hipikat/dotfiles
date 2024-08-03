@@ -16,27 +16,72 @@
 # Packaged under the BSD 2-Clause License
 ###
 
-
 ### 0. Setup
 ##########################################
 
-# Colours
-NC='\e[0m'          # No colour
-GREY='\e[0;37m'
+### Colours
+# Reset
+Color_Off='\[\e[0m\]'       # Text Reset
+
+# Regular Colors
+Black='\[\e[0;30m\]'        # Black
+Red='\[\e[0;31m\]'          # Red
+Green='\[\e[0;32m\]'        # Green
+Yellow='\[\e[0;33m\]'       # Yellow
+Blue='\[\e[0;34m\]'         # Blue
+Purple='\[\e[0;35m\]'       # Purple
+Cyan='\[\e[0;36m\]'         # Cyan
+White='\[\e[0;37m\]'        # White
+
+# Bold
+BBlack='\[\e[1;30m\]'       # Black
+BRed='\[\e[1;31m\]'         # Red
+BGreen='\[\e[1;32m\]'       # Green
+BYellow='\[\e[1;33m\]'      # Yellow
+BBlue='\[\e[1;34m\]'        # Blue
+BPurple='\[\e[1;35m\]'      # Purple
+BCyan='\[\e[1;36m\]'        # Cyan
+BWhite='\[\e[1;37m\]'       # White
+
+# Underline
+UBlack='\[\e[4;30m\]'       # Black
+URed='\[\e[4;31m\]'         # Red
+UGreen='\[\e[4;32m\]'       # Green
+UYellow='\[\e[4;33m\]'      # Yellow
+UBlue='\[\e[4;34m\]'        # Blue
+UPurple='\[\e[4;35m\]'      # Purple
+UCyan='\[\e[4;36m\]'        # Cyan
+UWhite='\[\e[4;37m\]'       # White
+
+# Background
+On_Black='\[\e[40m\]'       # Black
+On_Red='\[\e[41m\]'         # Red
+On_Green='\[\e[42m\]'       # Green
+On_Yellow='\[\e[43m\]'      # Yellow
+On_Blue='\[\e[44m\]'        # Blue
+On_Purple='\[\e[45m\]'      # Purple
+On_Cyan='\[\e[46m\]'        # Cyan
+On_White='\[\e[47m\]'       # White
+
+
 
 # Emoji
-EMJ_SHELL='\U1F41A'
-EMJ_SNAKE='\U1F40D'
+_SNAKE_EMOJI='\U1F40D'
+_DOVE_EMOJI='\U1F54A'
+_LIZARD_EMOJI='\U1F98E'
+_SHELL_EMOJI='\U1F41A'
+
+# Emoji
 
 
 # Command proxy - all shell commands should be passed in here; they will be
 # printed and then only evaluabed if we weren't passed a --dry-run flag
-SHELL__run_PREFIX="$EMJ_SHELL "
+_run_PREFIX="$_SHELL_EMOJI "
 function _run() {
-    printf "\n$GREY"
+    printf "\n$White"
     printf $"$SHELL__run_PREFIX"
     echo "$@"
-    printf "$NC"
+    printf "$Colour_Off"
     eval $@
 }
 
@@ -45,6 +90,7 @@ function _run() {
 ### 1. Convenience alises
 ##########################################
 alias s.bashrc='_run source ~/.bashrc'
+alias s.zshrc='_run source ~/.zshrc'
 alias s.deactivate='_run source deactivate'
 
 
@@ -364,9 +410,6 @@ alias gch='_run git checkout'
 alias gch.b='_run git checkout -b'
 alias gch.t='_run git checkout -t'
 alias gcl='_run git clone'
-alias gcln='_run git clean -n'
-alias gcln.i='_run git clean -i'
-alias gcln.f='_run git clean -f'
 alias gcl-gh='_git_clone_github'
 alias gcl-my='_git_clone_my_github'
 alias gco='_run git commit'
@@ -403,20 +446,6 @@ alias grm='git rm'
 alias grm.c='git rm --cached'
 alias grs='git reset'
 alias gsh='git show'
-function gsh.grep() {
-  local grep_string="$1"
-  git log --grep="$grep_string" --regexp-ignore-case --pretty=format:"%H %s" | while read -r hash msg; do
-    echo -e "\nCommit: $hash\nMessage: $msg\n"
-    git show --color=always "$hash"
-  done | less -R
-}
-function gsh.author() {
-  local author_string="$1"
-  git log --author="$author_string" --pretty=format:"%H %s" | while read -r hash msg; do
-    echo -e "\nCommit: $hash\nMessage: $msg\n"
-    git show --color=always "$hash"
-  done | less -R
-}
 alias gst='git -c color.status=always status'
 alias gst.sh='git stash'
 alias gta='git tag'
@@ -558,8 +587,6 @@ alias jst!='jst --no-deps'
 #    $(history -p \!\!) | less
 #}
 
-alias jst.md='just --command-color purple --highlight -f justfile.masdash'
-
 
 function k8-create-dashboard-token() {
     kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | awk '/^deployment-controller-token-/{print $1}') | awk '$1=="token:"{print $2}'
@@ -612,7 +639,8 @@ alias npo='npm outdated'
 alias npr='npm run'
 alias nps='npm show'
 
-alias nvim='nvim -p'      # Open files in tabs
+alias nv='nvim -p'        # Open files in tabs
+alias nv.n='nvim -n -p'   # Disable swap files
 
 # Common chown/chgrp shortcuts
 function _own() {
@@ -740,32 +768,32 @@ set_WINDOW() {
 }
 
 
-# Show a command
-function shw() {
-    _TYPE=$(type $1 &> /dev/null)
-    if [ $? -eq 1 ]; then
-        echo $1 not found.
-        return 1
-    else
-        _TYPE=$(type $1 | head -n 1)
-    fi
-
-    # Type describes aliases and functions by default
-    if [[ "$_TYPE" =~ aliased\ to|a\ function ]]; then
-        type $1
-    elif [[ "$_TYPE" =~ $1\ is\ / ]]; then
-        type $1
-        _FILE=$(file $1)
-        if [[ "$_FILE" =~ ASCII ]]; then
-            cat $(type -p $1)
-        else
-            echo "$_FILE"
-        fi
-    # Not sure what this is. Could be a binary. Just use the default.
-    else
-        type $1
-    fi
-}
+## Show a command
+#function shw() {
+#    _TYPE=$(type $1 &> /dev/null)
+#    if [ $? -eq 1 ]; then
+#        echo $1 not found.
+#        return 1
+#    else
+#        _TYPE=$(type $1 | head -n 1)
+#    fi
+#
+#    # Type describes aliases and functions by default
+#    if [[ "$_TYPE" =~ aliased\ to|a\ function ]]; then
+#        type $1
+#    elif [[ "$_TYPE" =~ $1\ is\ / ]]; then
+#        type $1
+#        _FILE=$(file $1)
+#        if [[ "$_FILE" =~ ASCII ]]; then
+#            cat $(type -p $1)
+#        else
+#            echo "$_FILE"
+#        fi
+#    # Not sure what this is. Could be a binary. Just use the default.
+#    else
+#        type $1
+#    fi
+#}
 
 alias slt='salt --force-color'
 function slt.() {
@@ -826,22 +854,7 @@ function slt-run() {
     salt-run --force-color "${@}"
 }
 
-alias ssh-ffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-alias ssh-vagrant='ssh -i ~/.vagrant.d/insecure_private_key -o UserKnownHostsFile=/dev/null'
-function ssh-clean_known_hosts() {
-    local known_hosts_file="$HOME/.ssh/known_hosts"
-    
-    if [ -f "$known_hosts_file" ]; then
-        cp "$known_hosts_file" "${known_hosts_file}.bak"
-
-        # Remove entries matching private IP address patterns
-        grep -vE '^(10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.)' "$known_hosts_file.bak" > "$known_hosts_file"
-        
-        echo "Private IP entries removed from $known_hosts_file."
-    else
-        echo "No known_hosts file found."
-    fi
-}
+alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 alias sush='sudo -E bash'       # TODO: Use $SHELL if set
 
@@ -887,7 +900,7 @@ function tdym() {
 function tre() {
     tree -C "$@" | grep -v '\.pyc$' | less
 }
-export -f tre
+#export -f tre
 alias tre2='tre -L 2'
 alias tre3='tre -L 3'
 alias tre4='tre -L 4'
@@ -897,6 +910,29 @@ alias tren2='tre -L 2 -I node_modules'
 alias tren3='tre -L 3 -I node_modules'
 alias tren4='tre -L 4 -I node_modules'
 alias tren5='tre -L 5 -I node_modules'
+
+
+# Tmux shortcut
+tx() {
+  # If an argument is given, treat it as the session name
+  if [ -n "$1" ]; then
+    tmux attach-session -t "$1" 2>/dev/null || tmux new-session -s "$1"
+  else
+    # Count the number of active sessions
+    session_count=$(tmux ls 2>/dev/null | wc -l)
+
+    if [ "$session_count" -eq 0 ]; then
+      # No sessions exist, create a new one called 'default'
+      tmux new-session -s default
+    elif [ "$session_count" -eq 1 ]; then
+      # Only one session exists, attach to it
+      tmux attach-session
+    else
+      # Multiple sessions exist, list them
+      tmux ls
+    fi
+  fi
+}
 
 
 alias tlf='tail -F'
@@ -915,7 +951,7 @@ function typ() {
 
     type -p "$@"
 }
-export -f typ
+#export -f typ
 
 alias ufwd='ufw delete'
 alias ufws='ufw status'
@@ -926,7 +962,6 @@ alias upd='updatedb'
 alias upt='uptime'
 
 alias vg='vagrant'
-alias vg.md='vagrant --app=mas_dash'
 alias vgu='vagrant up'
 alias vgp='vagrant provision'
 alias vgsh='vagrant ssh'
@@ -961,7 +996,7 @@ if ! type tac >/dev/null 2>&1; then
             awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -;
         }   
     fi  
-    export -f tac 
+    #export -f tac 
 fi
 
 
@@ -1099,7 +1134,7 @@ function l() {
         ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
     fi  
 }
-export -f l
+#export -f l
 
 function ll() {
     l "$@" | less
@@ -1118,7 +1153,7 @@ function f() {
     #    find ./ -iname "*$@*"
     #fi
 }
-export -f f
+#export -f f
 #alias f='eval $(find ./ -iname "*$@*")'
 
 
@@ -1142,7 +1177,7 @@ function cover() {
     coverage run --source="$1" $D test "$1";
     coverage report --omit='*/_[a-z]*,*/tests/test_*';
 }
-export -f cover
+#export -f cover
 
 
 
@@ -1161,7 +1196,7 @@ function sudoe() {
         sudo -E "$@"
     fi
 }
-export -f sudoe
+#export -f sudoe
 
 #
 function sudoeu() {
@@ -1171,7 +1206,7 @@ function sudoeu() {
         sudo -Eu "$@"
     fi
 }
-export -f sudoeu
+#export -f sudoeu
 
 #
 function dosass() {

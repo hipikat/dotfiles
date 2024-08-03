@@ -1,11 +1,22 @@
 -- Set default options
-vim.opt.ic = true         -- Ignore case in search patterns
 vim.opt.autoindent = true -- Auto-indenting
-vim.opt.incsearch = true  -- Incremental search
 vim.opt.hlsearch = false  -- No highlighting search matches
+vim.opt.number = true     -- Enable line numbers
+vim.opt.ic = true         -- Ignore case in search patterns
+vim.opt.incsearch = true  -- Incremental search
 vim.opt.wrap = false      -- No wrapping of lines
 vim.o.mouse = ''          -- Disable mouse supportp
 vim.wo.scrolloff = 3      -- Display context around the cursor line
+
+vim.opt.expandtab = true  -- Convert tabs to spaces
+vim.opt.shiftwidth = 4    -- Number of spaces to use for each step of (auto)indent
+vim.opt.softtabstop = 0   -- Number of spaces that a <Tab> counts for while editing
+vim.opt.tabstop = 4       -- Number of spaces that a <Tab> in the file counts for
+vim.opt.smarttab = false  -- Disable smarttab to prevent smart behavior
+
+vim.cmd([[
+  autocmd FileType yaml setlocal shiftwidth=2 softtabstop=2 tabstop=2
+]])
 
 -- Clipboard options
 
@@ -39,14 +50,42 @@ vim.g.vscode.cursorStylePerMode = 1
 
 -- Toggle commands
 vim.api.nvim_set_keymap('n', '<leader>#', ':set number!<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>v', ':set paste!<CR>', { noremap = true, silent = true })
+--vim.api.nvim_set_keymap('n', '<leader>v', ':set paste!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>w', ':set nolist!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>s', ':set spell!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>r', ':set wrap!<CR>:set linebreak!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>,', ':set hlsearch!<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>l', ':set syntax=', {noremap = true, silent = false})
 
--- Map key to open syntax setting prompt
-vim.api.nvim_set_keymap('n', '<leader>sy', ':set syntax=', {noremap = true, silent = false})
+-- Function to toggle paste mode and restore tab settings
+function TogglePasteMode()
+    vim.g.original_expandtab = vim.o.expandtab
+    vim.g.original_tabstop = vim.o.tabstop
+    vim.g.original_shiftwidth = vim.o.shiftwidth
+    vim.g.original_softtabstop = vim.o.softtabstop
+
+    vim.cmd('set paste!')
+
+    vim.opt.expandtab = vim.g.original_expandtab
+    vim.opt.tabstop = vim.g.original_tabstop
+    vim.opt.shiftwidth = vim.g.original_shiftwidth
+    vim.opt.softtabstop = vim.g.original_softtabstop
+    vim.opt.smarttab = false -- Disable smarttab to prevent smart behavior
+
+    if vim.g.paste_mode_enabled then
+        print("Paste-mode enabled")
+    else
+        print("Paste-mode disabled")
+    end
+end
+
+
+-- Initialize paste mode status
+vim.g.paste_mode_enabled = false
+
+-- Set keymap to toggle paste mode and restore tab settings
+vim.api.nvim_set_keymap('n', '<leader>v', ':lua TogglePasteMode()<CR>', { noremap = true, silent = true })
+
 
 -- Map F-keys to tabs for normal and insert modes
 local function set_tab_keymap(key, tab_number)

@@ -32,6 +32,7 @@ ignorecase on
 #bind } history
 
 
+
 # ------------------------------------------------------------------------------
 # TERMINAL SETTINGS
 # ------------------------------------------------------------------------------
@@ -89,6 +90,16 @@ startup_message off
 #vbell off
 encoding UTF-8
 
+
+
+# Custom command to swap current window with a specified window and update the WINDOW variable
+command -c swapwith "eval 'number %1' 'at #%1 number $WINDOW' 'at #$WINDOW exec bash -c \"export WINDOW=%1\"' 'exec bash -c \"export WINDOW=$WINDOW\"'"
+
+# Bind the commands to specific keys (for example, Ctrl-a 1, Ctrl-a 5, etc.)
+bind 1 swapwith 1
+bind 2 swapwith 2
+bind 3 swapwith 3
+# Add bindings for other numbers as needed
 
 
 

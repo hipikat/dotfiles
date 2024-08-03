@@ -2,6 +2,7 @@
 .vim/bundle/*
 nohup.out
 .config/configstore/
+.config/containers/
 .config/.mono
 .config/yarn/global/node_modules/
 .vim/pack/kite
