@@ -19,67 +19,98 @@
 ### 0. Setup
 ##########################################
 
-### Colours
-# Reset
-Color_Off='\[\e[0m\]'       # Text Reset
+# Dotfiles I'm working on
+VOLATILE_DOTFILES='.zshrc .dotfiles/shell_utils.sh .tmux.conf'
+
+# Text Reset
+Color_Off='\e[0m'       # Text Reset
 
 # Regular Colors
-Black='\[\e[0;30m\]'        # Black
-Red='\[\e[0;31m\]'          # Red
-Green='\[\e[0;32m\]'        # Green
-Yellow='\[\e[0;33m\]'       # Yellow
-Blue='\[\e[0;34m\]'         # Blue
-Purple='\[\e[0;35m\]'       # Purple
-Cyan='\[\e[0;36m\]'         # Cyan
-White='\[\e[0;37m\]'        # White
+Black='\e[0;30m'
+Red='\e[0;31m'
+Green='\e[0;32m'
+Yellow='\e[0;33m'
+Blue='\e[0;34m'
+Purple='\e[0;35m'
+Cyan='\e[0;36m'
+White='\e[0;37m'
 
 # Bold
-BBlack='\[\e[1;30m\]'       # Black
-BRed='\[\e[1;31m\]'         # Red
-BGreen='\[\e[1;32m\]'       # Green
-BYellow='\[\e[1;33m\]'      # Yellow
-BBlue='\[\e[1;34m\]'        # Blue
-BPurple='\[\e[1;35m\]'      # Purple
-BCyan='\[\e[1;36m\]'        # Cyan
-BWhite='\[\e[1;37m\]'       # White
+BBlack='\e[1;30m'
+BRed='\e[1;31m'
+BGreen='\e[1;32m'
+BYellow='\e[1;33m'
+BBlue='\e[1;34m'
+BPurple='\e[1;35m'
+BCyan='\e[1;36m'
+BWhite='\e[1;37m'
 
 # Underline
-UBlack='\[\e[4;30m\]'       # Black
-URed='\[\e[4;31m\]'         # Red
-UGreen='\[\e[4;32m\]'       # Green
-UYellow='\[\e[4;33m\]'      # Yellow
-UBlue='\[\e[4;34m\]'        # Blue
-UPurple='\[\e[4;35m\]'      # Purple
-UCyan='\[\e[4;36m\]'        # Cyan
-UWhite='\[\e[4;37m\]'       # White
+UBlack='\e[4;30m'
+URed='\e[4;31m'
+UGreen='\e[4;32m'
+UYellow='\e[4;33m'
+UBlue='\e[4;34m'
+UPurple='\e[4;35m'
+UCyan='\e[4;36m'
+UWhite='\e[4;37m'
 
 # Background
-On_Black='\[\e[40m\]'       # Black
-On_Red='\[\e[41m\]'         # Red
-On_Green='\[\e[42m\]'       # Green
-On_Yellow='\[\e[43m\]'      # Yellow
-On_Blue='\[\e[44m\]'        # Blue
-On_Purple='\[\e[45m\]'      # Purple
-On_Cyan='\[\e[46m\]'        # Cyan
-On_White='\[\e[47m\]'       # White
+On_Black='\e[40m'
+On_Red='\e[41m'
+On_Green='\e[42m'
+On_Yellow='\e[43m'
+On_Blue='\e[44m'
+On_Purple='\e[45m'
+On_Cyan='\e[46m'
+On_White='\e[47m'
 
+# High-intensity colors
+IBlack='\e[0;90m'
+IRed='\e[0;91m'
+IGreen='\e[0;92m'
+IYellow='\e[0;93m'
+IBlue='\e[0;94m'
+IPurple='\e[0;95m'
+ICyan='\e[0;96m'
+IWhite='\e[0;97m'
 
+# Bold high-intensity
+BIBlack='\e[1;90m'
+BIRed='\e[1;91m'
+BIGreen='\e[1;92m'
+BIYellow='\e[1;93m'
+BIBlue='\e[1;94m'
+BIPurple='\e[1;95m'
+BICyan='\e[1;96m'
+BIWhite='\e[1;97m'
+
+# High-intensity backgrounds
+On_IBlack='\e[0;100m'
+On_IRed='\e[0;101m'
+On_IGreen='\e[0;102m'
+On_IYellow='\e[0;103m'
+On_IBlue='\e[0;104m'
+On_IPurple='\e[0;105m'
+On_ICyan='\e[0;106m'
+On_IWhite='\e[0;107m'
+
+# Additional styles
+Blink='\e[5m'          # Blink
+Dim='\e[2m'            # Dim
+Inverse='\e[7m'        # Inverse/Reverse
+Hidden='\e[8m'         # Hidden
 
 # Emoji
-_SNAKE_EMOJI='\U1F40D'
-_DOVE_EMOJI='\U1F54A'
-_LIZARD_EMOJI='\U1F98E'
-_SHELL_EMOJI='\U1F41A'
-
-# Emoji
+SnakeEmoji='\U1F40D'
+DoveEmoji='\U1F54A'
+LizardEmoji='\U1F98E'
+ShellEmoji='\U1F41A'
 
 
-# Command proxy - all shell commands should be passed in here; they will be
-# printed and then only evaluabed if we weren't passed a --dry-run flag
-_run_PREFIX="$_SHELL_EMOJI "
+# Command proxy - a constant reminder of what lies beneath the aliases
 function _run() {
-    printf "\n$White"
-    printf $"$SHELL__run_PREFIX"
+    printf "\n$White$ShellEmoji "
     echo "$@"
     printf "$Colour_Off"
     eval $@
@@ -103,20 +134,22 @@ any_movie() {
     fi
 }
 
+# Bat
+alias bat.toml='bat -l toml'
 
-# Homebrew - br*
-alias brar='_run brew autoremove'
-alias brc='_run brew cleanup'
-alias brd='_run brew doctor'
-alias bri='_run brew install'
-alias brif='_run brew info'
-alias brl='_run brew list'
-alias brlg='_run "brew list | grep -i"'
-alias bru='_run brew upgrade --dry-run'
-alias bru!='_run brew upgrade ; _run brew autoremove ; _run brew cleanup && _run brew doctor'
-alias brU!='_run brew unpin bash pyenv nvim vim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup ; _run brew doctor ; _run brew pin bash pyenv nvim vim'
-alias brun='_run brew uninstall'
-alias brs='_run brew search'
+# Homebrew
+alias br.ar='_run brew autoremove'
+alias br.c='_run brew cleanup'
+alias br.d='_run brew doctor'
+alias br.i='_run brew install'
+alias br.in='_run brew info'
+alias br.l='_run brew list'
+alias br.lg='_run "brew list | grep -i"'
+alias br.u='_run brew upgrade --dry-run'
+alias br.u!='_run brew upgrade ; _run brew autoremove ; _run brew cleanup && _run brew doctor'
+alias br.U!='_run brew unpin bash pyenv nvim vim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup ; _run brew doctor ; _run brew pin bash pyenv nvim vim'
+alias br.un='_run brew uninstall'
+alias br.s='_run brew search'
 
 alias cd..='cd ..'
 
@@ -279,14 +312,9 @@ alias dom.rm='docker-machine rm -y -f'
 
 alias dve='source deactivate'
 
-
-echo.PATHs () {
-    paths=(${PATH//:/ })
-    for path_i in "${!paths[@]}"; do
-        echo "${paths[path_i]}"
-    done
+echo_paths() {
+    echo "$PATH" | tr ':' '\n'
 }
-
 
 # Fake TTY
 function fty() {
@@ -608,6 +636,8 @@ function mkcd() {
 }
 alias mkd='mkdir'
 
+alias mp='multipass'
+
 alias ne.l='nodenv local'
 alias ne.s='nodenv shell'
 alias ne.g='nodenv global'
@@ -641,6 +671,7 @@ alias nps='npm show'
 
 alias nv='nvim -p'        # Open files in tabs
 alias nv.n='nvim -n -p'   # Disable swap files
+alias nv.dotfiles="nvim -n -p $VOLATILE_DOTFILES"
 
 # Common chown/chgrp shortcuts
 function _own() {
@@ -684,11 +715,11 @@ function _own() {
     fi
 }   # end _own()
 alias own='_own b'              # Own both user and group on files
-alias ownr='_own br'            # Own user and group on files, recursively
-alias ownu='_own u'             # Own user flag on files
-alias owng='_own g'             # Own group flag on files
-alias ownur='_own ur'           # Own user flag on files, recursively
-alias owngr='_own gr'           # Own group flag on files, recursively
+alias own.r='_own br'            # Own user and group on files, recursively
+alias own.u='_own u'             # Own user flag on files
+alias own.g='_own g'             # Own group flag on files
+alias own.ur='_own ur'           # Own user flag on files, recursively
+alias own.gr='_own gr'           # Own group flag on files, recursively
 
 alias pct.='pipenv run picata'
 alias peg='pipenv graph'
@@ -734,7 +765,7 @@ alias pmsh='python manage.py shell'
 alias psa='ps aux'
 alias psg='ps aux | grep -i'
 
-alias pst='pstree -UpaunZ | less --quit-if-one-screen'
+alias pst='pstree -UpaunZ'
 
 alias rmr='rm -R'
 alias rmf='rm -f'
@@ -860,7 +891,7 @@ ssh-keygen-default() {
   ssh-keygen -t rsa -b 4096 -C "$comment"
 }
 
-alias sush='sudo -E bash'       # TODO: Use $SHELL if set
+alias sush='sudo -s'       # TODO: Use $SHELL if set
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'
@@ -920,7 +951,26 @@ alias tren5='tre -L 5 -I node_modules'
 tx() {
   # If an argument is given, treat it as the session name
   if [ -n "$1" ]; then
-    tmux attach-session -t "$1" 2>/dev/null || tmux new-session -s "$1"
+    if [ -n "$2" ]; then
+      # If a second argument is provided, link the new session to the existing one and detach it from the current client
+      tmux new-session -d -s "$2" -t "$1"
+
+      # Get the number of windows in the original session (home)
+      window_count=$(tmux list-windows -t "$1" | wc -l)
+
+      # Create a new window in the new session
+      tmux new-window -t "$2"
+
+      # Calculate the new window index (window_count + 1)
+      new_window_index=$((window_count + 1))
+
+      # Attach to the new session, starting in the newly created window
+      tmux select-window -t "$2:$new_window_index"
+      tmux attach-session -t "$2"
+    else
+      # Attach to the session if it exists, otherwise create a new one
+      tmux attach-session -t "$1" 2>/dev/null || tmux new-session -s "$1"
+    fi
   else
     # Count the number of active sessions
     session_count=$(tmux ls 2>/dev/null | wc -l)
@@ -937,6 +987,21 @@ tx() {
     fi
   fi
 }
+
+
+alias tx.ls='tmux ls'
+
+_tmux__safe_kill_session() {
+  session_name=$(tmux display-message -p '#S')
+  session_count=$(tmux list-sessions | wc -l)
+
+  if [ "$session_count" -gt 1 ]; then
+    tmux kill-session -t "$session_name"
+  else
+    echo "Warning: Only one session left; kill aborted."
+  fi
+}
+
 
 
 alias tlf='tail -F'
@@ -964,6 +1029,8 @@ alias ufwsv='ufw status verbose'
 
 alias upd='updatedb'
 alias upt='uptime'
+
+alias s.ve='source .venv/bin/activate'
 
 alias vg='vagrant'
 alias vgu='vagrant up'
