@@ -5,46 +5,39 @@ autoload -U promptinit; promptinit
 prompt pure
 
 
-### Load user aliases, functions & constants
-source ~/.dotfiles/shell_utils.sh
-
-
 ### Shell options
-setopt GLOB_DOTS        # Include hidden files in pathname expansion
-setopt EXTENDED_GLOB    # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns
-setopt NO_CASE_GLOB     # Make globbing case-insensitive
-setopt APPEND_HISTORY   # Append to the history file instead of overwriting it
+setopt GLOB_DOTS                # Include hidden files in pathname expansion
+setopt EXTENDED_GLOB            # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns
+setopt NO_CASE_GLOB             # Make globbing case-insensitive
 
 
-### Zsh Line Editor (ZLE) setup
-bindkey -v
-bindkey "^H" backward-delete-char
-bindkey "^?" backward-delete-char
-bindkey '\e[1;9C' forward-word     # For moving forward by word
-bindkey '\e[1;9D' backward-word    # For moving backward by word
-bindkey '\e[3;9~' delete-word      # For deleting a word forward
-bindkey '\e\b' backward-kill-word  # For deleting a word backward
+## History settings
+setopt APPEND_HISTORY           # Append to the history file instead of overwriting it
+setopt HIST_IGNORE_DUPS         # Ignore duplicate commands in history
+setopt HIST_IGNORE_ALL_DUPS     # Remove older duplicate commands from history
+setopt SHARE_HISTORY            # Share history across all sessions
+setopt HIST_REDUCE_BLANKS       # Remove unnecessary blanks from history
+setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first when trimming history
+setopt HIST_SAVE_NO_DUPS        # Do not save duplicates in history
+setopt HIST_IGNORE_SPACE        # Ignore commands that start with a space
+setopt HIST_FIND_NO_DUPS        # Do not display duplicates in history search
 
+export HISTSIZE=16384           # Number of commands to remember in the session history
+export SAVEHIST=16384           # Number of commands to save in the history file
 
 
 ### Set environment
 export EDITOR='vim'
-export LESS='-iRMXF'    # Ignore case, raw characters, detailed status, no
-                        # alternate screen (keep content), quit if <1 screen
+export COPYFILE_DISABLE=true    # Prevent mystery ._* files appearing in tarballs on MacOS
+export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, no
+                                # alternate screen (keep content), quit if <1 screen
 
-## History settings
-# Ignore duplicate history entries
-export HISTCONTROL='ignoredups:erasedups'
-# Maximum number of lines contained in the history file
-export HISTFILESIZE=8200
-# Maximum number of commands to remember in the command history
-export HISTSIZE=4096
-# Time specifier, between line number and command, in the `history` command
-export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
+### Zsh Line Editor (ZLE) setup
+bindkey -v
+bindkey "^?" backward-delete-char
 
 
 ## Set PATH
-# Define an array of paths to potentially add to $PATH
 paths=(
     ~/.bin
     ~/.local/bin
@@ -67,13 +60,10 @@ for (( i=${#paths[@]}-1 ; i>=0 ; i-- )); do
     fi
 done
 
-# Add paths for local Python venv and Node bin directories
-PATH="$PATH:.venv/bin:./node_modules/.bin"
-
-# Export the updated Path
+PATH="$PATH:.venv/bin:./node_modules/.bin"  # Add local Python venv & Node bin directories
 export PATH
 
 
-## Miscellaneous environment settings
-# Prevent problems with '._*' files on MacOS
-export COPYFILE_DISABLE=true
+### Load user aliases, functions & constants
+source ~/.dotfiles/shell_utils.sh
+

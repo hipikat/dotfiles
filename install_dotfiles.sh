@@ -1,10 +1,14 @@
 #!/bin/bash
+
+# Copy and/or link files into our home directory
 python3 plumb_files.py --current-user --force
+
+# Checkout git submodules
+git submodule sync --recursive
+git submodule update --init --recursive --force
+
+# Install Vim plugins
 if [ ! -d ../.vim/bundle/Vundle.vim ]; then
-  echo "go on..."
   git clone https://github.com/VundleVim/Vundle.vim.git ../.vim/bundle/Vundle.vim
 fi
-
-# Having just a BIT of trouble getting this to process with Salt...
-#vim -nes -c ':VundleInstall' -c ':qa!'
 vim +VundleInstall '+qa!' >/dev/null
