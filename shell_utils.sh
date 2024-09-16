@@ -759,6 +759,21 @@ alias pg_ctl-mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U po
 alias pif='_run pip freeze'
 alias pifl='_run pip freeze | wc -l'
 
+ping-loop() {
+  domain="$1"
+  sleep_time="${2:-10}"
+
+  if [ -z "$domain" ]; then
+    echo "Usage: ping-loop <domain> [sleep_time]"
+    return 1
+  fi
+
+  while true; do
+    ping -c 1 "$domain" | awk '/PING/{getline; print}'
+    sleep "$sleep_time"
+  done
+}
+
 alias pmn='python manage.py'
 alias pmsh='python manage.py shell'
 
@@ -888,7 +903,11 @@ function slt-run() {
 alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 ssh-keygen-default() {
   comment="$USER@$(hostname | cut -d '.' -f 1)-$(date +%F)"
-  ssh-keygen -t ed25519 -C "$comment"
+  ssh-keygen -N "" -t ed25519 -C "$comment"
+}
+ssh-keygen-cloud() {
+  comment="(ephemeral)-$(date +%F)"
+  ssh-keygen -N "" -t ed25519 -f ~/.ssh/ephemeral-ed25519 -C "$comment"
 }
 
 
@@ -1023,6 +1042,21 @@ function typ() {
 }
 #export -f typ
 
+unknow_host() {
+  if [ -z "$1" ]; then
+    echo "Please provide a pattern to match."
+    return 1
+  fi
+
+  # Create a backup of the known_hosts file
+  cp ~/.ssh/known_hosts ~/.ssh/known_hosts.bak
+
+  # Remove lines that start with the pattern passed as the first argument
+  sed -i.bak "/^$1/d" ~/.ssh/known_hosts
+
+  echo "Removed entries from ~/.ssh/known_hosts matching pattern '^$1'"
+}
+
 alias ufwd='ufw delete'
 alias ufws='ufw status'
 alias ufwsn='ufw status numbered'
@@ -1126,6 +1160,7 @@ alias chwon='chown'
 alias hsot='host'
 alias hsto='host'
 alias grpe='grep'
+alias gid.c='gdi.c'
 alias im='vim'
 alias ir='gir'
 alias ivm='vim'
