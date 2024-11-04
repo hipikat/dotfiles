@@ -12,7 +12,7 @@ if [[ ! -d "$SRC" || ! -d "$DEST" ]]; then
 fi
 
 # Perform the sync with rsync
-rsync -av --delete "$SRC/" "$DEST/" >> "$LOGFILE" 2>&1
+rsync -av --stats --progress --delete "$SRC/" "$DEST/" >> "$LOGFILE" 2>&1
 
 # Log success or failure
 if [ $? -eq 0 ]; then

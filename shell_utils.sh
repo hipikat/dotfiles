@@ -140,6 +140,7 @@ alias bat.toml='bat -l toml'
 # Homebrew
 alias br.ar='_run brew autoremove'
 alias br.c='_run brew cleanup'
+alias br.c!='_run brew cleanup --prune=all'
 alias br.d='_run brew doctor'
 alias br.i='_run brew install'
 alias br.in='_run brew info'
@@ -911,7 +912,10 @@ ssh-keygen-cloud() {
 }
 
 
-alias sush='sudo -s'       # TODO: Use $SHELL if set
+#alias sush='sudo -E zsh'       # TODO: Use $SHELL if set
+sush() {
+    sudo -E $SHELL
+}
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'
