@@ -911,14 +911,19 @@ ssh-keygen-cloud() {
   ssh-keygen -N "" -t ed25519 -f ~/.ssh/ephemeral-ed25519 -C "$comment"
 }
 
-
-#alias sush='sudo -E zsh'       # TODO: Use $SHELL if set
 sush() {
     if [ -n "$1" ]; then
-        sudo -E -u "$1" $SHELL
+        target_user="$1"
     else
-        sudo -E $SHELL
+        target_user="root"  # default to root if no user specified
     fi
+    if [ "$(uname)" = "Darwin" ]; then
+        home_base="/Users"
+    else
+        home_base="/home"
+    fi
+    target_home="${home_base}/${target_user}"
+    sudo -u "$target_user" -E HOME="$target_home" ZDOTDIR="$HOME" $SHELL
 }
 
 alias sup='supervisorctl'
