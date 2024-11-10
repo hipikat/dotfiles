@@ -914,7 +914,11 @@ ssh-keygen-cloud() {
 
 #alias sush='sudo -E zsh'       # TODO: Use $SHELL if set
 sush() {
-    sudo -E $SHELL
+    if [ -n "$1" ]; then
+        sudo -E -u "$1" $SHELL
+    else
+        sudo -E $SHELL
+    fi
 }
 
 alias sup='supervisorctl'
