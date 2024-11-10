@@ -65,5 +65,5 @@ export PATH
 
 
 ### Load user aliases, functions & constants
-source ~/.dotfiles/shell_utils.sh
+source "${0:a:h}/.dotfiles/shell_utils.sh"
 
