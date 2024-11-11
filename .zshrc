@@ -65,5 +65,11 @@ export PATH
 
 
 ### Load user aliases, functions & constants
-source "${0:a:h}/.dotfiles/shell_utils.sh"
+if [ -r "${HOME}/.dotfiles/shell_utils.sh" ]; then
+    source "${HOME}/.dotfiles/shell_utils.sh"
+elif [ -r "/home/ada/.dotfiles/shell_utils.sh" ]; then
+    source "/home/ada/.dotfiles/shell_utils.sh"
+elif [ -r "/home/hipikat/.dotfiles/shell_utils.sh" ]; then
+    source "/home/hipikat/.dotfiles/shell_utils.sh"
+fi
 
