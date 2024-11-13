@@ -1,7 +1,14 @@
 
 ### Initialise Pure prompt
-fpath+=("$HOME/.zsh/pure")
-autoload -U promptinit; promptinit
+if [[ -n "$SUDO_USER" && -d ~"$SUDO_USER"/.zsh/pure ]]; then
+  sudo_user_home=$(eval echo ~$SUDO_USER)
+  fpath=("$sudo_user_home/.zsh/pure" $fpath)
+elif [[ -d "$HOME/.zsh/pure" ]]; then
+  fpath=("$HOME/.zsh/pure" $fpath)
+fi
+
+autoload -U promptinit
+promptinit
 prompt pure
 
 
