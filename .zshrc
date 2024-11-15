@@ -23,6 +23,7 @@ setopt APPEND_HISTORY           # Append to the history file instead of overwrit
 setopt HIST_IGNORE_DUPS         # Ignore duplicate commands in history
 setopt HIST_IGNORE_ALL_DUPS     # Remove older duplicate commands from history
 setopt SHARE_HISTORY            # Share history across all sessions
+setopt EXTENDED_HISTORY         # Save timestamps with history
 setopt HIST_REDUCE_BLANKS       # Remove unnecessary blanks from history
 setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first when trimming history
 setopt HIST_SAVE_NO_DUPS        # Do not save duplicates in history
@@ -42,6 +43,32 @@ export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, 
 ### Zsh Line Editor (ZLE) setup
 bindkey -v
 bindkey "^?" backward-delete-char
+
+
+### Set screen title for terminal multiplexers
+
+# Function to set the screen title
+set_screen_title() {
+    if [[ "$TERM" == screen* || "$TERM" =~ tmux ]]; then
+        echo -ne "\033k$1\033\\"
+    fi
+}
+
+# Hook to set title before displaying the prompt
+precmd() {
+    # Contract home directory to ~
+    local screen_title="${PWD/#$HOME/~}"
+    set_screen_title "$screen_title"
+}
+
+# Hook to set title before executing a command
+preexec() {
+    # Contract home directory to ~
+    local screen_title="${PWD/#$HOME/~}"
+    screen_title+=`echo -ne " \xC2\xA7 "`
+    screen_title+=" $$1"
+    set_screen_title "$screen_title"
+}
 
 
 ## Set PATH
