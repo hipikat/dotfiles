@@ -20,7 +20,7 @@
 ##########################################
 
 # Dotfiles I'm working on
-VOLATILE_DOTFILES='.zshrc .dotfiles/shell_utils.sh .tmux.conf'
+VOLATILE_DOTFILES='~/.zshrc ~/.dotfiles/shell_utils.sh ~/.tmux.conf'
 
 # Text Reset
 Color_Off='\e[0m'       # Text Reset
@@ -110,9 +110,9 @@ ShellEmoji='\U1F41A'
 
 # Command proxy - a constant reminder of what lies beneath the aliases
 function _run() {
-    printf "\n$White$ShellEmoji "
-    echo "$@"
-    printf "$Colour_Off"
+    printf "$White$ShellEmoji " 1>&2
+    echo "$@" 1>&2
+    printf "$Colour_Off" 1>&2
     eval $@
 }
 
@@ -279,14 +279,17 @@ function dstat() {
   _run docker start $@
   _run docker attach $@
 }
-function drnsh() {
+function drn.sh() {
   _run docker run -it $@ /bin/bash
 }
 alias drnsh.="drnsh --user=$(whoami)"
 alias drnsh.mount-src="drnsh. -v $(pwd)/src:/app/src"
-alias dvi="_run docker volume inspect"
-alias dvl="_run docker volume ls"
-alias dvrm="_run docker volume rm"
+
+alias dv.c="_run docker volume create"
+alias dv.i="_run docker volume inspect"
+alias dv.ls="_run docker volume ls"
+alias dv.rm="_run docker volume rm"
+alias dv.pr="_run docker volume prune"
 
 
 # Digital ocean api
@@ -297,6 +300,12 @@ function do-api() {
       -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
       "https://api.digitalocean.com/v2/$@" | jq -C | less -F
 }
+alias do.region="_run doctl compute region list"
+do.size() {
+    [ -n "$1" ] && doctl compute size list | grep "$1" && return
+    _run doctl compute size list
+}
+
 function dom.create() {
     docker-machine create --driver digitalocean \
         --digitalocean-access-token $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=") \
@@ -543,7 +552,7 @@ alias htv='hatch version'
 
 # History
 alias hs='history'
-alias hsg='history | grep -i'
+alias hsg='fc -l 1 | grep -i'
 alias hsn='history -n'          # Append new lines from the history file to history
 hs.unique() {
     # Append session history to the file and reload it to ensure it's up-to-date
@@ -925,6 +934,14 @@ sush() {
     target_home="${home_base}/${target_user}"
     sudo -u "$target_user" -E HOME="$target_home" ZDOTDIR="$HOME" $SHELL
 }
+
+alias susctl='sudo systemctl'
+alias susctl.rel='sudo systemctl reload'
+alias susctl.res='sudo systemctl restart'
+alias susctl.sta='sudo systemctl start'
+alias susctl.sto='sudo systemctl stop'
+alias susctl.dre='sudo systemctl daemon-reload'
+
 
 alias sup='supervisorctl'
 alias supt='supervisorctl tail'

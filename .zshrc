@@ -19,16 +19,16 @@ setopt NO_CASE_GLOB             # Make globbing case-insensitive
 
 
 ## History settings
-setopt APPEND_HISTORY           # Append to the history file instead of overwriting it
+unsetopt APPEND_HISTORY         # Append to the history file instead of overwriting it
 setopt HIST_IGNORE_DUPS         # Ignore duplicate commands in history
-setopt HIST_IGNORE_ALL_DUPS     # Remove older duplicate commands from history
+unsetopt HIST_IGNORE_ALL_DUPS   # Remove older duplicate commands from history
 setopt SHARE_HISTORY            # Share history across all sessions
 setopt EXTENDED_HISTORY         # Save timestamps with history
 setopt HIST_REDUCE_BLANKS       # Remove unnecessary blanks from history
 setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first when trimming history
 setopt HIST_SAVE_NO_DUPS        # Do not save duplicates in history
 setopt HIST_IGNORE_SPACE        # Ignore commands that start with a space
-setopt HIST_FIND_NO_DUPS        # Do not display duplicates in history search
+unsetopt HIST_FIND_NO_DUPS      # Do not display duplicates in history search
 
 export HISTSIZE=16384           # Number of commands to remember in the session history
 export SAVEHIST=16384           # Number of commands to save in the history file
