@@ -156,6 +156,14 @@ alias cd..='cd ..'
 
 alias clr='clear'
 
+comeonnn() {
+    command="$*"
+    while ! eval "$command"; do
+        echo "Failed at $command. Retrying in 2 seconds..."
+        sleep 2
+    done
+}
+
 compress-pdf() {
     if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
         echo 'Usage: compresspdf INPUT_FILE OUTPUT_FILE [screen|ebook|printer|prepress]'
@@ -941,6 +949,10 @@ alias susctl.res='sudo systemctl restart'
 alias susctl.sta='sudo systemctl start'
 alias susctl.sto='sudo systemctl stop'
 alias susctl.dre='sudo systemctl daemon-reload'
+alias sujctl='sudo journalctl'
+alias sujctl.u='sudo journalctl -u'
+alias sujctl.f='sudo journalctl -f'
+alias sujctl.fu='sudo journalctl -f -u'
 
 
 alias sup='supervisorctl'
