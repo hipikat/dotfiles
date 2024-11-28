@@ -159,7 +159,7 @@ alias clr='clear'
 comeonnn() {
     command="$*"
     while ! eval "$command"; do
-        echo "Failed at $command. Retrying in 2 seconds..."
+        echo "Failed to $command. Retrying in 2 seconds..."
         sleep 2
     done
 }
@@ -947,6 +947,7 @@ alias susctl='sudo systemctl'
 alias susctl.rel='sudo systemctl reload'
 alias susctl.res='sudo systemctl restart'
 alias susctl.sta='sudo systemctl start'
+alias susctl.stat='sudo systemctl status'
 alias susctl.sto='sudo systemctl stop'
 alias susctl.dre='sudo systemctl daemon-reload'
 alias sujctl='sudo journalctl'
