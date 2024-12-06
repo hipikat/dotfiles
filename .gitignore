@@ -3,9 +3,10 @@
 .irssi/config*
 .vim/bundle/*
 nohup.out
+.config/.mono
 .config/configstore/
 .config/containers/
-.config/.mono
+.config/gcloud/
 .config/yarn/global/node_modules/
 .vim/pack/kite
 .config/nvim/pack/kite

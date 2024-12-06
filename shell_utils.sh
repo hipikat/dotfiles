@@ -159,7 +159,7 @@ alias clr='clear'
 comeonnn() {
     command="$*"
     while ! eval "$command"; do
-        echo "Failed to $command. Retrying in 2 seconds..."
+        echo "Failed to \"$command\". Retrying in 2 seconds..."
         sleep 2
     done
 }
@@ -341,6 +341,11 @@ function fty() {
 
 # Re-execute the last command, but prefix it with 'sudo'
 alias fuck='sudo $(history -p \!\!)'
+
+flush-dns() {
+    sudo dscacheutil -flushcache
+    sudo killall -HUP mDNSResponder
+}
 
 # Format Python
 alias fmp='black --diff . | csi python | les'

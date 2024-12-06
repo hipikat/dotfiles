@@ -97,6 +97,12 @@ done
 PATH="$PATH:.venv/bin:./node_modules/.bin"  # Add local Python venv & Node bin directories
 export PATH
 
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/hipikat/.gcloud-sdk/path.zsh.inc' ]; then . '/Users/hipikat/.gcloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/hipikat/.gcloud-sdk/completion.zsh.inc' ]; then . '/Users/hipikat/.gcloud-sdk/completion.zsh.inc'; fi
+
 
 ### Load user aliases, functions & constants
 if [ -r "${HOME}/.dotfiles/shell_utils.sh" ]; then
