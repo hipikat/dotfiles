@@ -334,6 +334,8 @@ echo_paths() {
     echo "$PATH" | tr ':' '\n'
 }
 
+alias fix-own-brews='sudo chown -R $(whoami) $(brew --prefix)/*'
+
 # Fake TTY
 function fty() {
     script -qfec "$(printf "%q " "$@")"
@@ -470,7 +472,7 @@ alias gco.a='_run git commit -a'
 alias gco.ap='_git_commit_n_push -a'
 alias gco.m='_run git commit -m'
 alias gco.mp='_git_commit_n_push -m'
-alias gco.am='_run git commit -am'
+alias gco.am='_run git commit -a -mm'
 alias gco.Am='git add -A; git commit -am'
 alias gco.amp='_git_commit_n_push -am'
 alias gco.Amp='git add -A; _git_commit_n_push -am'
