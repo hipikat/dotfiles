@@ -647,7 +647,7 @@ function k8-create-dashboard-token() {
 }
 alias k8='kubectl'
 
-alias kill-vscode='ps aux | grep '\.vscode' | awk '{print $2}' | xargs kill -'
+alias kill-vscode="ps aux | grep '\.vscode' | awk '{print $2}' | xargs kill -"
 
 
 #alias les='less --quit-if-one-screen'
