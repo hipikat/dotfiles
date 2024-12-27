@@ -334,6 +334,20 @@ echo_paths() {
     echo "$PATH" | tr ':' '\n'
 }
 
+exp-env() {
+    local files=("${@:-/etc/environment}")
+    for file in "${files[@]}"; do
+        if [ -f "$file" ]; then
+            grep -v '^#' "$file" | grep -v '^\s*$' | sed 's/^/export /' | while read -r line; do
+                eval "$line"
+            done
+        else
+            echo "File not found: $file" >&2
+        fi
+    done
+}
+
+
 alias fix-own-brews='sudo chown -R $(whoami) $(brew --prefix)/*'
 
 # Fake TTY
