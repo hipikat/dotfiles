@@ -513,6 +513,7 @@ alias gre.rm='git remote remove'
 alias grm='git rm'
 alias grm.c='git rm --cached'
 alias grs='git reset'
+alias grs.HEAD='git reset --hard HEAD'
 alias gsh='git show'
 alias gst='git -c color.status=always status'
 alias gst.sh='git stash'
@@ -662,9 +663,8 @@ function k8-create-dashboard-token() {
 alias k8='kubectl'
 
 kill-vscode() {
-    ps aux | grep '\.vscode' | awk '{print $2}' | xargs kill -9
+    ps aux | grep '\.vscode' | grep -v grep | awk '{print $2}' | xargs kill -9
 }
-
 
 #alias les='less --quit-if-one-screen'
 function les() {
