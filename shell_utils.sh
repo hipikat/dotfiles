@@ -982,11 +982,11 @@ alias sujctl='sudo journalctl'
 alias sujctl.u='sudo journalctl -u'
 alias sujctl.f='sudo journalctl -f'
 _sujctl-fu() {
-    args=""
+    args=()
     for service in "$@"; do
-        args="$args -u $service"
+        args+=("-u" "$service")
     done
-    sudo journalctl -f $args
+    sudo journalctl -f "${args[@]}"
 }
 alias sujctl.fu='_sujctl-fu'
 
