@@ -6,10 +6,11 @@ nohup.out
 .config/.mono
 .config/configstore/
 .config/containers/
+.config/gtk-2.0/gtkfilechooser.ini
 .config/gcloud/
 .config/yarn/global/node_modules/
-.vim/pack/kite
 .config/nvim/pack/kite
+.vim/pack/kite
 
 .bin/just
 .bin/rt.*
