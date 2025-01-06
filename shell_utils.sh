@@ -981,7 +981,14 @@ alias susctl.dre='sudo systemctl daemon-reload'
 alias sujctl='sudo journalctl'
 alias sujctl.u='sudo journalctl -u'
 alias sujctl.f='sudo journalctl -f'
-alias sujctl.fu='sudo journalctl -f -u'
+_sujctl-fu() {
+    args=""
+    for service in "$@"; do
+        args="$args -u $service"
+    done
+    sudo journalctl -f $args
+}
+alias sujctl.fu='_sujctl-fu'
 
 
 alias sup='supervisorctl'
