@@ -675,6 +675,9 @@ function les() {
 
 alias mame='/Applications/mame0236-x86/mame'
 
+alias mm='just dj makemigrations'
+alias mmm='just dj makemigrations && just dj migrate'
+
 # Make a directory and change into it
 function mkcd() {
     mkdir "$@"
