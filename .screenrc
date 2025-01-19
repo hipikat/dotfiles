@@ -7,6 +7,13 @@ shell -$SHELL
 # Make new windows 'login' windows
 #deflogin on
 
+# Enable truecolor support
+truecolor on
+
+# Default encoding to UTF-8
+defutf8 on
+encoding UTF-8
+
 # define a bigger scrollback, default is 100 lines
 defscrollback 512
 
@@ -88,7 +95,6 @@ startup_message off
 
 # Turn visual bell off
 #vbell off
-encoding UTF-8
 
 
 
@@ -106,10 +112,18 @@ bind 3 swapwith 3
 # — Command: backtick id lifespan autorefresh command [args]
 #backtick 1 5 5 echo -n "foo-$WINDOW-"
 
-#windowlist title 'Num) Directory [Command]%=Flags'
+#backtick 1 1 1 sh -c 'ps -o cmd= -p $(screen -ls | grep $(screen -Q windows | head -n 1 | cut -f1) | awk "{print \$1}" | cut -d"." -f1)'
+#backtick 1 60 0 echo -n "§"
+##backtick 1 60 0 echo -n "foo"
+#backtick 1 1 1 bash -c 'ps -o cmd= -p $$'
+#backtick 1 1 1 bash -c 'ps -o cmd= -p $(pgrep -f "^SCREEN")'
+#backtick 1 1 1 bash -c 'echo $(pwd | sed "s|^$HOME|~|")'
+#backtick 2 1 1 bash -c 'ps -o cmd= -p $(pgrep -f "^SCREEN")'
+
 windowlist title '     %{G}%H %{d}: %{C}%S%{d}%=CPU averages [1m 5m 15m] [%l]'
-windowlist string "%{b}%3n)%{d} %t%=%f"
 #windowlist string '%?%F%{.R.}%?%3n %`%t`%? [%h]%?'
+#windowlist string "%{b}%3n)%{6} %1` > %h %=%f"
+windowlist string "%{b}%3n)%{6} %h %=%f"
 
 
 
