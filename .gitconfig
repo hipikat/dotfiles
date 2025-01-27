@@ -12,3 +12,7 @@
 	required = true
 [safe]
 	directory = /app
+	directory = /app/.git
+	directory = /app/.git
+	directory = lib/picata
+	directory = lib/picata
