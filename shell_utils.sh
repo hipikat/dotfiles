@@ -151,7 +151,7 @@ alias br.l='_run brew list'
 alias br.lg='_run "brew list | grep -i"'
 alias br.u='_run brew upgrade --dry-run'
 alias br.u!='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all && _run brew doctor'
-alias br.U!='_run brew unpin bash pyenv nvim vim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all; _run brew doctor ; _run brew pin bash pyenv nvim vim'
+alias br.U!='_run brew unpin macvim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all; _run brew doctor ; _run brew pin macvim'
 alias br.un='_run brew uninstall'
 alias br.s='_run brew search'
 
@@ -725,6 +725,13 @@ alias nps='npm show'
 alias nv='nvim -p'        # Open files in tabs
 alias nv.n='nvim -n -p'   # Disable swap files
 alias nv.dotfiles="nvim -n -p $VOLATILE_DOTFILES"
+function _nv_hpk() {
+    mvim -p ~/Local\ Store/hpk.io/hpk-scratch.txt ~/Local\ Store/hpk.io/hpk-stream.txt &
+    sleep 2
+    mvim ~/Local\ Store/hpk.io/hpk-code.py &
+    sleep 1
+}
+alias nv.hpk="_nv_hpk"
 
 # Common chown/chgrp shortcuts
 function _own() {
