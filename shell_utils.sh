@@ -137,6 +137,9 @@ any_movie() {
 # Bat
 alias bat.toml='bat -l toml'
 
+alias bak.zomboid='/usr/local/bin/rsync -t -r --delete --info=progress2 ~/Zomboid/Saves/Builder/ShaunaWang /Users/hipikat/Local\ store/Zomboid\ Backups'
+alias res.zomboid='/usr/local/bin/rsync -t -r --delete --info=progress2 /Users/hipikat/Local\ store/Zomboid\ Backups/ShaunaWang ~/Zomboid/Saves/Builder'
+
 # Homebrew
 alias br.ar='_run brew autoremove'
 alias br.c='_run brew cleanup'
@@ -512,6 +515,7 @@ alias gre.r='git remote rename'
 alias gre.rm='git remote remove'
 alias grm='git rm'
 alias grm.c='git rm --cached'
+alias grm.f='git rm -f'
 alias grs='git reset'
 alias grs.HEAD='git reset --hard HEAD'
 alias gsh='git show'

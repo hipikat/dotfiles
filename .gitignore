@@ -6,6 +6,7 @@ nohup.out
 .config/.mono
 .config/configstore/
 .config/containers/
+.config/fontforge/
 .config/gtk-2.0/gtkfilechooser.ini
 .config/gcloud/
 .config/yarn/global/node_modules/
