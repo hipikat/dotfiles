@@ -137,8 +137,11 @@ any_movie() {
 # Bat
 alias bat.toml='bat -l toml'
 
-alias bak.zomboid='/usr/local/bin/rsync -t -r --delete --info=progress2 ~/Zomboid/Saves/Builder/ShaunaWang /Users/hipikat/Local\ store/Zomboid\ Backups'
-alias res.zomboid='/usr/local/bin/rsync -t -r --delete --info=progress2 /Users/hipikat/Local\ store/Zomboid\ Backups/ShaunaWang ~/Zomboid/Saves/Builder'
+alias bak.zomboid='/usr/local/bin/rsync -t -r --checksum --delete --info=progress2 ~/Zomboid/Saves/Builder/ShaunaWang /Users/hipikat/Local\ store/Zomboid\ Backups'
+alias bak.zomboid32='/usr/local/bin/rsync -t -r --checksum --delete --info=progress2 ~/Zomboid/Saves/Survivor/2025-07-08_12-18-16 /Users/hipikat/Local\ store/Zomboid\ Backups'
+
+alias res.zomboid='/usr/local/bin/rsync -t -r --checksum --delete --info=progress2 /Users/hipikat/Local\ store/Zomboid\ Backups/ShaunaWang ~/Zomboid/Saves/Builder'
+alias res.zomboid32='/usr/local/bin/rsync -t -r --checksum --delete --info=progress2 /Users/hipikat/Local\ store/Zomboid\ Backups/2025-07-08_12-18-16 ~/Zomboid/Saves/Survivor'
 
 # Homebrew
 alias br.ar='_run brew autoremove'
@@ -149,9 +152,8 @@ alias br.i='_run brew install'
 alias br.in='_run brew info'
 alias br.l='_run brew list'
 alias br.lg='_run "brew list | grep -i"'
-alias br.u='_run brew upgrade --dry-run'
-alias br.u!='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all && _run brew doctor'
-alias br.U!='_run brew unpin macvim ; _run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all; _run brew doctor ; _run brew pin macvim'
+alias br.ud='_run brew upgrade --dry-run'
+alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.un='_run brew uninstall'
 alias br.s='_run brew search'
 
