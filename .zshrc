@@ -7,6 +7,14 @@ elif [[ -d "$HOME/.zsh/pure" ]]; then
   fpath=("$HOME/.zsh/pure" $fpath)
 fi
 
+zstyle :prompt:pure:git:dirty detailed yes
+zstyle :prompt:pure:environment:node_version show yes
+zstyle :prompt:pure:path:separator dim yes
+
+if [[ -n "${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
+    zstyle :prompt:pure:git show no
+fi
+
 autoload -U promptinit
 promptinit
 prompt pure
@@ -39,6 +47,7 @@ export EDITOR='vim'
 export COPYFILE_DISABLE=true    # Prevent mystery ._* files appearing in tarballs on MacOS
 export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, no
                                 # alternate screen (keep content), quit if <1 screen
+export GOPATH="${GOPATH:-$HOME/go}"
 
 ### Zsh Line Editor (ZLE) setup
 bindkey -v
@@ -76,14 +85,21 @@ paths=(
     ~/.bin
     ~/.local/bin
     ~/Dropbox/bin
+    ~/go/bin
     /opt/homebrew/opt/coreutils/libexec/gnubin
+    /opt/homebrew/opt/findutils/libexec/gnubin
+    /opt/homebrew/opt/grep/libexec/gnubin
     /opt/homebrew/opt/gnu-sed/libexec/gnubin
     /opt/homebrew/opt/gnu-tar/libexec/gnubin
+    /opt/homebrew/opt/make/libexec/gnubin
     /opt/homebrew/sbin
     /opt/homebrew/bin
     /usr/local/opt/coreutils/libexec/gnubin
+    /usr/local/opt/findutils/libexec/gnubin
+    /usr/local/opt/grep/libexec/gnubin
     /usr/local/opt/gnu-sed/libexec/gnubin
     /usr/local/opt/gnu-tar/libexec/gnubin
+    /usr/local/opt/make/libexec/gnubin
     /usr/local/sbin
     /usr/local/bin
     /usr/local/mysql/bin
@@ -102,6 +118,10 @@ done
 path=("${path[@]:#.venv/bin}" ".venv/bin")
 path=("${path[@]:#./node_modules/.bin}" "./node_modules/.bin")
 export PATH
+
+if command -v fnm >/dev/null 2>&1; then
+    eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/hipikat/.gcloud-sdk/path.zsh.inc' ]; then . '/Users/hipikat/.gcloud-sdk/path.zsh.inc'; fi
