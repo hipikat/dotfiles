@@ -99,7 +99,8 @@ for (( i=${#paths[@]} ; i>0 ; i-- )); do
     fi
 done
 
-path+=(".venv/bin" "./node_modules/.bin")  # Add local Python venv & Node bin directories
+path=("${path[@]:#.venv/bin}" ".venv/bin")
+path=("${path[@]:#./node_modules/.bin}" "./node_modules/.bin")
 export PATH
 
 # The next line updates PATH for the Google Cloud SDK.
