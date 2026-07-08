@@ -7,10 +7,12 @@ elif [[ -d "$HOME/.zsh/pure" ]]; then
   fpath=("$HOME/.zsh/pure" $fpath)
 fi
 
+# Pure prompt display options
 zstyle :prompt:pure:git:dirty detailed yes
 zstyle :prompt:pure:environment:node_version show yes
 zstyle :prompt:pure:path:separator dim yes
 
+# Hide Git prompt details while agent tools may be editing the tree
 if [[ -n "${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
     zstyle :prompt:pure:git show no
 fi
@@ -47,11 +49,19 @@ export EDITOR='vim'
 export COPYFILE_DISABLE=true    # Prevent mystery ._* files appearing in tarballs on MacOS
 export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, no
                                 # alternate screen (keep content), quit if <1 screen
-export GOPATH="${GOPATH:-$HOME/go}"
+export GOPATH="${GOPATH:-$HOME/go}"  # Default Go workspace for user-installed tools
 
 ### Zsh Line Editor (ZLE) setup
 bindkey -v
 bindkey "^?" backward-delete-char
+
+
+### Completion setup
+# Match completions case-insensitively, e.g. doc<Tab> matches Documents
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+autoload -Uz compinit
+compinit
 
 
 ### Set screen title for terminal multiplexers
@@ -82,16 +92,21 @@ preexec() {
 
 ## Set PATH
 paths=(
+    # User-managed bins
     ~/.bin
     ~/.local/bin
     ~/Dropbox/bin
     ~/go/bin
+
+    # GNU tools from Homebrew; gnubin exposes unprefixed command names
     /opt/homebrew/opt/coreutils/libexec/gnubin
     /opt/homebrew/opt/findutils/libexec/gnubin
     /opt/homebrew/opt/grep/libexec/gnubin
     /opt/homebrew/opt/gnu-sed/libexec/gnubin
     /opt/homebrew/opt/gnu-tar/libexec/gnubin
     /opt/homebrew/opt/make/libexec/gnubin
+
+    # Homebrew prefixes for Apple Silicon and Intel Macs
     /opt/homebrew/sbin
     /opt/homebrew/bin
     /usr/local/opt/coreutils/libexec/gnubin
@@ -102,6 +117,8 @@ paths=(
     /usr/local/opt/make/libexec/gnubin
     /usr/local/sbin
     /usr/local/bin
+
+    # Other machine-specific paths
     /usr/local/mysql/bin
     ~/Library/Python/3.9/bin
     /usr/games
@@ -115,10 +132,12 @@ for (( i=${#paths[@]} ; i>0 ; i-- )); do
     fi
 done
 
+# Add project-local Python and Node bins at the end, without duplicates
 path=("${path[@]:#.venv/bin}" ".venv/bin")
 path=("${path[@]:#./node_modules/.bin}" "./node_modules/.bin")
 export PATH
 
+# Enable fnm-managed Node versions when fnm is installed
 if command -v fnm >/dev/null 2>&1; then
     eval "$(fnm env --use-on-cd --shell zsh)"
 fi
