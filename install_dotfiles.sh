@@ -20,3 +20,7 @@ vim +VundleInstall '+qa!' >/dev/null
 # Ensure the dotfiles 'origin' remote uses SSH
 git remote remove origin 2>/dev/null || true
 git remote add origin git@github.com:hipikat/dotfiles.git
+
+# Ensure plain `git push` on main targets origin/main
+git config branch.main.remote origin
+git config branch.main.merge refs/heads/main
