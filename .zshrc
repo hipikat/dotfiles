@@ -76,6 +76,11 @@ paths=(
     ~/.bin
     ~/.local/bin
     ~/Dropbox/bin
+    /opt/homebrew/opt/coreutils/libexec/gnubin
+    /opt/homebrew/opt/gnu-sed/libexec/gnubin
+    /opt/homebrew/opt/gnu-tar/libexec/gnubin
+    /opt/homebrew/sbin
+    /opt/homebrew/bin
     /usr/local/opt/coreutils/libexec/gnubin
     /usr/local/opt/gnu-sed/libexec/gnubin
     /usr/local/opt/gnu-tar/libexec/gnubin
@@ -87,14 +92,14 @@ paths=(
 )
 
 # Prepend existing directories to $PATH, iterating in reverse order
-for (( i=${#paths[@]}-1 ; i>=0 ; i-- )); do
+for (( i=${#paths[@]} ; i>0 ; i-- )); do
     dir="${paths[i]}"
-    if [[ -d "$dir" && ":$PATH:" != *":$dir:"* ]]; then
-        PATH="$dir:$PATH"
+    if [[ -d "$dir" ]]; then
+        path=("$dir" "${path[@]:#$dir}")
     fi
 done
 
-PATH="$PATH:.venv/bin:./node_modules/.bin"  # Add local Python venv & Node bin directories
+path+=(".venv/bin" "./node_modules/.bin")  # Add local Python venv & Node bin directories
 export PATH
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -112,4 +117,3 @@ elif [ -r "/home/ada/.dotfiles/shell_utils.sh" ]; then
 elif [ -r "/home/hipikat/.dotfiles/shell_utils.sh" ]; then
     source "/home/hipikat/.dotfiles/shell_utils.sh"
 fi
-
