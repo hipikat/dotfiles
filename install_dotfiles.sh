@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 # Copy and/or link files into our home directory
 python3 plumb_files.py --current-user --force
 
@@ -14,6 +18,5 @@ fi
 vim +VundleInstall '+qa!' >/dev/null
 
 # Ensure the dotfiles 'origin' remote uses SSH
-git remote remove origin
+git remote remove origin 2>/dev/null || true
 git remote add origin git@github.com:hipikat/dotfiles.git
-
