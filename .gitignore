@@ -9,6 +9,7 @@ nohup.out
 .config/fontforge/
 .config/gtk-2.0/gtkfilechooser.ini
 .config/gcloud/
+.config/incus
 .config/iterm2/
 .config/raycast/
 .config/yarn/global/node_modules/
