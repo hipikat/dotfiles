@@ -66,6 +66,12 @@ compinit
 
 
 ### Zsh plugin setup
+# Use fzf-tab for interactive completion menus after the usual Tab expansion.
+if [[ -r "$HOME/.zsh/fzf-tab/fzf-tab.plugin.zsh" ]]; then
+    zstyle ':fzf-tab:*' fzf-flags --height=40% --layout=reverse --border
+    source "$HOME/.zsh/fzf-tab/fzf-tab.plugin.zsh"
+fi
+
 # Load autosuggestions after completion widgets have been initialised.
 if [[ -r "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
     source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
@@ -127,8 +133,6 @@ paths=(
     /usr/local/bin
 
     # Other machine-specific paths
-    /usr/local/mysql/bin
-    ~/Library/Python/3.9/bin
     /usr/games
 )
 
