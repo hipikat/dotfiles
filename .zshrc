@@ -8,15 +8,16 @@ elif [[ -d "$HOME/.zsh/pure" ]]; then
 fi
 
 # Pure prompt display options
-zstyle :prompt:pure:git:dirty detailed yes
-zstyle :prompt:pure:environment:node_version show yes
-zstyle :prompt:pure:path:separator dim yes
+zstyle :prompt:pure:git:dirty detailed yes              # More than just 'dirty'
+zstyle :prompt:pure:environment:node_version show yes   # Show package.json node version
+zstyle :prompt:pure:path:separator dim yes              # Dim path separators
 
-# Hide Git prompt details while agent tools may be editing the tree
+# Don't asynchronously perform git fetches for the prompt if you're "agentic" in nature
 if [[ -n "${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
     zstyle :prompt:pure:git show no
 fi
 
+# Initialise the Pure prompt - the wet dream of prompts for minimalists
 autoload -U promptinit
 promptinit
 prompt pure
@@ -62,6 +63,13 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 autoload -Uz compinit
 compinit
+
+
+### Zsh plugin setup
+# Load autosuggestions after completion widgets have been initialised.
+if [[ -r "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
 
 
 ### Set screen title for terminal multiplexers
