@@ -169,3 +169,15 @@ elif [ -r "/home/ada/.dotfiles/shell_utils.sh" ]; then
 elif [ -r "/home/hipikat/.dotfiles/shell_utils.sh" ]; then
     source "/home/hipikat/.dotfiles/shell_utils.sh"
 fi
+
+
+### Final ZLE hook setup
+# Source syntax highlighting last so it can observe widgets from compinit/plugins.
+if [[ -r "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+    typeset -A ZSH_HIGHLIGHT_STYLES
+    ZSH_HIGHLIGHT_STYLES[path]='none'
+    ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+    ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=green'
+
+    source "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
