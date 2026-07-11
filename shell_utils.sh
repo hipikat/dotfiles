@@ -1298,48 +1298,42 @@ function 10shells() {
 ### unclean... UNCLEANNNNNN...
 ### a.k.a. "I hadn't read the Advanced Bash Programming guide yet".
 
-# Enable color support of ls and also add handy aliases
-if [ "$TERM" != "dumb" ]; then
-    if [ -f /usr/bin/dircolors ]; then
-        eval "`dircolors -b`"
-        alias ls='ls -Fh --color=auto'       # Traditional unix options
-    else 
-        export CLICOLOR_FORCE='TRUE'
-        alias ls='ls -Gh -F'                 # Probably on a Mac
+# Prefer eza when available; otherwise retain colourful native ls defaults.
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza'
+elif [ "$TERM" != "dumb" ]; then
+    if command -v dircolors >/dev/null 2>&1; then
+        eval "$(dircolors -b)"
+        alias ls='ls -Fh --color=auto'       # GNU ls
+    else
+        export CLICOLOR='TRUE'
+        alias ls='ls -GhF'                   # BSD/macOS ls
     fi
 fi
 
+alias l='ls -l'
+alias la='ls -al'
+alias ll.d='ll -d'
+alias la.d='la -d'
+alias las='la | less'
 
-
-# Some more ls aliases
-#alias lv='l -l'            # ls (visible, vertical & verbose)
-#alias les='l | less'        # List piped through less
-alias la='l -a'             # List all
-alias las='l -a | less'     # List all piped through less
-#function lvl() { ls $COLOR_ALWAYS -l "$@" | less ;}
-#function lal() { ls $COLOR_ALWAYS -Al "$@" | less ;}
+# Use a function so arguments go to the listing command rather than less.
+unalias ll 2>/dev/null
+if command -v eza >/dev/null 2>&1; then
+    function ll() {
+        eza --colour=always -l "$@" | less -R
+    }
+else
+    function ll() {
+        ls -l "$@" | less -R
+    }
+fi
 function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 
 
 # supervisor
 alias sv='sudo supervisorctl'
 
-
-# l == ls -l ... (but filtering out junk files)
-function l() {
-    if [ "$1" = "s-al" ]; then
-        ls -al ${*:2}
-    elif [ `uname` = "Darwin" ]; then
-        ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
-    else
-        ls -l --color=always "$@" | grep -v '\(\.swp\|\.pyc\)$';
-    fi  
-}
-#export -f l
-
-function ll() {
-    l "$@" | less
-}
 
 # d == django-admin.py ...
 #function d() { django-admin.py "$@" ;}
@@ -1418,6 +1412,3 @@ function dosass() {
 #function runsrv() {
 #    eval "django-admin.py runserver "$@" --traceback"
 #}
-
-
-
