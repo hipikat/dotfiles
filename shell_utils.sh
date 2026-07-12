@@ -105,15 +105,33 @@ Hidden='\e[8m'         # Hidden
 SnakeEmoji='\U1F40D'
 DoveEmoji='\U1F54A'
 LizardEmoji='\U1F98E'
-ShellEmoji='\U1F41A'
+ShellEmoji='🐚'
 
 
 # Command proxy - a constant reminder of what lies beneath the aliases
 function _run() {
-    printf "$White$ShellEmoji " 1>&2
-    echo "$@" 1>&2
-    printf "$Colour_Off" 1>&2
-    eval $@
+    printf '%b' "$White$ShellEmoji " 1>&2
+    printf '%q ' "$@" 1>&2
+    printf '%b\n' "$Color_Off" 1>&2
+    "$@"
+}
+
+# Shell proxy for compound commands. Extra arguments become positional parameters.
+function _runsh() {
+    local command="$1"
+    shift
+
+    printf '%b' "$White$ShellEmoji " 1>&2
+    if [ "$#" -eq 0 ]; then
+        printf '%s' "$command" 1>&2
+    else
+        printf '(set --' 1>&2
+        printf ' %q' "$@" 1>&2
+        printf '; %s)' "$command" 1>&2
+    fi
+    printf '%b\n' "$Color_Off" 1>&2
+
+    eval "$command"
 }
 
 
@@ -151,10 +169,13 @@ alias br.d='_run brew doctor'
 alias br.i='_run brew install'
 alias br.in='_run brew info'
 alias br.l='_run brew list'
-alias br.lg='_run "brew list | grep -i"'
+alias br.lg='_runsh "brew list | grep -i \"\$@\""'
 alias br.ud='_run brew upgrade --dry-run'
 alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.un='_run brew uninstall'
+function br.uses() {
+    _runsh 'brew leaves | grep -Fxf <(for formula; do brew uses --installed --recursive --formula "$formula"; done)' "$@"
+}
 alias br.s='_run brew search'
 
 alias cd..='cd ..'
@@ -188,7 +209,7 @@ alias cpr='cp -r'
 alias ctw='cut -c1-$(tput cols)'
 
 function dif() {
-    _run colordiff -w "$@" | less -R
+    _runsh 'colordiff -w "$@" | less -R' "$@"
 }
 alias dif3='_run dif -C3'
 
@@ -207,14 +228,14 @@ alias dja='django-admin'
 alias dat='_run docker attach'
 alias dbl='_run docker build'
 function dbl.t() {
-    _run docker build --tag "$1" ${1:.}
+    _run docker build --tag "$1" "${1:.}"
 }
 #alias dbl.t='_run docker build --target'
 function dbl.tt() {
     local tag="$1"
     local target="${2:-$tag}"
     local path="${3:-.}"
-    _run docker build --tag "$tag" --target "$target" $path
+    _run docker build --tag "$tag" --target "$target" "$path"
 }
 alias dcm='_run docker-compose'
 alias dcmb='_run docker-compose build'
@@ -241,14 +262,14 @@ alias dcmu.d='_run docker-compose up --detach'
 alias dcmu.bd='_run docker-compose up --build --detach'
 alias dcmd='_run docker-compose down'
 function dcm-m() {
-    _run docker-compose exec $@ pipenv run manage migrate
+    _run docker-compose exec "$@" pipenv run manage migrate
 }
 function dcm-mm() {
-    _run docker-compose exec $@ pipenv run manage makemigrations
+    _run docker-compose exec "$@" pipenv run manage makemigrations
 }
 function dcm-mmm() {
-    _run docker-compose exec $@ pipenv run manage makemigrations
-    _run docker-compose exec $@ pipenv run manage migrate
+    _run docker-compose exec "$@" pipenv run manage makemigrations
+    _run docker-compose exec "$@" pipenv run manage migrate
 }
 
 alias dcn='_run docker container'
@@ -257,7 +278,7 @@ alias dpl='_run docker pull'
 alias dx='_run docker exec'
 alias dx.it='_run docker exec -it'
 function dxsh() {
-  _run docker exec -it $@ /bin/bash
+  _run docker exec -it "$@" /bin/bash
 }
 alias dxsh.="dxsh --user=$(whoami)"
 alias dxsh-mount-src="dxsh. -v $(pwd)/src:/app/src"
@@ -289,11 +310,11 @@ alias dsp='_run docker system prune'
 alias dsp!='_run docker system prune --force'
 alias dst='_run docker start'
 function dstat() {
-  _run docker start $@
-  _run docker attach $@
+  _run docker start "$@"
+  _run docker attach "$@"
 }
 function drn.sh() {
-  _run docker run -it $@ /bin/bash
+  _run docker run -it "$@" /bin/bash
 }
 alias drnsh.="drnsh --user=$(whoami)"
 alias drnsh.mount-src="drnsh. -v $(pwd)/src:/app/src"
@@ -793,7 +814,7 @@ alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
 alias per='pipenv run'
 alias perd='pipenv run django'
 alias perf='pipenv run pip freeze'
-alias perfl='_run "pipenv run pip freeze | wc -l"'
+alias perfl='_runsh "pipenv run pip freeze | wc -l"'
 alias perm='pipenv run manage'
 alias pe.rm='pipenv --rm'
 alias perp='pipenv run python'
@@ -819,7 +840,7 @@ alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U pos
 alias pg_ctl-mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
 
 alias pif='_run pip freeze'
-alias pifl='_run pip freeze | wc -l'
+alias pifl='_runsh "pip freeze | wc -l"'
 
 ping-loop() {
   domain="$1"
