@@ -173,8 +173,43 @@ alias br.lg='_runsh "brew list | grep -i \"\$@\""'
 alias br.ud='_run brew upgrade --dry-run'
 alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.un='_run brew uninstall'
+# Report leaf dependents, distinguishing top-level leaves from orphaned dependencies.
 function br.uses() {
-    _runsh 'brew leaves | grep -Fxf <(for formula; do brew uses --installed --recursive --formula "$formula"; done)' "$@"
+    [ "$#" -gt 0 ] || return 1
+
+    local formula
+    local dependents
+    local rc
+    local leaves
+    local orphaned=0
+    local multiple="$#"
+    local uses
+
+    leaves="$(brew leaves)" || return
+
+    for formula; do
+        uses="$(brew uses --installed --recursive --formula "$formula")" || return
+        dependents="$(printf '%s\n' "$leaves" | grep -Fxf <(printf '%s\n' "$uses"))"
+        rc=$?
+
+        if [ "$rc" -gt 1 ]; then
+            return "$rc"
+        elif [ "$rc" -eq 1 ]; then
+            if printf '%s\n' "$leaves" | grep -Fxq -- "$formula"; then
+                printf '%s: [leaf]\n' "$formula"
+            else
+                printf '%s: [orphan]\n' "$formula"
+                orphaned=1
+            fi
+        elif [ "$multiple" -gt 1 ]; then
+            printf '%s:\n' "$formula"
+            printf '%s\n' "$dependents" | sed 's/^/  /'
+        else
+            printf '%s\n' "$dependents"
+        fi
+    done
+
+    return "$orphaned"
 }
 alias br.s='_run brew search'
 
