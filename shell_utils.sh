@@ -1,3 +1,4 @@
+# shellcheck disable=SC2034  # Variables are consumed by shells sourcing this file
 ###
 # .bash_aliases
 #
@@ -169,7 +170,9 @@ alias br.d='_run brew doctor'
 alias br.i='_run brew install'
 alias br.in='_run brew info'
 alias br.l='_run brew list'
-alias br.lg='_runsh "brew list | grep -i \"\$@\""'
+function br.lg() {
+    _runsh 'brew list | grep -i "$@"' "$@"
+}
 alias br.ud='_run brew upgrade --dry-run'
 alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.un='_run brew uninstall'
@@ -440,7 +443,7 @@ function _grep() {
 }
 function __grep() {
     # If grepping recursively, and just a search term is
-    # given, defualt to searching the current directory.
+    # given, default to searching the current directory.
     if [[ "$#" -eq "3" && $1 == *"r"* ]]; then
         _run grep --color=always "$@" ./
     else
