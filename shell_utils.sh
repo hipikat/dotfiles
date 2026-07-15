@@ -370,7 +370,7 @@ function do-api() {
       -X GET \
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
-      "https://api.digitalocean.com/v2/$@" | jq -C | less -F
+      "https://api.digitalocean.com/v2/$1" | jq -C | less -F
 }
 alias do.region="_run doctl compute region list"
 do.size() {
