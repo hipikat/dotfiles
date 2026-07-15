@@ -4,6 +4,7 @@
 .vim/bundle/*
 nohup.out
 .config/.mono
+.config/1Password
 .config/configstore/
 .config/containers/
 .config/fontforge/
