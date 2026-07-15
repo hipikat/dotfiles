@@ -490,7 +490,7 @@ function gAd() {
 }
 function _git_clone_github() {
     # TODO: If '/' not in $1, use "$1/$1"
-    git clone git@github.com:$1.git ${@:2}
+    git clone git@github.com:$1.git "${@:2}"
 }
 function _git_clone_my_github() {
     git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git ${@:2}
