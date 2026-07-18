@@ -1,4 +1,4 @@
-# shellcheck disable=SC2034  # Variables are consumed by shells sourcing this file
+# shellcheck disable=SC2034,SC2288  # Variables are consumed by shells sourcing this file
 # cspell:disable
 ###
 # .bash_aliases
@@ -22,6 +22,7 @@
 ##########################################
 
 # Dotfiles I'm working on
+# shellcheck disable=SC2088  # Keep literal ~ for Neovim's path display
 VOLATILE_DOTFILES='~/.zshrc ~/.dotfiles/shell_utils.sh ~/.tmux.conf'
 
 # Text Reset
@@ -308,8 +309,12 @@ alias dx.it='_run docker exec -it'
 function dxsh() {
   _run docker exec -it "$@" /bin/bash
 }
-alias dxsh.="dxsh --user=$(whoami)"
-alias dxsh-mount-src="dxsh. -v $(pwd)/src:/app/src"
+function dxsh.() {
+    dxsh --user="$(whoami)" "$@"
+}
+function dxsh-mount-src() {
+    dxsh. -v "$(pwd)/src:/app/src" "$@"
+}
 alias dim='_run docker image'
 alias dims='_run docker images'
 alias dimi='_run docker image inspect'
@@ -344,8 +349,12 @@ function dstat() {
 function drn.sh() {
   _run docker run -it "$@" /bin/bash
 }
-alias drnsh.="drnsh --user=$(whoami)"
-alias drnsh.mount-src="drnsh. -v $(pwd)/src:/app/src"
+function drnsh.() {
+    drn.sh --user="$(whoami)" "$@"
+}
+function drnsh.mount-src() {
+    drnsh. -v "$(pwd)/src:/app/src" "$@"
+}
 
 alias dv.c="_run docker volume create"
 alias dv.i="_run docker volume inspect"
@@ -368,18 +377,6 @@ do.size() {
     _run doctl compute size list
 }
 
-function dom.create() {
-    docker-machine create --driver digitalocean \
-        --digitalocean-access-token $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=") \
-        --digitalocean-backups=false \
-        --digitalocean-image 72067660 \
-        --digitalocean-region sgp1 \
-        --digitalocean-size 1gb \
-        --digitalocean-ssh-key-fingerprint "fa:fd:ae:da:0e:c7:79:f6:d6:bd:42:a3:24:d3:c7:c8" \
-        --digitalocean-ssh-user "root" \
-        --engine-install-url "https://releases.rancher.com/install-docker/19.03.9.sh" \
-        `adjspecies`
-}
 alias dom.rm='docker-machine rm -y -f'
 
 alias dve='source deactivate'
@@ -742,6 +739,7 @@ alias nps='npm show'
 
 alias nv='nvim -p'        # Open files in tabs
 alias nv.n='nvim -n -p'   # Disable swap files
+# shellcheck disable=SC2139  # Expand the file list into separate alias words when defined
 alias nv.dotfiles="nvim -n -p $VOLATILE_DOTFILES"
 function _nv_hpk() {
     mvim -p ~/Local\ Store/hpk.io/hpk-scratch.txt ~/Local\ Store/hpk.io/hpk-stream.txt &
@@ -1308,6 +1306,7 @@ function f() {
     find . -iname "*$*"
 }
 
+# shellcheck disable=SC1091  # Virtualenv hook path is resolved only at runtime
 function venv-postactivate { source "${VIRTUAL_ENV}/bin/postactivate"; }
 
 
