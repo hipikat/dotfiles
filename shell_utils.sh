@@ -907,17 +907,6 @@ alias rmr='rm -R'
 alias rmf='rm -f'
 alias rmrf='rm -Rf'
 
-function run() {
-    for file in $(ls .); do
-        if [[ -f "$file" && -x "$file" && "$file" =~ ^run ]]; then
-            ./"$file" "$@"
-            return $?
-        fi
-    done
-    echo 'No run command found!'
-    return 1
-}
-
 alias scpr='scp -r'
 
 # Screen shortcuts
@@ -1400,7 +1389,7 @@ alias sv='sudo supervisorctl'
 
 # f == find ./ -iname ...
 function f() {
-    find . -iname "*$@*"
+    find . -iname "*$*"
     #if [ "$#" -eq 0 ] ; then
     #    find ./ -iname "*"
     #else
