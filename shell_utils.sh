@@ -1,4 +1,5 @@
 # shellcheck disable=SC2034  # Variables are consumed by shells sourcing this file
+# cspell:disable
 ###
 # .bash_aliases
 #
@@ -232,7 +233,7 @@ compress-pdf() {
     if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
         echo 'Usage: compresspdf INPUT_FILE OUTPUT_FILE [screen|ebook|printer|prepress]'
     else
-        _run gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH -dPDFSETTINGS=/${3:-"screen"} -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
+        _run gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH "-dPDFSETTINGS=/${3:-screen}" -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
     fi
 }
 
@@ -459,8 +460,8 @@ alias glb='grep --line-buffered'    # Stream into pipes
 
 # Git shortcuts
 function git-get_remote_branches() {
-    _REMOTE=${1-origin}
-    git remote set-branches $_REMOTE '*'
+    local remote=${1-origin}
+    git remote set-branches "$remote" '*'
     git fetch -vvv
 }
 function gad() {
@@ -479,10 +480,10 @@ function gAd() {
 }
 function _git_clone_github() {
     # TODO: If '/' not in $1, use "$1/$1"
-    git clone git@github.com:$1.git "${@:2}"
+    git clone "git@github.com:$1.git" "${@:2}"
 }
 function _git_clone_my_github() {
-    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git "${@:2}"
+    git clone "git@github.com:${DEFAULT_USER:-$USER}/$1.git" "${@:2}"
 }
 function _git_commit_n_push() {
     if git commit "$@"; then
@@ -497,7 +498,7 @@ function _git_diff_commit() {
     # - commits_behind defaults to '1'
     target_commit=${1:-HEAD}
     commits_behind=${2:-1}
-    git diff --color=always $target_commit^$commits_behind $target_commit
+    git diff --color=always "$target_commit^$commits_behind" "$target_commit"
 }
 function _git_log_author() {
     git log --color=always --author="$*"
@@ -515,7 +516,7 @@ function gam() {
 function gbru() {
     branch=$(git symbolic-ref HEAD)
     branch=${branch##refs/heads/}
-    git branch --set-upstream-to=$1/$branch $branch
+    git branch "--set-upstream-to=$1/$branch" "$branch"
 }
 alias gbl='_run git blame'
 alias gbr='_run git branch --color=always'
@@ -579,10 +580,11 @@ function gwta() {
     local branch=$1
     local dir="../${2:-$1}"
 
+    local -a track=()
     if [[ "${branch%%/*}" == "remotes" ]]; then
-        local track="--track -b ${branch##*/}"
+        track=(--track -b "${branch##*/}")
     fi
-    git worktree add $track $dir $branch
+    git worktree add "${track[@]}" "$dir" "$branch"
 }
 
 if type __git_complete &>/dev/null; then
@@ -751,6 +753,8 @@ alias nv.hpk="_nv_hpk"
 
 # Common chown/chgrp shortcuts
 function _own() {
+    local ch_name ch_owners
+    local -a ch_ops ch_targets
 
     # Change files to match a user account if we're sudoing from one
     if [ -n "$SUDO_USER" ]; then
@@ -764,9 +768,9 @@ function _own() {
     fi
 
     # Set options ('r' is for 'recursive')
-    ch_ops=
+    ch_ops=()
     if [[ $1 =~ .*r.* ]]; then
-        ch_ops+=" -R "
+        ch_ops=(-R)
     fi
 
     # Set owning user/group ('b' is for 'both')
@@ -778,16 +782,16 @@ function _own() {
 
     # Assume current directory if no files specified
     if [ "$#" -le "1" ]; then
-        ch_targets="./"
+        ch_targets=(./)
     else
-        ch_targets="${@:2}"
+        ch_targets=("${@:2}")
     fi
 
     # Change something ('g' is for 'group')
     if [[ $1 =~ .*g.* ]]; then
-        eval chgrp $ch_ops "$ch_owners" "$ch_targets"
+        chgrp "${ch_ops[@]}" "$ch_owners" "${ch_targets[@]}"
     else
-        eval chown $ch_ops "$ch_owners" "$ch_targets"
+        chown "${ch_ops[@]}" "$ch_owners" "${ch_targets[@]}"
     fi
 }   # end _own()
 alias own='_own b'              # Own both user and group on files
@@ -956,7 +960,7 @@ sush() {
         home_base="/home"
     fi
     target_home="${home_base}/${target_user}"
-    sudo -u "$target_user" -E HOME="$target_home" ZDOTDIR="$HOME" $SHELL
+    sudo -u "$target_user" -E HOME="$target_home" ZDOTDIR="$HOME" "$SHELL"
 }
 
 alias susctl='sudo systemctl'
@@ -1190,12 +1194,12 @@ function cd() {
 ##########################################
 
 function tar() {
-    extra_options=
+    local -a extra_options=()
     # Exclude localisation and Desktop Services Store files on Macs
     if [ "$BASIC_MACHINE_TYPE" = "Mac" ]; then
-        extra_options+=" --exclude .DS_Store --exclude .localized "
+        extra_options=(--exclude .DS_Store --exclude .localized)
     fi
-    command -p tar $extra_options "$@"
+    command -p tar "${extra_options[@]}" "$@"
 }
 
 
@@ -1286,7 +1290,13 @@ else
         ls -l "$@" | less -R
     }
 fi
-function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
+function grepl() {
+    if [ -n "${COLOR_ALWAYS:-}" ]; then
+        grep "$COLOR_ALWAYS" "$@" | less
+    else
+        grep "$@" | less
+    fi
+}
 
 
 # supervisor
@@ -1298,7 +1308,7 @@ function f() {
     find . -iname "*$*"
 }
 
-function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
+function venv-postactivate { source "${VIRTUAL_ENV}/bin/postactivate"; }
 
 
 
@@ -1307,7 +1317,7 @@ function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
 alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
 
 function cover() {
-    coverage run --source="$1" $D test "$1";
+    coverage run --source="$1" "$D" test "$1"
     coverage report --omit='*/_[a-z]*,*/tests/test_*';
 }
 alias myip="curl -s icanhazip.com"
