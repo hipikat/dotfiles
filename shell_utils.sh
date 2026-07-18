@@ -493,7 +493,7 @@ function _git_clone_github() {
     git clone git@github.com:$1.git "${@:2}"
 }
 function _git_clone_my_github() {
-    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git ${@:2}
+    git clone git@github.com:${DEFAULT_USER:-$USER}/$1.git "${@:2}"
 }
 function _git_commit_n_push() {
     if git commit "$@"; then
@@ -728,14 +728,14 @@ function k8-create-dashboard-token() {
 alias k8='kubectl'
 
 kill-vscode() {
-    ps aux | grep '\.vscode' | grep -v grep | awk '{print $2}' | xargs kill $@
+    ps aux | grep '\.vscode' | grep -v grep | awk '{print $2}' | xargs kill "$@"
 }
 alias k.vsc='kill-vscode'
 alias k.vsc!='kill-vscode -9'
 
 #alias les='less --quit-if-one-screen'
 function les() {
-  script -q /dev/null $@ | less -R
+  script -q /dev/null "$@" | less -R
 }
 
 alias mame='/Applications/mame0236-x86/mame'
@@ -910,7 +910,7 @@ alias rmrf='rm -Rf'
 function run() {
     for file in $(ls .); do
         if [[ -f "$file" && -x "$file" && "$file" =~ ^run ]]; then
-            ./"$file" ${@:1}
+            ./"$file" "$@"
             return $?
         fi
     done
