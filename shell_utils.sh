@@ -511,10 +511,10 @@ function _git_diff_commit() {
     git diff --color=always $target_commit^$commits_behind $target_commit
 }
 function _git_log_author() {
-    git log --color=always --author="$@"
+    git log --color=always --author="$*"
 }
 function _git_log_author_stat() {
-    git log --color=always --author="$@" --stat
+    git log --color=always --author="$*" --stat
 }
 #alias git.resetlocks='git reset Pipfile.lock'
 #alias gam='git commit --amend'
