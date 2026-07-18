@@ -257,7 +257,6 @@ alias dis='_run dispense'
 
 alias dfh='_run df -h'
 
-#alias dja='_django-admin'
 alias dja='django-admin'
 
 
@@ -268,7 +267,6 @@ alias dbl='_run docker build'
 function dbl.t() {
     _run docker build --tag "$1" "${1:.}"
 }
-#alias dbl.t='_run docker build --target'
 function dbl.tt() {
     local tag="$1"
     local target="${2:-$tag}"
@@ -278,15 +276,6 @@ function dbl.tt() {
 alias dcm='_run docker-compose'
 alias dcmb='_run docker-compose build'
 alias dcmx='_run docker-compose exec'
-#function dcm.b() {
-#    _run docker-compose exec $@ npm run watch:build
-#}
-#function dcm.bd() {
-#    docker-compose exec $@ npm run watch:build:debug
-#}
-#function dcm.bp() {
-#    docker-compose exec $@ npm run watch:build:prod
-#}
 alias dcmr='_run docker-compose run'
 alias dcmr.p='_run docker-compose run --service-ports'
 alias dcmr.pn='docker-compose run --service-ports --name'
@@ -516,8 +505,6 @@ function _git_log_author() {
 function _git_log_author_stat() {
     git log --color=always --author="$*" --stat
 }
-#alias git.resetlocks='git reset Pipfile.lock'
-#alias gam='git commit --amend'
 function gam() {
     if [ "$#" -eq "0" ]; then
       git commit --amend
@@ -673,24 +660,6 @@ hs.unique() {
 }
 
 
-#function hsg() {
-#    # Print reversed, filtered history to .hsging1
-#    history | grep -i "$@" | tac > ~/.hsging1
-#    cat ~/.hsging1 | sort -uk2 | sort -nk1 | cut -f2- > ~/.hsging2
-#    tac ~/.hsging2 > ~/.hsging3
-#    cat ~/.hsging
-#    #rm ~/.hsging*
-#}
-
-#tac stuff.txt > stuff2.txt
-#cat -n stuff2.txt | sort -uk2 | sort -nk1 | cut -f2- > stuff3.txt
-#tac stuff3.txt > stuff4.txt
-#cat stuff4.txt
-
-
-# HTTPie - a CLI, cURL-like tool for humans
-#alias htp='http --pretty all'
-
 # Iptables
 alias ipt='iptables'
 alias iptl='iptables -L --line-numbers'
@@ -709,19 +678,6 @@ alias j.='jqc.'
 alias jst='just --color always --command-color cyan'
 alias jst!='jst --no-deps'
 
-#function jl() {
-#    j "$@" | less
-#}
-#fucntion jl.() {
-#    j. "$@" | less
-#}
-
-# Repeat the last command, piped through less
-#function les() {
-#    $(history -p \!\!) | less
-#}
-
-
 function k8-create-dashboard-token() {
     kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | awk '/^deployment-controller-token-/{print $1}') | awk '$1=="token:"{print $2}'
 }
@@ -733,7 +689,6 @@ kill-vscode() {
 alias k.vsc='kill-vscode'
 alias k.vsc!='kill-vscode -9'
 
-#alias les='less --quit-if-one-screen'
 function les() {
   script -q /dev/null "$@" | less -R
 }
@@ -924,33 +879,6 @@ set_WINDOW() {
 }
 
 
-## Show a command
-#function shw() {
-#    _TYPE=$(type $1 &> /dev/null)
-#    if [ $? -eq 1 ]; then
-#        echo $1 not found.
-#        return 1
-#    else
-#        _TYPE=$(type $1 | head -n 1)
-#    fi
-#
-#    # Type describes aliases and functions by default
-#    if [[ "$_TYPE" =~ aliased\ to|a\ function ]]; then
-#        type $1
-#    elif [[ "$_TYPE" =~ $1\ is\ / ]]; then
-#        type $1
-#        _FILE=$(file $1)
-#        if [[ "$_FILE" =~ ASCII ]]; then
-#            cat $(type -p $1)
-#        else
-#            echo "$_FILE"
-#        fi
-#    # Not sure what this is. Could be a binary. Just use the default.
-#    else
-#        type $1
-#    fi
-#}
-
 alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
@@ -980,10 +908,6 @@ function slt.high() {
         salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
     fi
 }
-#function slt.pil() {
-#    if [ "$#" -ge "1" ]; then
-#        salt --force-color "${HOSTNAME} pillar.get
-#}
 alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
 alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
 alias slt..high='slt.. \* state.highstate'
@@ -1059,7 +983,6 @@ alias sup='supervisorctl'
 alias supt='supervisorctl tail'
 alias suptf='supervisorctl tail -F'
 
-#alias syu='synergy-up-home'
 alias syu='synergy-up'
 
 function tdy() {
@@ -1097,7 +1020,6 @@ function tdym() {
 function tre() {
     tree -C "$@" | grep -v '\.pyc$' | less
 }
-#export -f tre
 alias tre2='tre -L 2'
 alias tre3='tre -L 3'
 alias tre4='tre -L 4'
@@ -1175,14 +1097,8 @@ alias trfP='_run terraform plan -out'
 alias trfa='_run terraform apply'
 
 function typ() {
-    #type_p_out=$(type -p "$@")
-    #if [ "$?" -eq "0" ] && [ -z "$type_p_out" ]; then
-    #    if type "$@" | grep 'is aliased to'; then
-    #fi
-
     type -p "$@"
 }
-#export -f typ
 
 unknow_host() {
   if [ -z "$1" ]; then
@@ -1244,7 +1160,6 @@ if ! type tac >/dev/null 2>&1; then
             awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -;
         }   
     fi  
-    #export -f tac 
 fi
 
 
@@ -1267,11 +1182,6 @@ function cd() {
     else
         builtin cd "$@"
     fi
-
-    # Look for autoenv scripts *after* we've successfully changed directories
-    #if [[ "$(type autoenv_init 2>/dev/null | head -n 1)" == "autoenv_init is a function" ]]; then
-    #    autoenv_init
-    #fi
 
 }
 
@@ -1383,29 +1293,10 @@ function grepl() { grep $COLOR_ALWAYS "$@" | less ;}
 alias sv='sudo supervisorctl'
 
 
-# d == django-admin.py ...
-#function d() { django-admin.py "$@" ;}
-#export -f d
-
 # f == find ./ -iname ...
 function f() {
     find . -iname "*$*"
-    #if [ "$#" -eq 0 ] ; then
-    #    find ./ -iname "*"
-    #else
-    #    find ./ -iname "*$@*"
-    #fi
 }
-#export -f f
-#alias f='eval $(find ./ -iname "*$@*")'
-
-
-# g == grep -Iris ... ./
-# gh == grep -Iis ... ./ (grep here)
-#function g() { grep -Iris "$@" ./ ;}
-#export -f g
-#function gh() { grep -Iis "$@" ./* ;}
-#export -f gh
 
 function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
 
@@ -1415,20 +1306,10 @@ function venv-postactivate { source $VIRTUAL_ENV/bin/postactivate; }
 # Shortcuts
 alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
 
-#alias cover='coverage run --source="." $D test $@; coverage report'
 function cover() {
     coverage run --source="$1" $D test "$1";
     coverage report --omit='*/_[a-z]*,*/tests/test_*';
 }
-#export -f cover
-
-
-
-
-
-
-
-
 alias myip="curl -s icanhazip.com"
 
 
@@ -1439,9 +1320,6 @@ function sudoe() {
         sudo -E "$@"
     fi
 }
-#export -f sudoe
-
-#
 function sudoeu() {
     if [[ $# -eq 1 ]]; then
         sudo -Eu "$1" bash
@@ -1449,14 +1327,8 @@ function sudoeu() {
         sudo -Eu "$@"
     fi
 }
-#export -f sudoeu
-
-#
 function dosass() {
     cd "src/styles"
     eval "bundle exec compass watch &"
     cd "../.."
 }
-#function runsrv() {
-#    eval "django-admin.py runserver "$@" --traceback"
-#}
