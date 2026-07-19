@@ -16,3 +16,5 @@
 	directory = /app/.git
 	directory = lib/picata
 	directory = lib/picata
+[core]
+	excludesfile = ~/.gitignore_global
