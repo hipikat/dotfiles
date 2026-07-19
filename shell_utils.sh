@@ -1303,7 +1303,7 @@ alias sv='sudo supervisorctl'
 
 # f == find ./ -iname ...
 function f() {
-    find . -iname "*$*"
+    find . -iname "*${*}*"
 }
 
 # shellcheck disable=SC1091  # Virtualenv hook path is resolved only at runtime
@@ -1316,7 +1316,8 @@ function venv-postactivate { source "${VIRTUAL_ENV}/bin/postactivate"; }
 alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
 
 function cover() {
-    coverage run --source="$1" "$D" test "$1"
+    # shellcheck disable=SC2086  # D is an optional command fragment and may be empty
+    coverage run --source="$1" $D test "$1"
     coverage report --omit='*/_[a-z]*,*/tests/test_*';
 }
 alias myip="curl -s icanhazip.com"
