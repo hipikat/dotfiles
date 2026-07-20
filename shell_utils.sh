@@ -617,6 +617,8 @@ if type __git_complete &>/dev/null; then
     __git_complete gta _git_tag
 fi
 
+alias glw='glow -w 80 -p'
+
 # Hatch
 alias htb='hatch build'
 alias htc='hatch clean'
