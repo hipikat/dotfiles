@@ -1,0 +1,11 @@
+# Custom Dictionary Words
+Justfile
+picata
+pilcrow
+pycache
+pygments
+pyproject
+pytest
+tfvar
+venv
+werkzeug

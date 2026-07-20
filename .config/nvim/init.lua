@@ -25,7 +25,12 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- add your plugins here
+    "neovim/nvim-lspconfig",
+    { "williamboman/mason.nvim", opts = {} },
+    {
+      "williamboman/mason-lspconfig.nvim",
+      opts = { ensure_installed = { "harper_ls" } },
+    },
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
@@ -33,6 +38,16 @@ require("lazy").setup({
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+-- Harper: spell/grammar checker LSP (binary fetched by mason.nvim from GitHub releases)
+vim.lsp.config("harper_ls", {
+  settings = {
+    ["harper-ls"] = {
+      dialect = "Australian",
+    },
+  },
+})
+vim.lsp.enable("harper_ls")
 
 --------
 -- Set default options
