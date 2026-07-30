@@ -49,6 +49,22 @@ vim.lsp.config("harper_ls", {
 })
 vim.lsp.enable("harper_ls")
 
+
+-- Clear background for various UI elements
+local clear_bg = function()
+  vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+  vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE", ctermbg = "NONE" })
+  vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
+  vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE", ctermbg = "NONE" })
+  vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "NONE", ctermbg = "NONE" })
+  vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "NONE", ctermbg = "NONE" })
+end
+
+-- Run it on startup and whenever a colorscheme loads
+clear_bg()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = clear_bg })
+
+
 --------
 -- Set default options
 vim.opt.autoindent = true -- Auto-indenting
@@ -57,7 +73,7 @@ vim.opt.number = true     -- Enable line numbers
 vim.opt.ic = true         -- Ignore case in search patterns
 vim.opt.incsearch = true  -- Incremental search
 vim.opt.wrap = false      -- No wrapping of lines
-vim.o.mouse = ''          -- Disable mouse supportp
+vim.o.mouse = 'a'         -- Enable mouse support in all modes
 vim.wo.scrolloff = 3      -- Display context around the cursor line
 
 vim.opt.expandtab = true  -- Convert tabs to spaces
@@ -76,7 +92,7 @@ vim.cmd([[
 -- vim.opt.clipboard = "unnamed"
 
 -- Use the + and * registers for all yank, delete, change and put operations which would normally go to the clipboard.
--- vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard = "unnamedplus"
 
 -- Use both the unnamed and the + and * registers for all yank, delete, change and put operations which would normally go to the clipboard.
 -- vim.opt.clipboard = "unnamed,unnamedplus"
@@ -88,7 +104,7 @@ vim.opt.guifont = 'Fira Code:h13, Menlo:h13, Monospace:h13'
 vim.opt.visualbell = true
 
 -- Load the colorscheme
-vim.cmd('colorscheme torte')  -- Set preferred color scheme
+vim.cmd('colorscheme softwake-dark')  -- Set preferred color scheme
 
 -- Enable syntax highlighting
 vim.cmd('syntax enable')
@@ -152,4 +168,3 @@ end
 for i, char in ipairs({'#', '*', '=', '-', '^'}) do
     vim.api.nvim_set_keymap('n', '<leader>'..i, 'yyPVr'..char..'yyjp', { noremap = true, silent = true })
 end
-

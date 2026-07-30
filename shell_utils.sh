@@ -7,14 +7,14 @@
 # 1.    Convenience aliases
 # 1.1.  Aliases affecting default program behaviour
 # 2.    Emulate missing Gnu Coreutils
-# 3.    Shell Builtin overrides 
+# 3.    Shell Builtin overrides
 # 4.    POSIX command overrides
 # 5.    Typos
 # 6.    Operating system consistency
 # 10.   Functions
 #
 # By Ada Wright <ada@hpk.io>
-# https://github.com/hipikat/dotfiles 
+# https://github.com/hipikat/dotfiles
 # Packaged under the BSD 2-Clause License
 ###
 
@@ -421,7 +421,7 @@ alias fmp!='black .'
 # Grep shortcuts
 function _grep() {
     # If grepping recursively, and just a search term is
-    # given, defualt to searching the current directory.
+    # given, default to searching the current directory.
     if [[ "$#" -eq "2" && $1 == *"r"* ]]; then
         grep --color=always "$@" ./
     else
@@ -1162,8 +1162,8 @@ if ! type tac >/dev/null 2>&1; then
     else
         function tac() {
             awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' -;
-        }   
-    fi  
+        }
+    fi
 fi
 
 
@@ -1252,13 +1252,6 @@ function 10shells() {
     screen -S "$1" -c ~/.screen/10shells
 }
 
-
-
-
-
-##########################################
-### unclean... UNCLEANNNNNN...
-### a.k.a. "I hadn't read the Advanced Bash Programming guide yet".
 
 # Prefer eza when available; otherwise retain colourful native ls defaults.
 if command -v eza >/dev/null 2>&1; then
