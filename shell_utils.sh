@@ -949,18 +949,9 @@ ssh-keygen-cloud() {
 }
 
 sush() {
-    if [ -n "$1" ]; then
-        target_user="$1"
-    else
-        target_user="root"  # default to root if no user specified
-    fi
-    if [ "$(uname)" = "Darwin" ]; then
-        home_base="/Users"
-    else
-        home_base="/home"
-    fi
-    target_home="${home_base}/${target_user}"
-    sudo -u "$target_user" -E HOME="$target_home" ZDOTDIR="$HOME" "$SHELL"
+    local target_user="${1:-root}"
+    local config_home="${SUSH_CONFIG_HOME:-${ZDOTDIR:-$HOME}}"
+    sudo -H -E -u "$target_user" SUSH_CONFIG_HOME="$config_home" ZDOTDIR="$config_home" "$SHELL"
 }
 
 alias susctl='sudo systemctl'
