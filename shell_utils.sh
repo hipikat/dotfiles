@@ -1118,6 +1118,9 @@ alias ufwsv='ufw status verbose'
 alias upd='updatedb'
 alias upt='uptime'
 
+alias uva='uv add'
+alias uva.d='uv add --dev'
+
 alias s.ve='source .venv/bin/activate'
 
 alias vg='vagrant'
