@@ -170,11 +170,13 @@ alias br.c='_run brew cleanup'
 alias br.c!='_run brew cleanup --prune=all'
 alias br.d='_run brew doctor'
 alias br.i='_run brew install'
-alias br.in='_run brew info'
+alias br.ic='_run brew install --cask'
+alias br.info='_run brew info'
 alias br.l='_run brew list'
 function br.lg() {
     _runsh 'brew list | grep -i "$@"' "$@"
 }
+alias br.s='_run brew search'
 alias br.ud='_run brew upgrade --dry-run'
 alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.un='_run brew uninstall'
