@@ -144,7 +144,7 @@ function _runsh() {
 alias s.bashrc='_run source ~/.bashrc'
 alias s.zshrc='_run source ~/.zshrc'
 alias s.deactivate='_run source deactivate'
-
+alias s.venv='source .venv/bin/activate'
 
 any_movie() {
     # TODO: check for zero matches
@@ -1122,8 +1122,8 @@ alias upt='uptime'
 
 alias uva='uv add'
 alias uva.d='uv add --dev'
-
-alias s.ve='source .venv/bin/activate'
+alias uvr='uv run'
+alias uvre='uv remove'
 
 alias vg='vagrant'
 alias vgu='vagrant up'

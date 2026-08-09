@@ -1,8 +1,14 @@
 # Custom Dictionary Words
+categorise
+customise
+dayfirst
+docstrings
 Justfile
+kwargs
 picata
 pilcrow
 pycache
+pydocstyle
 pygments
 pyproject
 pytest
