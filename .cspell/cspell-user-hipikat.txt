@@ -3,10 +3,12 @@ categorise
 customise
 dayfirst
 docstrings
+esac
 Justfile
 kwargs
 picata
 pilcrow
+pipefail
 pycache
 pydocstyle
 pygments
@@ -15,3 +17,4 @@ pytest
 tfvar
 venv
 werkzeug
+worktree
