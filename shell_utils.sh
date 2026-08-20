@@ -202,23 +202,23 @@ function dbl.tt() {
 }
 
 alias dcn='_run docker container'
-alias dcns='_run docker container ls'
+alias dcn.ls='_run docker container ls'
 
 alias dim='_run docker image'
-function dim-rm-dangling() {
+function dim.rm-dangling() {
     while IFS= read -r image_id; do
         _run docker rmi "$image_id"
     done < <(docker images --filter dangling=true -q)
 }
-alias dimi='_run docker image inspect'
-alias dimrm='_run docker image rm'
-alias dims='_run docker images'
+alias dim.i='_run docker image inspect'
+alias dim.rm='_run docker image rm'
+alias dim.s='_run docker images'
 
-alias dntc='_run docker network create'
-alias dntco='_run docker network connect'
-alias dnti='_run docker network inspect'
-alias dntl='_run docker network ls'
-alias dntrm='_run docker network rm'
+alias dnt.c='_run docker network create'
+alias dnt.co='_run docker network connect'
+alias dnt.i='_run docker network inspect'
+alias dnt.l='_run docker network ls'
+alias dnt.rm='_run docker network rm'
 
 alias dpl='_run docker pull'
 alias dps='_run docker ps'
@@ -229,11 +229,11 @@ alias drn.itrm='_run docker run -it --rm'
 function drn.sh() {
   _run docker run -it "$@" /bin/bash
 }
-function drnsh.() {
+function drn.sh.() {
     drn.sh --user="$(whoami)" "$@"
 }
-function drnsh.mount-src() {
-    drnsh. -v "$(pwd)/src:/app/src" "$@"
+function drn.sh.mount-src() {
+    drn.sh. -v "$(pwd)/src:/app/src" "$@"
 }
 
 alias dsi='_run docker system info'
@@ -253,25 +253,25 @@ alias dv.rm="_run docker volume rm"
 
 alias dx='_run docker exec'
 alias dx.it='_run docker exec -it'
-function dxsh() {
+function dx.sh() {
   _run docker exec -it "$@" /bin/bash
 }
-function dxsh.() {
-    dxsh --user="$(whoami)" "$@"
+function dx.sh.() {
+    dx.sh --user="$(whoami)" "$@"
 }
-function dxsh-mount-src() {
-    dxsh. -v "$(pwd)/src:/app/src" "$@"
+function dx.sh-mount-src() {
+    dx.sh. -v "$(pwd)/src:/app/src" "$@"
 }
 
 
 ### 1.3. Firewalls
 alias ipt='iptables'
-alias iptd='iptables -D'
-alias iptl='iptables -L --line-numbers'
-alias ufwd='ufw delete'
-alias ufws='ufw status'
-alias ufwsn='ufw status numbered'
-alias ufwsv='ufw status verbose'
+alias ipt.d='iptables -D'
+alias ipt.l='iptables -L --line-numbers'
+alias ufw.d='ufw delete'
+alias ufw.s='ufw status'
+alias ufw.sn='ufw status numbered'
+alias ufw.sv='ufw status verbose'
 
 
 ### 1.4. General utilities
@@ -301,13 +301,13 @@ compress-pdf() {
         _run gs -sDEVICE=pdfwrite -dNOPAUSE -dQUIET -dBATCH "-dPDFSETTINGS=/${3:-screen}" -dCompatibilityLevel=1.4 -sOutputFile="$2" "$1"
     fi
 }
-alias cpr='cp -r'
+alias cp.r='cp -r'
 alias ctw='cut -c1-$(tput cols)'
-alias dfh='_run df -h'
+alias df.h='_run df -h'
 function dif() {
     _runsh 'colordiff -w "$@" | less -R' "$@"
 }
-alias dif3='_run dif -C3'
+alias dif.3='_run dif -C3'
 echo_paths() {
     echo "$PATH" | tr ':' '\n'
 }
@@ -360,12 +360,12 @@ ping-loop() {
     sleep "$sleep_time"
   done
 }
-alias psa='ps aux'
-alias psg='ps aux | grep -i'
+alias ps.a='ps aux'
+alias ps.g='ps aux | grep -i'
 alias pst='pstree -UpaunZ'
-alias rmf='rm -f'
-alias rmr='rm -R'
-alias rmrf='rm -Rf'
+alias rm.f='rm -f'
+alias rm.r='rm -R'
+alias rm.rf='rm -Rf'
 alias sed-fail="sed -n -e '/\[\(CRITICAL\|WARNING\) *\]/,/\[\(DEBUG\|INFO\) *\]/ { /\[\(DEBUG\|INFO\) *\]/b; p }'"
 function tdy() {
     # Use default options, don't let attribute/values wrap, reduce
@@ -394,19 +394,19 @@ function tdy() {
 }
 # As in `tdy`, but modify the file in-place
 # Todo: Make this work when 'extra options' consitute the first words of $@
-function tdym() {
+function tdy.m() {
     tidy -m -config ~/.htmltidy "$@"
     sed -i ':a;N;$!ba;s/=\n\s*/=/g;s/\n\n/\n/ig' "$@"
 }
-alias tlf='tail -F'
+alias tl.f='tail -F'
 function typ() {
     type -p "$@"
 }
 alias upd='updatedb'
 alias upt='uptime'
-alias wcc='wc -c'
-alias wcl='wc -l'
-alias wcw='wc -w'
+alias wc.c='wc -c'
+alias wc.l='wc -l'
+alias wc.w='wc -w'
 
 
 ### 1.5. Git
@@ -446,33 +446,33 @@ function gad() {
         git add "$@"
     fi
 }
-function gAd() {
+function gad.a() {
     if [ "$#" -eq "0" ]; then
         git add -A .
     else
         git add -A "$@"
     fi
 }
-function gam() {
+function gco.amend() {
     if [ "$#" -eq "0" ]; then
       git commit --amend
     else
       git commit --amend -m "@"
     fi
 }
-function gbru() {
+function gbr.u() {
     branch=$(git symbolic-ref HEAD)
     branch=${branch##refs/heads/}
     git branch "--set-upstream-to=$1/$branch" "$branch"
 }
-function git-get_remote_branches() {
+function git.get_remote_branches() {
     local remote=${1-origin}
     git remote set-branches "$remote" '*'
     git fetch -vvv
 }
-function gwta() {
+function gwt.a() {
     # Check out a git worktree in a sibling directory
-    # Usage: gwta BRANCH [DIR_NAME]
+    # Usage: gwt.a BRANCH [DIR_NAME]
     local branch=$1
     local dir="../${2:-$1}"
 
@@ -604,22 +604,22 @@ function __grep() {
     fi
 }
 
-alias g='_grep -I'          # I: ignores binary files
-alias gi='_grep -Ii'        # i: case insensitive
-alias gin='_grep -Iin'
-alias gir='_grep -Iri'
-alias girn='__grep -Irin'
-alias girnn='__grep -Iri --exclude-dir=node_modules'
-alias girnnn='__grep -Irin --exclude-dir=node_modules'
-alias girv='_grep -Iriv'
-alias giv='_grep -Iiv'      # v: invert matching
-alias glb='grep --line-buffered'    # Stream into pipes
-alias gn='_grep -In'        # n: print line numbers
-alias gr='_grep -Ir'        # r: recursive
-alias grn='_grep -Irn'
-alias grnn='_grep -Ir --exclude-dir=node_modules'
-alias grnnn='_grep -Irn --exclude-dir=node_modules'
-alias gv='_grep -Iv'
+alias g='_grep -I'            # I: ignores binary files
+alias g.i='_grep -Ii'         # i: case insensitive
+alias g.in='_grep -Iin'
+alias g.ir='_grep -Iri'
+alias g.irn='__grep -Irin'
+alias g.irnn='__grep -Iri --exclude-dir=node_modules'
+alias g.irnnn='__grep -Irin --exclude-dir=node_modules'
+alias g.irv='_grep -Iriv'
+alias g.iv='_grep -Iiv'       # v: invert matching
+alias g.lb='grep --line-buffered'    # Stream into pipes
+alias g.n='_grep -In'         # n: print line numbers
+alias g.r='_grep -Ir'         # r: recursive
+alias g.rn='_grep -Irn'
+alias g.rnn='_grep -Ir --exclude-dir=node_modules'
+alias g.rnnn='_grep -Irn --exclude-dir=node_modules'
+alias g.v='_grep -Iv'
 
 
 ### 1.7. Homebrew
@@ -701,8 +701,8 @@ hs.unique() {
         echo "$line"
     done | sort -k2  # Optionally sort the results by the timestamp, which is the second field
 }
-alias hsg='fc -l 1 | grep -i'
-alias hsn='history -n'          # Append new lines from the history file to history
+alias hs.g='fc -l 1 | grep -i'
+alias hs.n='history -n'          # Append new lines from the history file to history
 alias s.bashrc='_run source ~/.bashrc'
 alias s.venv='source .venv/bin/activate'
 alias s.zshrc='_run source ~/.zshrc'
@@ -710,10 +710,10 @@ alias s.zshrc='_run source ~/.zshrc'
 
 ### 1.9. JSON
 alias jq.='jq .'
-alias jqc='jq -C'
-alias jqc.='jq -C .'
-alias j='jqc'
-alias j.='jqc.'
+alias jq.c='jq -C'
+alias jq.c.='jq -C .'
+alias j='jq.c'
+alias j.='jq.c.'
 
 
 ### 1.10. Just
@@ -739,7 +739,7 @@ alias l='ls -l'
 alias la='ls -al'
 alias ll.d='ll -d'
 alias la.d='la -d'
-alias las='la | less'
+alias la.s='la | less'
 
 # Use a function so arguments go to the listing command rather than less.
 unalias ll 2>/dev/null
@@ -771,20 +771,20 @@ alias nv.n='nvim -n -p'   # Disable swap files
 
 
 ### 1.13. Node.js
-alias npi='npm install -P'
-alias npia='npm install -PD'
-alias npid='npm install -D'
-alias npig='npm install --global'
-alias npl='npm list'
-alias npl0='npm list --depth=0'
-alias npl1='npm list --depth=1'
-alias npo='npm outdated'
-alias npr='npm run'
-alias nps='npm show'
-alias npu='npm update'
-alias npua='npm update --dev'
-alias npuad='npm --depth=9999 update --dev'
-alias npud='npm --depth=9999 update'
+alias np.i='npm install -P'
+alias np.ia='npm install -PD'
+alias np.id='npm install -D'
+alias np.ig='npm install --global'
+alias np.l='npm list'
+alias np.l0='npm list --depth=0'
+alias np.l1='npm list --depth=1'
+alias np.o='npm outdated'
+alias np.r='npm run'
+alias np.s='npm show'
+alias np.u='npm update'
+alias np.ua='npm update --dev'
+alias np.uad='npm --depth=9999 update --dev'
+alias np.ud='npm --depth=9999 update'
 
 
 ### 1.14. Ownership
@@ -845,24 +845,24 @@ function cover() {
     coverage run --source="$1" $D test "$1"
     coverage report --omit='*/_[a-z]*,*/tests/test_*';
 }
-alias dja='django-admin'
+alias dj.a='django-admin'
 
-alias htb='hatch build'
-alias htc='hatch clean'
-alias htco='hatch config'
-alias htd='hatch dep'
-alias hte='hatch env'
-alias htf='hatch format'
-alias htp='hatch publish'
-alias htpr='hatch project'
-alias htpy='hatch python'
-alias htr='hatch run'
-alias hts='hatch status'
-alias htsh='hatch shell'
-alias htv='hatch version'
+alias ht.b='hatch build'
+alias ht.c='hatch clean'
+alias ht.co='hatch config'
+alias ht.d='hatch dep'
+alias ht.e='hatch env'
+alias ht.f='hatch format'
+alias ht.p='hatch publish'
+alias ht.pr='hatch project'
+alias ht.py='hatch python'
+alias ht.r='hatch run'
+alias ht.s='hatch status'
+alias ht.sh='hatch shell'
+alias ht.v='hatch version'
 
 alias mm='just dj makemigrations'
-alias mmm='just dj makemigrations && just dj migrate'
+alias mm.m='just dj makemigrations && just dj migrate'
 
 function __pdm_venv_activate() {
     eval "$(pdm venv activate | sed 's/^source/source /; s/^.*$/&/')"
@@ -870,29 +870,29 @@ function __pdm_venv_activate() {
 alias pd.r='pdm run'
 alias pd.va=__pdm_venv_activate
 
-alias pif='_run pip freeze'
-alias pifl='_runsh "pip freeze | wc -l"'
-alias pmn='python manage.py'
-alias pmsh='python manage.py shell'
+alias pi.f='_run pip freeze'
+alias pi.fl='_runsh "pip freeze | wc -l"'
+alias pm.n='python manage.py'
+alias pm.sh='python manage.py shell'
 
 alias pye='pyenv'
-alias pyei='pyenv install'
-alias pyel='pyenv install -list | less'
-alias pyev='pyenv version'
-alias pyevs='pyenv versions'
+alias pye.i='pyenv install'
+alias pye.l='pyenv install -list | less'
+alias pye.v='pyenv version'
+alias pye.vs='pyenv versions'
 
 
 ### 1.16. SSH
 alias scp.r='scp -r'
-ssh-keygen-cloud() {
+ssh-keygen.cloud() {
   comment="(ephemeral)-$(date +%F)"
   ssh-keygen -N "" -t ed25519 -f ~/.ssh/ephemeral-ed25519 -C "$comment"
 }
-ssh-keygen-default() {
+ssh-keygen.default() {
   comment="$USER@$(hostname | cut -d '.' -f 1)-$(date +%F)"
   ssh-keygen -N "" -t ed25519 -C "$comment"
 }
-alias sshffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias ssh.ffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 unknow_host() {
   if [ -z "$1" ]; then
     echo "Please provide a pattern to match."
@@ -924,7 +924,7 @@ function sudoe() {
         sudo -E "$@"
     fi
 }
-function sudoeu() {
+function sudoe.u() {
     if [[ $# -eq 1 ]]; then
         sudo -Eu "$1" bash
     else
@@ -951,10 +951,10 @@ sush() {
 
 ### 1.18. Terraform
 alias trf='_run terraform'
-alias trfa='_run terraform apply'
-alias trfi='_run terraform init'
-alias trfP='_run terraform plan -out'
-alias trfp='_run terraform plan'
+alias trf.a='_run terraform apply'
+alias trf.i='_run terraform init'
+alias trf.P='_run terraform plan -out'
+alias trf.p='_run terraform plan'
 
 
 ### 1.19. Tmux
@@ -1014,22 +1014,22 @@ alias tx.ls='tmux ls'
 function tre() {
     tree -C "$@" | grep -v '\.pyc$' | less
 }
-alias tre2='tre -L 2'
-alias tre3='tre -L 3'
-alias tre4='tre -L 4'
-alias tre5='tre -L 5'
-alias tren='tre -I node_modules'
-alias tren2='tre -L 2 -I node_modules'
-alias tren3='tre -L 3 -I node_modules'
-alias tren4='tre -L 4 -I node_modules'
-alias tren5='tre -L 5 -I node_modules'
+alias tre.2='tre -L 2'
+alias tre.3='tre -L 3'
+alias tre.4='tre -L 4'
+alias tre.5='tre -L 5'
+alias tre.n='tre -I node_modules'
+alias tre.n2='tre -L 2 -I node_modules'
+alias tre.n3='tre -L 3 -I node_modules'
+alias tre.n4='tre -L 4 -I node_modules'
+alias tre.n5='tre -L 5 -I node_modules'
 
 
 ### 1.21. uv
 alias uva='uv add'
 alias uva.d='uv add --dev'
-alias uvr='uv run'
-alias uvre='uv remove'
+alias uv.r='uv run'
+alias uv.re='uv remove'
 
 
 ### 1.22. Project Zomboid saves
@@ -1116,7 +1116,7 @@ alias grpe='grep'
 alias hsot='host'
 alias hsto='host'
 alias im='vim'
-alias ir='gir'
+alias ir='g.ir'
 alias ivm='vim'
 alias pign='ping'
 alias piong='ping'
@@ -1138,7 +1138,7 @@ alias wpd='pwd'
 
 
 ### 4.1. DigitalOcean
-function do-api() {
+function do.api() {
     curl -s \
       -X GET \
       -H "Content-Type: application/json" \
@@ -1154,18 +1154,18 @@ do.size() {
 
 ### 4.2. Docker Compose v1
 alias dcm='_run docker-compose'
-function dcm-m() {
+function dcm.m() {
     _run docker-compose exec "$@" pipenv run manage migrate
 }
-function dcm-mm() {
+function dcm.mm() {
     _run docker-compose exec "$@" pipenv run manage makemigrations
 }
-function dcm-mmm() {
+function dcm.mmm() {
     _run docker-compose exec "$@" pipenv run manage makemigrations
     _run docker-compose exec "$@" pipenv run manage migrate
 }
-alias dcmb='_run docker-compose build'
-alias dcmd='_run docker-compose down'
+alias dcm.b='_run docker-compose build'
+alias dcm.d='_run docker-compose down'
 alias dcmr='_run docker-compose run'
 alias dcmr.p='_run docker-compose run --service-ports'
 alias dcmr.pn='docker-compose run --service-ports --name'
@@ -1177,14 +1177,14 @@ alias dcmu='_run docker-compose up'
 alias dcmu.b='_run docker-compose up --build'
 alias dcmu.bd='_run docker-compose up --build --detach'
 alias dcmu.d='_run docker-compose up --detach'
-alias dcmx='_run docker-compose exec'
+alias dcm.x='_run docker-compose exec'
 
 
 ### 4.3. Docker Machine
 alias dmac='_run docker-machine'
 alias dmacc='_run docker-machine create'
 alias dmacc.vb='_run docker-machine create -d virtualbox'
-alias dmace='_run docker-machine env'
+alias dmac.e='_run docker-machine env'
 alias dom.rm='docker-machine rm -y -f'
 
 
@@ -1192,7 +1192,7 @@ alias dom.rm='docker-machine rm -y -f'
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='_run dispense'
-alias irssi2='irssi --config=~/.irssi/config2'
+alias irssi.2='irssi --config=~/.irssi/config2'
 alias mame='/Applications/mame0236-x86/mame'
 function _nv_hpk() {
     mvim -p ~/Local\ Store/hpk.io/hpk-scratch.txt ~/Local\ Store/hpk.io/hpk-stream.txt &
@@ -1218,7 +1218,7 @@ set_WINDOW() {
 
 ### 4.6. Kubernetes dashboard token
 alias k8='kubectl'
-function k8-create-dashboard-token() {
+function k8.create-dashboard-token() {
     kubectl -n kube-system get secret |
         awk '/^deployment-controller-token-/{print $1}' |
         while IFS= read -r secret_name; do
@@ -1232,16 +1232,16 @@ function k8-create-dashboard-token() {
 alias ne.g='nodenv global'
 alias ne.l='nodenv local'
 alias ne.s='nodenv shell'
-alias nei='nodenv install'
-alias neil='nodenv install --list'
-function neilg() {
+alias ne.i='nodenv install'
+alias ne.il='nodenv install --list'
+function ne.ilg() {
   nodenv install --list | grep "$@"
 }
-alias ner='nodenv rehash'
-alias nev='nodenv version'
-alias nevs='nodenv versions'
-alias newe='nodenv whence'
-alias newi='nodenv which'
+alias ne.r='nodenv rehash'
+alias ne.v='nodenv version'
+alias ne.vs='nodenv versions'
+alias ne.we='nodenv whence'
+alias ne.wi='nodenv which'
 
 
 ### 4.8. Old Homebrew ownership repair
@@ -1263,21 +1263,21 @@ exp-env() {
     done
 }
 alias pe.rm='pipenv --rm'
-alias peg='pipenv graph'
-alias pei='pipenv install'
-alias pei.='pipenv install --python `pyenv which python`'
-alias peid='pipenv install --dev'
-alias peid.='pipenv install --dev --python `pyenv which python`'
-alias pel='pipenv lock -d; pipenv lock --requirements > requirements.txt'
-alias per='pipenv run'
-alias perd='pipenv run django'
-alias perf='pipenv run pip freeze'
-alias perfl='_runsh "pipenv run pip freeze | wc -l"'
-alias perm='pipenv run manage'
-alias perp='pipenv run python'
-alias pers='pipenv run server'
-alias persh='pipenv run shell'
-alias pesh='pipenv shell'
+alias pe.g='pipenv graph'
+alias pe.i='pipenv install'
+alias pe.i.='pipenv install --python `pyenv which python`'
+alias pe.id='pipenv install --dev'
+alias pe.id.='pipenv install --dev --python `pyenv which python`'
+alias pe.l='pipenv lock -d; pipenv lock --requirements > requirements.txt'
+alias pe.r='pipenv run'
+alias pe.rd='pipenv run django'
+alias pe.rf='pipenv run pip freeze'
+alias pe.rfl='_runsh "pipenv run pip freeze | wc -l"'
+alias pe.m='pipenv run manage'
+alias pe.rp='pipenv run python'
+alias pe.rs='pipenv run server'
+alias pe.rsh='pipenv run shell'
+alias pe.sh='pipenv shell'
 alias pct.='pipenv run picata'
 alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
 # shellcheck disable=SC1091  # Virtualenv hook path is resolved only at runtime
@@ -1285,9 +1285,9 @@ function venv-postactivate { source "${VIRTUAL_ENV}/bin/postactivate"; }
 
 
 ### 4.10. PostgreSQL 12
-alias pg_ctl-mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
-alias pg_ctl-mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
-alias pg_ctl-mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
+alias pg_ctl.mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
+alias pg_ctl.mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
+alias pg_ctl.mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
 
 
 ### 4.11. Salt
@@ -1323,14 +1323,14 @@ function slt..ping() {
 }
 alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
 alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
-alias sltapi='salt-api --force-color'
-alias sltcld='salt-cloud --force-color'
-alias sltcll='salt-call --force-color'
-alias sltcp='salt-cp --force-color'
-alias sltkey='salt-key --force-color'
-alias sltrun='salt-run --force-color'
-alias sltssh='salt-ssh --force-color'
-function slt-cln() {
+alias slt.api='salt-api --force-color'
+alias slt.cld='salt-cloud --force-color'
+alias slt.cll='salt-call --force-color'
+alias slt.cp='salt-cp --force-color'
+alias slt.key='salt-key --force-color'
+alias slt.run-raw='salt-run --force-color'
+alias slt.ssh='salt-ssh --force-color'
+function slt.cln() {
     # Clean out Salt caches before running a `salt` command
     salt-run cache.clear_all
     if [ "$#" -ge "1" ]; then
@@ -1340,15 +1340,15 @@ function slt-cln() {
         fi
     fi
 }
-function slt-run() {
+function slt.run() {
     salt-run --force-color "${@}"
 }
 
 
 ### 4.12. Supervisor
 alias sup='supervisorctl'
-alias supt='supervisorctl tail'
-alias suptf='supervisorctl tail -F'
+alias sup.t='supervisorctl tail'
+alias sup.tf='supervisorctl tail -F'
 alias sv='sudo supervisorctl'
 
 
@@ -1358,13 +1358,13 @@ alias syu='synergy-up'
 
 ### 4.14. Vagrant
 alias vg='vagrant'
-alias vgc='vagrant config'
+alias vg.c='vagrant config'
 alias vgd='vagrant destroy'
 alias vgd.f='vagrant destroy -f'
-alias vgh='vagrant halt'
-alias vgi='vagrant ssh-config'
-alias vgp='vagrant provision'
-alias vgr='vagrant reload'
-alias vgs='vagrant status'
-alias vgsh='vagrant ssh'
-alias vgu='vagrant up'
+alias vg.h='vagrant halt'
+alias vg.i='vagrant ssh-config'
+alias vg.p='vagrant provision'
+alias vg.r='vagrant reload'
+alias vg.s='vagrant status'
+alias vg.sh='vagrant ssh'
+alias vg.u='vagrant up'
