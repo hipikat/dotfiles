@@ -6,10 +6,10 @@ _config_home="${SUSH_CONFIG_HOME:-$HOME}"
 
 ### Initialise Pure prompt
 if [[ -d "$_config_home/.zsh/pure" ]]; then
-  fpath=("$_config_home/.zsh/pure" $fpath)
+  fpath=("$_config_home/.zsh/pure" "${fpath[@]}")
 elif [[ -n "$SUDO_USER" && -d ~"$SUDO_USER"/.zsh/pure ]]; then
-  sudo_user_home=$(eval echo ~$SUDO_USER)
-  fpath=("$sudo_user_home/.zsh/pure" $fpath)
+  sudo_user_home=~"$SUDO_USER"
+  fpath=("$sudo_user_home/.zsh/pure" "${fpath[@]}")
 fi
 
 # Pure prompt display options
@@ -19,6 +19,7 @@ zstyle :prompt:pure:path:separator dim yes              # Dim path separators
 
 # Don't asynchronously perform git fetches for elevated or agentic shells.
 if [[ -n "${SUSH_CONFIG_HOME}${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
+    # shellcheck disable=SC2034  # Read by Pure when its prompt functions run.
     PURE_GIT_PULL=0
 fi
 
@@ -85,6 +86,7 @@ fi
 
 # Load autosuggestions after completion widgets have been initialised.
 if [[ -r "$_config_home/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+    # shellcheck disable=SC1091,SC1094  # This Zsh plugin uses syntax ShellCheck cannot parse.
     source "$_config_home/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
@@ -117,8 +119,9 @@ precmd() {
 
 # Hook to set title before executing a command
 preexec() {
-    local screen_title="$(screen_title_context)"
-    screen_title+=`echo -ne " \xC2\xA7 "`
+    local screen_title
+    screen_title="$(screen_title_context)"
+    screen_title+=' § '
     screen_title+="$1"
     set_screen_title "$screen_title"
 }
@@ -180,10 +183,13 @@ fi
 
 ### Load user aliases, functions & constants
 if [ -r "${_config_home}/.dotfiles/shell_utils.sh" ]; then
+    # shellcheck disable=SC1091  # The trusted configuration root is selected at run time.
     source "${_config_home}/.dotfiles/shell_utils.sh"
 elif [ -r "/home/ada/.dotfiles/shell_utils.sh" ]; then
+    # shellcheck disable=SC1091  # This legacy deployment path is guarded above.
     source "/home/ada/.dotfiles/shell_utils.sh"
 elif [ -r "/home/hipikat/.dotfiles/shell_utils.sh" ]; then
+    # shellcheck disable=SC1091  # This legacy deployment path is guarded above.
     source "/home/hipikat/.dotfiles/shell_utils.sh"
 fi
 
@@ -194,8 +200,10 @@ if [[ -r "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     typeset -A ZSH_HIGHLIGHT_STYLES
     ZSH_HIGHLIGHT_STYLES[path]='none'
     ZSH_HIGHLIGHT_STYLES[path_prefix]='none'
+    # shellcheck disable=SC2034  # Read by the plugin sourced immediately below.
     ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=green'
 
+    # shellcheck disable=SC1091,SC1094  # This Zsh plugin uses syntax ShellCheck cannot parse.
     source "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
