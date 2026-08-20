@@ -1,9 +1,12 @@
 # Custom Dictionary Words
+agentic
 categorise
 customise
 dayfirst
 docstrings
 esac
+hipikat
+initialised
 Justfile
 kwargs
 picata

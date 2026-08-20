@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "/processors/**"
+  ],
+  "words": [
+    "_config_home",
+    "autodirectory",
+    "CLAUDECODE",
+    "COPYFILE",
+    "coreutils",
+    "dotfiles",
+    "DUPS",
+    "findutils",
+    "fpath",
+    "gnubin",
+    "GOPATH",
+    "home",
+    "libexec",
+    "OPENCODE",
+    "RMXF",
+    "SAVEHIST",
+    "sush",
+    "zcompdump"
+  ]
+}
