@@ -17,6 +17,7 @@ pydocstyle
 pygments
 pyproject
 pytest
+serialise
 tfvar
 venv
 werkzeug
