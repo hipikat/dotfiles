@@ -5,28 +5,37 @@
 #
 # 0.    Setup
 # 1.    Current commands and aliases
-# 1.1.  Bat and colourised output
-# 1.2.  Docker
-# 1.3.  Firewalls
-# 1.4.  General utilities
-# 1.5.  Git
-# 1.6.  Grep
-# 1.7.  Homebrew
-# 1.8.  History and shell sourcing
-# 1.9.  JSON
-# 1.10. Just
-# 1.11. Listing and finding
-# 1.12. Neovim
-# 1.13. Node.js
-# 1.14. Ownership
-# 1.15. Python and Django
-# 1.16. SSH
-# 1.17. Sudo and system services
-# 1.18. Terraform
-# 1.19. Tmux
-# 1.20. Tree
-# 1.21. uv
-# 1.22. Project Zomboid saves
+# 1.1.  Application and project shortcuts
+# 1.2.  Bat and colourised output
+# 1.3.  DigitalOcean
+# 1.4.  Docker
+# 1.5.  Docker Compose v1
+# 1.6.  Docker Machine
+# 1.7.  Firewalls
+# 1.8.  General utilities
+# 1.9.  Git
+# 1.10. GNU Screen
+# 1.11. Grep
+# 1.12. Homebrew
+# 1.13. History and shell sourcing
+# 1.14. JSON
+# 1.15. Just
+# 1.16. Listing and finding
+# 1.17. Neovim
+# 1.18. Node.js
+# 1.19. Nodenv
+# 1.20. Ownership
+# 1.21. Python and Django
+# 1.22. Salt
+# 1.23. SSH
+# 1.24. Sudo and system services
+# 1.25. Supervisor
+# 1.26. Terraform
+# 1.27. Tmux
+# 1.28. Tree
+# 1.29. uv
+# 1.30. Vagrant
+# 1.31. Project Zomboid saves
 # 2.    Command behaviour and compatibility
 # 2.1.  Default program behaviour
 # 2.2.  Emulate missing GNU Coreutils
@@ -34,25 +43,6 @@
 # 2.4.  POSIX command overrides
 # 2.5.  Shell builtin overrides
 # 3.    Typos usually typed in anger
-# 4.    Suspected legacy commands
-# 4.1.  DigitalOcean
-# 4.2.  Docker Compose v1
-# 4.3.  Docker Machine
-# 4.4.  Fixed application and project shortcuts
-# 4.5.  GNU Screen
-# 4.6.  Kubernetes dashboard token
-# 4.7.  Nodenv
-# 4.8.  Old Homebrew ownership repair
-# 4.9.  Older environment and Python workflows
-# 4.10. PostgreSQL 12
-# 4.11. Salt
-# 4.12. Supervisor
-# 4.13. Synergy
-# 4.14. Vagrant
-
-# By Ada Wright <ada@hpk.io>
-# https://github.com/hipikat/dotfiles
-# Packaged under the BSD 2-Clause License
 ###
 
 ### 0. Setup
@@ -179,7 +169,14 @@ function _runsh() {
 ##########################################
 
 
-### 1.1. Bat and colourised output
+### 1.1. Application and project shortcuts
+# Dispense from the UCC Coke machine
+#  - http://wiki.ucc.asn.au/Dispense
+alias dis='_run dispense'
+alias irssi2='irssi --config=~/.irssi/config2'
+
+
+### 1.2. Bat and colourised output
 alias bat.l='bat -l'
 alias bat.toml='bat -l toml'
 
@@ -188,7 +185,22 @@ alias cct='pygmentize -O style=monokai -f console256 -g'
 alias csi='pygmentize -O style=monokai -f console256 -l'
 
 
-### 1.2. Docker
+### 1.3. DigitalOcean
+function do-api() {
+    curl -s \
+      -X GET \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
+      "https://api.digitalocean.com/v2/$1" | jq -C | less -F
+}
+alias do.region="_run doctl compute region list"
+do.size() {
+    [ -n "$1" ] && doctl compute size list | grep "$1" && return
+    _run doctl compute size list
+}
+
+
+### 1.4. Docker
 alias dat='_run docker attach'
 alias dbl='_run docker build'
 function dbl.t() {
@@ -264,7 +276,43 @@ function dx.sh-mount-src() {
 }
 
 
-### 1.3. Firewalls
+### 1.5. Docker Compose v1
+alias dcm='_run docker-compose'
+function dcm.m() {
+    _run docker-compose exec "$@" pipenv run manage migrate
+}
+function dcm.mm() {
+    _run docker-compose exec "$@" pipenv run manage makemigrations
+}
+function dcm.mmm() {
+    _run docker-compose exec "$@" pipenv run manage makemigrations
+    _run docker-compose exec "$@" pipenv run manage migrate
+}
+alias dcm.b='_run docker-compose build'
+alias dcm.d='_run docker-compose down'
+alias dcmr='_run docker-compose run'
+alias dcmr.p='_run docker-compose run --service-ports'
+alias dcmr.pn='docker-compose run --service-ports --name'
+alias dcmr.prm='_run docker-compose run --service-ports --rm'
+alias dcmr.prmn='docker-compose run --service-ports --rm --name'
+alias dcmr.rm='_run docker-compose run --rm'
+alias dcmr.rmn='docker-compose run --rm --name'
+alias dcmu='_run docker-compose up'
+alias dcmu.b='_run docker-compose up --build'
+alias dcmu.bd='_run docker-compose up --build --detach'
+alias dcmu.d='_run docker-compose up --detach'
+alias dcm.x='_run docker-compose exec'
+
+
+### 1.6. Docker Machine
+alias dmac='_run docker-machine'
+alias dmacc='_run docker-machine create'
+alias dmacc.vb='_run docker-machine create -d virtualbox'
+alias dmac.e='_run docker-machine env'
+alias dom.rm='docker-machine rm -y -f'
+
+
+### 1.7. Firewalls
 alias ipt='iptables'
 alias ipt.d='iptables -D'
 alias ipt.l='iptables -L --line-numbers'
@@ -274,7 +322,7 @@ alias ufw.sn='ufw status numbered'
 alias ufw.sv='ufw status verbose'
 
 
-### 1.4. General utilities
+### 1.8. General utilities
 any_movie() {
     local movie
     if [ "$#" -ge 1 ]; then
@@ -409,7 +457,7 @@ alias wc.l='wc -l'
 alias wc.w='wc -w'
 
 
-### 1.5. Git
+### 1.9. Git
 function _git_clone_github() {
     # TODO: If '/' not in $1, use "$1/$1"
     git clone "git@github.com:$1.git" "${@:2}"
@@ -584,7 +632,16 @@ if type __git_complete &>/dev/null; then
 fi
 
 
-### 1.6. Grep
+### 1.10. GNU Screen
+alias scr.l='screen -list'
+alias scr.x='screen -x'
+set_WINDOW() {
+    WINDOW="$(screen -Q number)" || return
+    export WINDOW
+}
+
+
+### 1.11. Grep
 function _grep() {
     # If grepping recursively, and just a search term is
     # given, default to searching the current directory.
@@ -622,7 +679,7 @@ alias g.rnnn='_grep -Irn --exclude-dir=node_modules'
 alias g.v='_grep -Iv'
 
 
-### 1.7. Homebrew
+### 1.12. Homebrew
 alias br.ar='_run brew autoremove'
 alias br.c='_run brew cleanup'
 alias br.c!='_run brew cleanup --prune=all'
@@ -678,7 +735,7 @@ function br.uses() {
 }
 
 
-### 1.8. History and shell sourcing
+### 1.13. History and shell sourcing
 alias hs='history'
 hs.unique() {
     # Append session history to the file and reload it to ensure it's up-to-date
@@ -708,7 +765,7 @@ alias s.venv='source .venv/bin/activate'
 alias s.zshrc='_run source ~/.zshrc'
 
 
-### 1.9. JSON
+### 1.14. JSON
 alias jq.='jq .'
 alias jq.c='jq -C'
 alias jq.c.='jq -C .'
@@ -716,12 +773,12 @@ alias j='jq.c'
 alias j.='jq.c.'
 
 
-### 1.10. Just
+### 1.15. Just
 alias jst='just --color always --command-color cyan'
 alias jst!='jst --no-deps'
 
 
-### 1.11. Listing and finding
+### 1.16. Listing and finding
 # Prefer eza when available; otherwise retain colourful native ls defaults.
 if command -v eza >/dev/null 2>&1; then
     alias ls='eza'
@@ -763,14 +820,14 @@ function grepl() {
 }
 
 
-### 1.12. Neovim
+### 1.17. Neovim
 alias nv='nvim -p'        # Open files in tabs
 # shellcheck disable=SC2139  # Expand the file list into separate alias words when defined
 alias nv.dotfiles="nvim -n -p $VOLATILE_DOTFILES"
 alias nv.n='nvim -n -p'   # Disable swap files
 
 
-### 1.13. Node.js
+### 1.18. Node.js
 alias np.i='npm install -P'
 alias np.ia='npm install -PD'
 alias np.id='npm install -D'
@@ -787,7 +844,23 @@ alias np.uad='npm --depth=9999 update --dev'
 alias np.ud='npm --depth=9999 update'
 
 
-### 1.14. Ownership
+### 1.19. Nodenv
+alias ne.g='nodenv global'
+alias ne.l='nodenv local'
+alias ne.s='nodenv shell'
+alias ne.i='nodenv install'
+alias ne.il='nodenv install --list'
+function ne.ilg() {
+  nodenv install --list | grep "$@"
+}
+alias ne.r='nodenv rehash'
+alias ne.v='nodenv version'
+alias ne.vs='nodenv versions'
+alias ne.we='nodenv whence'
+alias ne.wi='nodenv which'
+
+
+### 1.20. Ownership
 function _own() {
     local ch_name ch_owners
     local -a ch_ops ch_targets
@@ -839,7 +912,7 @@ alias own.u='_own u'             # Own user flag on files
 alias own.ur='_own ur'           # Own user flag on files, recursively
 
 
-### 1.15. Python and Django
+### 1.21. Python and Django
 function cover() {
     # shellcheck disable=SC2086  # D is an optional command fragment and may be empty
     coverage run --source="$1" $D test "$1"
@@ -882,7 +955,62 @@ alias pye.v='pyenv version'
 alias pye.vs='pyenv versions'
 
 
-### 1.16. SSH
+### 1.22. Salt
+alias slt='salt --force-color'
+function slt.() {
+    salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
+}
+function slt..() {
+    salt --force-color \* "${@:1}"
+}
+function slt.apply() {
+    slt. state.apply "$@"
+}
+function slt..apply() {
+    slt.. state.apply "$@"
+}
+function slt.doc() {
+    slt. sys.doc "$@" | less
+}
+function slt.high() {
+    if [ "$#" -ge "1" ]; then
+        salt --force-color "${@}" state.highstate
+    else
+        salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
+    fi
+}
+alias slt..high='slt.. \* state.highstate'
+function slt.ping() {
+    slt. test.ping
+}
+function slt..ping() {
+    slt.. test.ping
+}
+alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
+alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
+alias slt.api='salt-api --force-color'
+alias slt.cld='salt-cloud --force-color'
+alias slt.cll='salt-call --force-color'
+alias slt.cp='salt-cp --force-color'
+alias slt.key='salt-key --force-color'
+alias slt.run-raw='salt-run --force-color'
+alias slt.ssh='salt-ssh --force-color'
+function slt.cln() {
+    # Clean out Salt caches before running a `salt` command
+    salt-run cache.clear_all
+    if [ "$#" -ge "1" ]; then
+        salt "$1" saltutil.clear_cache
+        if [ "$#" -gt "1" ]; then
+            salt --force-color "${@}"
+        fi
+    fi
+}
+function slt.run() {
+    salt-run --force-color "${@}"
+}
+
+
+### 1.23. SSH
 alias scp.r='scp -r'
 ssh-keygen-cloud() {
   comment="(ephemeral)-$(date +%F)"
@@ -909,7 +1037,7 @@ unknow_host() {
 }
 
 
-### 1.17. Sudo and system services
+### 1.24. Sudo and system services
 _sujctl-fu() {
     args=()
     for service in "$@"; do
@@ -949,7 +1077,14 @@ sush() {
 }
 
 
-### 1.18. Terraform
+### 1.25. Supervisor
+alias sup='supervisorctl'
+alias sup.t='supervisorctl tail'
+alias sup.tf='supervisorctl tail -F'
+alias sv='sudo supervisorctl'
+
+
+### 1.26. Terraform
 alias trf='_run terraform'
 alias trf.a='_run terraform apply'
 alias trf.i='_run terraform init'
@@ -957,7 +1092,7 @@ alias trf.P='_run terraform plan -out'
 alias trf.p='_run terraform plan'
 
 
-### 1.19. Tmux
+### 1.27. Tmux
 _tmux__safe_kill_session() {
   session_name=$(tmux display-message -p '#S')
   session_count=$(tmux list-sessions | wc -l)
@@ -1010,7 +1145,7 @@ tx() {
 alias tx.ls='tmux ls'
 
 
-### 1.20. Tree
+### 1.28. Tree
 function tre() {
     tree -C "$@" | grep -v '\.pyc$' | less
 }
@@ -1025,14 +1160,28 @@ alias tre.n4='tre -L 4 -I node_modules'
 alias tre.n5='tre -L 5 -I node_modules'
 
 
-### 1.21. uv
+### 1.29. uv
 alias uva='uv add'
 alias uva.d='uv add --dev'
 alias uvr='uv run'
 alias uvre='uv remove'
 
 
-### 1.22. Project Zomboid saves
+### 1.30. Vagrant
+alias vg='vagrant'
+alias vg.c='vagrant config'
+alias vg.d='vagrant destroy'
+alias vg.df='vagrant destroy -f'
+alias vg.h='vagrant halt'
+alias vg.i='vagrant ssh-config'
+alias vg.p='vagrant provision'
+alias vg.r='vagrant reload'
+alias vg.s='vagrant status'
+alias vg.sh='vagrant ssh'
+alias vg.u='vagrant up'
+
+
+### 1.31. Project Zomboid saves
 alias bak.zomboid='rsync -t -r --checksum --delete --info=progress2 ~/Zomboid/Saves/Sandbox/KelleyCarson ~/Local/Zomboid/Saves'
 alias res.zomboid='rsync -t -r --checksum --delete --info=progress2 ~/Local/Zomboid/Saves/KelleyCarson ~/Zomboid/Saves/Sandbox'
 
@@ -1130,241 +1279,3 @@ alias vin='vim'
 alias vl='lv'           # ls (visible, vertical & verbose)
 alias whomai='whoami'
 alias wpd='pwd'
-
-
-### 4. Suspected legacy commands
-##########################################
-# Review candidates only: every declaration remains enabled and unchanged.
-
-
-### 4.1. DigitalOcean
-function do-api() {
-    curl -s \
-      -X GET \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $(grep 'DIGITAL_OCEAN_ACCESS_TOKEN' ~/dev/hpk/secrets.conf | cut -f2 -d"=")" \
-      "https://api.digitalocean.com/v2/$1" | jq -C | less -F
-}
-alias do.region="_run doctl compute region list"
-do.size() {
-    [ -n "$1" ] && doctl compute size list | grep "$1" && return
-    _run doctl compute size list
-}
-
-
-### 4.2. Docker Compose v1
-alias dcm='_run docker-compose'
-function dcm.m() {
-    _run docker-compose exec "$@" pipenv run manage migrate
-}
-function dcm.mm() {
-    _run docker-compose exec "$@" pipenv run manage makemigrations
-}
-function dcm.mmm() {
-    _run docker-compose exec "$@" pipenv run manage makemigrations
-    _run docker-compose exec "$@" pipenv run manage migrate
-}
-alias dcm.b='_run docker-compose build'
-alias dcm.d='_run docker-compose down'
-alias dcmr='_run docker-compose run'
-alias dcmr.p='_run docker-compose run --service-ports'
-alias dcmr.pn='docker-compose run --service-ports --name'
-alias dcmr.prm='_run docker-compose run --service-ports --rm'
-alias dcmr.prmn='docker-compose run --service-ports --rm --name'
-alias dcmr.rm='_run docker-compose run --rm'
-alias dcmr.rmn='docker-compose run --rm --name'
-alias dcmu='_run docker-compose up'
-alias dcmu.b='_run docker-compose up --build'
-alias dcmu.bd='_run docker-compose up --build --detach'
-alias dcmu.d='_run docker-compose up --detach'
-alias dcm.x='_run docker-compose exec'
-
-
-### 4.3. Docker Machine
-alias dmac='_run docker-machine'
-alias dmacc='_run docker-machine create'
-alias dmacc.vb='_run docker-machine create -d virtualbox'
-alias dmac.e='_run docker-machine env'
-alias dom.rm='docker-machine rm -y -f'
-
-
-### 4.4. Fixed application and project shortcuts
-# Dispense from the UCC Coke machine
-#  - http://wiki.ucc.asn.au/Dispense
-alias dis='_run dispense'
-alias irssi2='irssi --config=~/.irssi/config2'
-alias mame='/Applications/mame0236-x86/mame'
-function _nv_hpk() {
-    mvim -p ~/Local\ Store/hpk.io/hpk-scratch.txt ~/Local\ Store/hpk.io/hpk-stream.txt &
-    sleep 2
-    mvim ~/Local\ Store/hpk.io/hpk-code.py &
-    sleep 1
-}
-alias nv.hpk="_nv_hpk"
-
-
-### 4.5. GNU Screen
-# `scr` is at https://github.com/hipikat/dotfiles/blob/master/.bin/scr
-function 10shells() {
-    screen -S "$1" -c ~/.screen/10shells
-}
-alias scr.l='screen -list'
-alias scr.x='screen -x'
-set_WINDOW() {
-    WINDOW="$(screen -Q number)" || return
-    export WINDOW
-}
-
-
-### 4.6. Kubernetes dashboard token
-alias k8='kubectl'
-function k8.create-dashboard-token() {
-    kubectl -n kube-system get secret |
-        awk '/^deployment-controller-token-/{print $1}' |
-        while IFS= read -r secret_name; do
-            kubectl -n kube-system describe secret "$secret_name"
-        done |
-        awk '$1=="token:"{print $2}'
-}
-
-
-### 4.7. Nodenv
-alias ne.g='nodenv global'
-alias ne.l='nodenv local'
-alias ne.s='nodenv shell'
-alias ne.i='nodenv install'
-alias ne.il='nodenv install --list'
-function ne.ilg() {
-  nodenv install --list | grep "$@"
-}
-alias ne.r='nodenv rehash'
-alias ne.v='nodenv version'
-alias ne.vs='nodenv versions'
-alias ne.we='nodenv whence'
-alias ne.wi='nodenv which'
-
-
-### 4.8. Old Homebrew ownership repair
-alias fix-own-brews='sudo chown -R $(whoami) $(brew --prefix)/*'
-
-
-### 4.9. Older environment and Python workflows
-alias dve='source deactivate'
-exp-env() {
-    local files=("${@:-/etc/environment}")
-    for file in "${files[@]}"; do
-        if [ -f "$file" ]; then
-            grep -v '^#' "$file" | grep -v '^\s*$' | sed 's/^/export /' | while read -r line; do
-                eval "$line"
-            done
-        else
-            echo "File not found: $file" >&2
-        fi
-    done
-}
-alias pe.rm='pipenv --rm'
-alias pe.g='pipenv graph'
-alias pe.i='pipenv install'
-alias pe.i.='pipenv install --python `pyenv which python`'
-alias pe.id='pipenv install --dev'
-alias pe.id.='pipenv install --dev --python `pyenv which python`'
-alias pe.l='pipenv lock -d; pipenv lock --requirements > requirements.txt'
-alias pe.r='pipenv run'
-alias pe.rd='pipenv run django'
-alias pe.rf='pipenv run pip freeze'
-alias pe.rfl='_runsh "pipenv run pip freeze | wc -l"'
-alias pe.m='pipenv run manage'
-alias pe.rp='pipenv run python'
-alias pe.rs='pipenv run server'
-alias pe.rsh='pipenv run shell'
-alias pe.sh='pipenv shell'
-alias pct.='pipenv run picata'
-alias pip-upgrade='pip freeze --local | cut -d = -f 1  | xargs pip install -U'
-# shellcheck disable=SC1091  # Virtualenv hook path is resolved only at runtime
-function venv-postactivate { source "${VIRTUAL_ENV}/bin/postactivate"; }
-
-
-### 4.10. PostgreSQL 12
-alias pg_ctl.mac='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl'
-alias pg_ctl.mac-start='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres start -D /Library/PostgreSQL/12/data'
-alias pg_ctl.mac-stop='sudo -u postgres /Library/PostgreSQL/12/bin/pg_ctl -U postgres stop -D /Library/PostgreSQL/12/data'
-
-
-### 4.11. Salt
-alias slt='salt --force-color'
-function slt.() {
-    salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
-}
-function slt..() {
-    salt --force-color \* "${@:1}"
-}
-function slt.apply() {
-    slt. state.apply "$@"
-}
-function slt..apply() {
-    slt.. state.apply "$@"
-}
-function slt.doc() {
-    slt. sys.doc "$@" | less
-}
-function slt.high() {
-    if [ "$#" -ge "1" ]; then
-        salt --force-color "${@}" state.highstate
-    else
-        salt --force-color "${HOSTNAME:-`hostname`}" state.highstate
-    fi
-}
-alias slt..high='slt.. \* state.highstate'
-function slt.ping() {
-    slt. test.ping
-}
-function slt..ping() {
-    slt.. test.ping
-}
-alias slt.refresh_pillar='slt. saltutil.refresh_pillar'
-alias slt..refresh_pillar='slt.. saltutil.refresh_pillar'
-alias slt.api='salt-api --force-color'
-alias slt.cld='salt-cloud --force-color'
-alias slt.cll='salt-call --force-color'
-alias slt.cp='salt-cp --force-color'
-alias slt.key='salt-key --force-color'
-alias slt.run-raw='salt-run --force-color'
-alias slt.ssh='salt-ssh --force-color'
-function slt.cln() {
-    # Clean out Salt caches before running a `salt` command
-    salt-run cache.clear_all
-    if [ "$#" -ge "1" ]; then
-        salt "$1" saltutil.clear_cache
-        if [ "$#" -gt "1" ]; then
-            salt --force-color "${@}"
-        fi
-    fi
-}
-function slt.run() {
-    salt-run --force-color "${@}"
-}
-
-
-### 4.12. Supervisor
-alias sup='supervisorctl'
-alias sup.t='supervisorctl tail'
-alias sup.tf='supervisorctl tail -F'
-alias sv='sudo supervisorctl'
-
-
-### 4.13. Synergy
-alias syu='synergy-up'
-
-
-### 4.14. Vagrant
-alias vg='vagrant'
-alias vg.c='vagrant config'
-alias vg.d='vagrant destroy'
-alias vg.df='vagrant destroy -f'
-alias vg.h='vagrant halt'
-alias vg.i='vagrant ssh-config'
-alias vg.p='vagrant provision'
-alias vg.r='vagrant reload'
-alias vg.s='vagrant status'
-alias vg.sh='vagrant ssh'
-alias vg.u='vagrant up'
