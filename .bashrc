@@ -177,7 +177,7 @@ export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 ##########################################
 
 # Usage: `in_array needle "${haystack[@]}"`
-in_array() { 
+in_array() {
     local needle=$1 hay
     for hay in "${2-}"; do
         [[ $hay == $needle ]] && return 0
@@ -210,7 +210,7 @@ set_screen_title () {
 #-cmdhist        Save multi-line commands to the history as a single line
 # dotglob        Includes hidden files in pathname expansion
 # extglob        Enables [?*+@!](pattern|pattern|...) matching
-# nocaseglob     Pathname expansion matches in a case-insensitive way 
+# nocaseglob     Pathname expansion matches in a case-insensitive way
 # histappend     Append to the history file instead of overwriting it
 # autocd         Change to a directory if a directory's given as a command
 # extdebug       Enable behavior intended for debuggers (for trap 'prepare_command' DEBUG)
@@ -346,7 +346,7 @@ function set_ps1_strings() {
 
     # Hostname (or an alias, typically provided in .bash_local)
     if [[ -n $HOST_ALIAS ]]; then
-        PS1_HOST=$HOST_ALIAS 
+        PS1_HOST=$HOST_ALIAS
     else
         PS1_HOST=$HOSTNAME
     fi
@@ -527,11 +527,6 @@ if type -P pyenv &>/dev/null; then
     pyenv virtualenvwrapper 2>/dev/null
 fi
 
-# Nodeenv
-#if type -ap nodenv &>/dev/null; then
-#    eval "$(nodenv init -)"
-#fi
-
 # Node Version Manager (NVM)
 if [ -d ~/.nvm ]; then
     export NVM_DIR="$HOME/.nvm"
@@ -539,11 +534,15 @@ if [ -d ~/.nvm ]; then
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
-# Whatever rbenv is
+# Ruby environment manager
 if which rbenv &> /dev/null; then
     eval "$(rbenv init -)";
 fi
 
+# Rustup's Cargo path setup
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
 
 
 ### Load command-line aliases
@@ -572,7 +571,3 @@ export LDFLAGS="$LDFLAGS -L/usr/local/opt/readline/lib -L/usr/local/opt/openssl@
 export CPPFLAGS="$CPPFLAGS -I/usr/local/opt/readline/include -I/usr/local/opt/openssl@3/include -I/usr/local/opt/sqlite/include -I/usr/local/opt/zlib/include -I/usr/local/opt/tcl-tk/include"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/local/opt/readline/lib/pkgconfig:/usr/local/opt/openssl@3/lib/pkgconfig:/usr/local/opt/sqlite/lib/pkgconfig:/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/tcl-tk/lib/pkgconfig"
 export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
-
-
-
-#bind 'Tab: menu-complete'

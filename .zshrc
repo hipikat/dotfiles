@@ -58,6 +58,11 @@ export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, 
                                 # alternate screen (keep content), quit if <1 screen
 export GOPATH="${GOPATH:-$HOME/go}"  # Default Go workspace for user-installed tools
 
+# Rustup's Cargo path setup
+if [ -f "$HOME/.cargo/env" ]; then
+    source "$HOME/.cargo/env"
+fi
+
 ### Zsh Line Editor (ZLE) setup
 bindkey -v
 bindkey "^?" backward-delete-char
