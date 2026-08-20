@@ -322,7 +322,9 @@ alias dims='_run docker images'
 alias dimi='_run docker image inspect'
 alias dimrm='_run docker image rm'
 function dim-rm-dangling() {
-    _run docker rmi $(docker images --filter dangling=true -q)
+    while IFS= read -r image_id; do
+        _run docker rmi "$image_id"
+    done < <(docker images --filter dangling=true -q)
 }
 
 alias dmac='_run docker-machine'
@@ -692,12 +694,19 @@ alias jst='just --color always --command-color cyan'
 alias jst!='jst --no-deps'
 
 function k8-create-dashboard-token() {
-    kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | awk '/^deployment-controller-token-/{print $1}') | awk '$1=="token:"{print $2}'
+    kubectl -n kube-system get secret |
+        awk '/^deployment-controller-token-/{print $1}' |
+        while IFS= read -r secret_name; do
+            kubectl -n kube-system describe secret "$secret_name"
+        done |
+        awk '$1=="token:"{print $2}'
 }
 alias k8='kubectl'
 
 kill-vscode() {
-    ps aux | grep '\.vscode' | grep -v grep | awk '{print $2}' | xargs kill "$@"
+    pgrep -f '\.vscode' | while IFS= read -r pid; do
+        kill "$@" "$pid"
+    done
 }
 alias k.vsc='kill-vscode'
 alias k.vsc!='kill-vscode -9'
@@ -714,6 +723,7 @@ alias mmm='just dj makemigrations && just dj migrate'
 # Make a directory and change into it
 function mkcd() {
     mkdir "$@"
+    # shellcheck disable=SC2164  # `cd` is the function's final command, so its status is returned.
     cd "$@"
 }
 alias mkd='mkdir'
@@ -891,7 +901,8 @@ alias sed-fail="sed -n -e '/\[\(CRITICAL\|WARNING\) *\]/,/\[\(DEBUG\|INFO\) *\]/
 
 
 set_WINDOW() {
-    export WINDOW=$(screen -Q number)
+    WINDOW="$(screen -Q number)" || return
+    export WINDOW
 }
 
 
@@ -1064,7 +1075,7 @@ tx() {
     fi
   else
     # Count the number of active sessions
-    session_count=$(tmux ls 2>/dev/null | wc -l)
+    session_count=$(tmux list-sessions 2>/dev/null | wc -l)
 
     if [ "$session_count" -eq 0 ]; then
       # No sessions exist, create a new one called 'default'
@@ -1074,7 +1085,7 @@ tx() {
       tmux attach-session
     else
       # Multiple sessions exist, list them
-      tmux ls
+      tmux list-sessions
     fi
   fi
 }
@@ -1188,8 +1199,10 @@ function cd() {
         for ((n=0; n<$dirs_rootward; n++)); do
             back_string="$back_string../"
         done
+        # shellcheck disable=SC2164  # `cd` is the function's final command, so its status is returned.
         builtin cd "$back_string"
     else
+        # shellcheck disable=SC2164  # `cd` is the function's final command, so its status is returned.
         builtin cd "$@"
     fi
 
@@ -1286,6 +1299,7 @@ if command -v eza >/dev/null 2>&1; then
     }
 else
     function ll() {
+        # shellcheck disable=SC2012  # Output goes straight to less; filenames are never parsed.
         ls -l "$@" | less -R
     }
 fi
@@ -1337,9 +1351,4 @@ function sudoeu() {
     else
         sudo -Eu "$@"
     fi
-}
-function dosass() {
-    cd "src/styles"
-    eval "bundle exec compass watch &"
-    cd "../.."
 }
