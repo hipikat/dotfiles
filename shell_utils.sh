@@ -862,7 +862,7 @@ alias ht.sh='hatch shell'
 alias ht.v='hatch version'
 
 alias mm='just dj makemigrations'
-alias mm.m='just dj makemigrations && just dj migrate'
+alias mmm='just dj makemigrations && just dj migrate'
 
 function __pdm_venv_activate() {
     eval "$(pdm venv activate | sed 's/^source/source /; s/^.*$/&/')"
@@ -884,15 +884,15 @@ alias pye.vs='pyenv versions'
 
 ### 1.16. SSH
 alias scp.r='scp -r'
-ssh-keygen.cloud() {
+ssh-keygen-cloud() {
   comment="(ephemeral)-$(date +%F)"
   ssh-keygen -N "" -t ed25519 -f ~/.ssh/ephemeral-ed25519 -C "$comment"
 }
-ssh-keygen.default() {
+ssh-keygen-default() {
   comment="$USER@$(hostname | cut -d '.' -f 1)-$(date +%F)"
   ssh-keygen -N "" -t ed25519 -C "$comment"
 }
-alias ssh.ffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias ssh-ffs='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 unknow_host() {
   if [ -z "$1" ]; then
     echo "Please provide a pattern to match."
@@ -1028,8 +1028,8 @@ alias tre.n5='tre -L 5 -I node_modules'
 ### 1.21. uv
 alias uva='uv add'
 alias uva.d='uv add --dev'
-alias uv.r='uv run'
-alias uv.re='uv remove'
+alias uvr='uv run'
+alias uvre='uv remove'
 
 
 ### 1.22. Project Zomboid saves
@@ -1138,7 +1138,7 @@ alias wpd='pwd'
 
 
 ### 4.1. DigitalOcean
-function do.api() {
+function do-api() {
     curl -s \
       -X GET \
       -H "Content-Type: application/json" \
@@ -1192,7 +1192,7 @@ alias dom.rm='docker-machine rm -y -f'
 # Dispense from the UCC Coke machine
 #  - http://wiki.ucc.asn.au/Dispense
 alias dis='_run dispense'
-alias irssi.2='irssi --config=~/.irssi/config2'
+alias irssi2='irssi --config=~/.irssi/config2'
 alias mame='/Applications/mame0236-x86/mame'
 function _nv_hpk() {
     mvim -p ~/Local\ Store/hpk.io/hpk-scratch.txt ~/Local\ Store/hpk.io/hpk-stream.txt &
@@ -1359,8 +1359,8 @@ alias syu='synergy-up'
 ### 4.14. Vagrant
 alias vg='vagrant'
 alias vg.c='vagrant config'
-alias vgd='vagrant destroy'
-alias vgd.f='vagrant destroy -f'
+alias vg.d='vagrant destroy'
+alias vg.df='vagrant destroy -f'
 alias vg.h='vagrant halt'
 alias vg.i='vagrant ssh-config'
 alias vg.p='vagrant provision'
