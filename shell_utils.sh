@@ -1182,8 +1182,106 @@ alias vg.u='vagrant up'
 
 
 ### 1.31. Project Zomboid saves
-alias bak.zomboid='rsync -t -r --checksum --delete --info=progress2 ~/Zomboid/Saves/Sandbox/KelleyCarson ~/Local/Zomboid/Saves'
-alias res.zomboid='rsync -t -r --checksum --delete --info=progress2 ~/Local/Zomboid/Saves/KelleyCarson ~/Zomboid/Saves/Sandbox'
+function _zomboid_current_save() {
+    local current="$HOME/Zomboid/Saves/current"
+
+    if [ ! -L "$current" ]; then
+        printf 'Expected a Zomboid save symlink at %s\n' "$current" >&2
+        return 1
+    fi
+    if [ ! -d "$current" ]; then
+        printf 'Zomboid save symlink does not resolve to a directory: %s\n' "$current" >&2
+        return 1
+    fi
+
+    builtin cd -P "$current" && pwd -P
+}
+
+function _zomboid_rsync() {
+    local progress_option='--progress'
+
+    # Homebrew rsync supports overall progress; macOS rsync needs the older form.
+    if rsync --info=help >/dev/null 2>&1; then
+        progress_option='--info=progress2'
+    fi
+
+    rsync -r -t --delete "$progress_option" "$@"
+}
+
+function bak.zomboid() {
+    local live_dir save_name backup_root latest staging generation newer older
+    local -a link_options=()
+
+    live_dir=$(_zomboid_current_save) || return 1
+    save_name=${live_dir##*/}
+    backup_root="$HOME/Local/Zomboid/Saves"
+    latest="$backup_root/$save_name"
+
+    mkdir -p "$backup_root" || return 1
+    if { [ -e "$latest" ] || [ -L "$latest" ]; } && [ ! -d "$latest" ]; then
+        printf 'Zomboid backup path is not a directory: %s\n' "$latest" >&2
+        return 1
+    fi
+
+    staging=$(mktemp -d "$backup_root/.${save_name}.XXXXXX") || return 1
+    if [ -d "$latest" ]; then
+        link_options=("--link-dest=$latest")
+    fi
+    if ! _zomboid_rsync "${link_options[@]}" "$live_dir/" "$staging/"; then
+        rm -rf "$staging"
+        return 1
+    fi
+
+    if [ -d "$latest" ]; then
+        if ! rm -rf "$latest.4"; then
+            rm -rf "$staging"
+            return 1
+        fi
+        for generation in 3 2 1; do
+            newer="$latest.$generation"
+            older="$latest.$((generation + 1))"
+            if [ -e "$newer" ] && ! mv "$newer" "$older"; then
+                rm -rf "$staging"
+                return 1
+            fi
+        done
+        if ! mv "$latest" "$latest.1"; then
+            rm -rf "$staging"
+            return 1
+        fi
+    fi
+
+    mv "$staging" "$latest"
+}
+
+function res.zomboid() {
+    local generation="${1:-latest}"
+    local live_dir save_name backup_root snapshot
+
+    if [ "$#" -gt 1 ]; then
+        printf 'Usage: res.zomboid [latest|1|2|3|4]\n' >&2
+        return 2
+    fi
+
+    live_dir=$(_zomboid_current_save) || return 1
+    save_name=${live_dir##*/}
+    backup_root="$HOME/Local/Zomboid/Saves"
+    case "$generation" in
+        latest) snapshot="$backup_root/$save_name" ;;
+        1|2|3|4) snapshot="$backup_root/$save_name.$generation" ;;
+        *)
+            printf 'Usage: res.zomboid [latest|1|2|3|4]\n' >&2
+            return 2
+            ;;
+    esac
+
+    if [ ! -d "$snapshot" ]; then
+        printf 'Zomboid backup does not exist: %s\n' "$snapshot" >&2
+        return 1
+    fi
+
+    _zomboid_rsync "$snapshot/" "$live_dir/"
+}
 
 
 ### 2. Command behaviour and compatibility
