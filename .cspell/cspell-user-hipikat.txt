@@ -17,6 +17,7 @@ pydocstyle
 pygments
 pyproject
 pytest
+Rustaceans
 serialise
 tfvar
 venv

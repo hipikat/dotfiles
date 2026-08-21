@@ -16,6 +16,7 @@ fi
 zstyle :prompt:pure:git:dirty detailed yes              # More than just 'dirty'
 zstyle :prompt:pure:environment:node_version show yes   # Show package.json node version
 zstyle :prompt:pure:path:separator dim yes              # Dim path separators
+zstyle :prompt:pure:prompt:success color 14             # ansiBrightCyan
 
 # Don't asynchronously perform git fetches for elevated or agentic shells.
 if [[ -n "${SUSH_CONFIG_HOME}${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
@@ -60,6 +61,7 @@ export GOPATH="${GOPATH:-$HOME/go}"  # Default Go workspace for user-installed t
 
 # Rustup's Cargo path setup
 if [ -f "$HOME/.cargo/env" ]; then
+    # shellcheck disable=SC1091  # Rustup dynamically generates this file.
     source "$HOME/.cargo/env"
 fi
 
