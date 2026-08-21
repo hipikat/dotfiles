@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+
+readonly ZOMBOID_SAVES_DIR="${ZOMBOID_SAVES_DIR:-$HOME/Zomboid/Saves}"
+readonly ZOMBOID_BACKUP_DIR="${ZOMBOID_BACKUP_DIR:-$HOME/Zomboid/Backups}"
+readonly BACKUP_COUNT=10
+readonly LAST_GENERATION=$((BACKUP_COUNT - 1))
+readonly CURRENT_LINK="$ZOMBOID_SAVES_DIR/current"
+
+usage() {
+    cat <<EOF
+Usage:
+  ${0##*/} backup
+  ${0##*/} restore [latest|1-$LAST_GENERATION]
+  ${0##*/} set-current SAVE_PATH
+
+Environment:
+  ZOMBOID_SAVES_DIR   Zomboid Saves directory
+                      (default: $HOME/Zomboid/Saves)
+  ZOMBOID_BACKUP_DIR  Backup destination directory
+                      (default: $HOME/Local/Zomboid/Saves)
+EOF
+}
+
+current_save() {
+    if [[ ! -L "$CURRENT_LINK" ]]; then
+        printf 'Expected a Zomboid save symlink at %s\n' "$CURRENT_LINK" >&2
+        return 1
+    fi
+    if [[ ! -d "$CURRENT_LINK" ]]; then
+        printf 'Zomboid save symlink does not resolve to a directory: %s\n' "$CURRENT_LINK" >&2
+        return 1
+    fi
+
+    builtin cd -P "$CURRENT_LINK" && pwd -P
+}
+
+run_rsync() {
+    local progress_option='--progress'
+
+    # Homebrew rsync supports overall progress; macOS rsync needs the older form.
+    if rsync --info=help >/dev/null 2>&1; then
+        progress_option='--info=progress2'
+    fi
+
+    # Do not preserve mtimes: hard-linked snapshots cannot have distinct mtimes.
+    rsync -r --checksum --delete "$progress_option" "$@"
+}
+
+has_content_changes() {
+    local line
+
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        # macOS rsync may itemise an ignored mtime as `.f..T....`.
+        [[ "$line" =~ ^\.[^[:space:]]\.\.T\.*[[:space:]] ]] && continue
+        return 0
+    done <<< "$1"
+    return 1
+}
+
+backup() {
+    local live_dir save_name latest comparison staging generation newer older
+    local -a link_options=()
+
+    live_dir=$(current_save) || return 1
+    save_name=${live_dir##*/}
+    latest="$ZOMBOID_BACKUP_DIR/$save_name"
+
+    mkdir -p "$ZOMBOID_BACKUP_DIR" || return 1
+    if { [[ -e "$latest" ]] || [[ -L "$latest" ]]; } && [[ ! -d "$latest" ]]; then
+        printf 'Zomboid backup path is not a directory: %s\n' "$latest" >&2
+        return 1
+    fi
+    if [[ -d "$latest" ]]; then
+        comparison=$(rsync -r --checksum --delete --dry-run --itemize-changes "$live_dir/" "$latest/") || return 1
+        if ! has_content_changes "$comparison"; then
+            printf 'Latest Zomboid backup is already up-to-date.\n'
+            return 0
+        fi
+    fi
+
+    staging=$(mktemp -d "$ZOMBOID_BACKUP_DIR/.${save_name}.XXXXXX") || return 1
+    if [[ -d "$latest" ]]; then
+        link_options=("--link-dest=$latest")
+    fi
+    if ! run_rsync "${link_options[@]}" "$live_dir/" "$staging/"; then
+        rm -rf "$staging"
+        return 1
+    fi
+
+    if [[ -d "$latest" ]]; then
+        if ! rm -rf "$latest.$LAST_GENERATION"; then
+            rm -rf "$staging"
+            return 1
+        fi
+        for ((generation = LAST_GENERATION - 1; generation >= 1; generation--)); do
+            newer="$latest.$generation"
+            older="$latest.$((generation + 1))"
+            if [[ -e "$newer" ]] && ! mv "$newer" "$older"; then
+                rm -rf "$staging"
+                return 1
+            fi
+        done
+        if ! mv "$latest" "$latest.1"; then
+            rm -rf "$staging"
+            return 1
+        fi
+    fi
+
+    mv "$staging" "$latest"
+}
+
+restore() {
+    local generation="${1:-latest}"
+    local live_dir save_name snapshot
+
+    if [[ "$#" -gt 1 ]]; then
+        printf 'Usage: %s restore [latest|1-%s]\n' "${0##*/}" "$LAST_GENERATION" >&2
+        return 2
+    fi
+
+    live_dir=$(current_save) || return 1
+    save_name=${live_dir##*/}
+    if [[ "$generation" == latest ]]; then
+        snapshot="$ZOMBOID_BACKUP_DIR/$save_name"
+    elif [[ "$generation" =~ ^[1-9][0-9]*$ ]] && ((generation <= LAST_GENERATION)); then
+        snapshot="$ZOMBOID_BACKUP_DIR/$save_name.$generation"
+    else
+        printf 'Usage: %s restore [latest|1-%s]\n' "${0##*/}" "$LAST_GENERATION" >&2
+        return 2
+    fi
+
+    if [[ ! -d "$snapshot" ]]; then
+        printf 'Zomboid backup does not exist: %s\n' "$snapshot" >&2
+        return 1
+    fi
+
+    run_rsync "$snapshot/" "$live_dir/"
+}
+
+set_current() {
+    local target=${1:-}
+    local saves_dir target_dir
+
+    if [[ "$#" -ne 1 ]] || [[ -z "$target" ]] || [[ "$target" == /* ]]; then
+        printf 'Usage: %s set-current SAVE_PATH\n' "${0##*/}" >&2
+        return 2
+    fi
+    if [[ ! -d "$ZOMBOID_SAVES_DIR/$target" ]]; then
+        printf 'Zomboid save does not exist: %s\n' "$ZOMBOID_SAVES_DIR/$target" >&2
+        return 1
+    fi
+
+    saves_dir=$(builtin cd -P "$ZOMBOID_SAVES_DIR" && pwd -P) || return 1
+    target_dir=$(builtin cd -P "$ZOMBOID_SAVES_DIR/$target" && pwd -P) || return 1
+    case "$target_dir" in
+        "$saves_dir"/*) ;;
+        *)
+            printf 'Zomboid save must be inside %s: %s\n' "$ZOMBOID_SAVES_DIR" "$target" >&2
+            return 1
+            ;;
+    esac
+
+    if [[ -e "$CURRENT_LINK" ]] && [[ ! -L "$CURRENT_LINK" ]]; then
+        printf 'Refusing to replace non-symlink path: %s\n' "$CURRENT_LINK" >&2
+        return 1
+    fi
+    if [[ -L "$CURRENT_LINK" ]]; then
+        rm "$CURRENT_LINK" || return 1
+    fi
+    ln -s "$target" "$CURRENT_LINK" || return 1
+    printf '%s -> %s\n' "$CURRENT_LINK" "$target"
+}
+
+main() {
+    local command=${1:-}
+
+    if [[ -z "$command" ]]; then
+        usage >&2
+        return 2
+    fi
+    shift
+
+    case "$command" in
+        backup)
+            if [[ "$#" -ne 0 ]]; then
+                printf 'Usage: %s backup\n' "${0##*/}" >&2
+                return 2
+            fi
+            backup
+            ;;
+        restore) restore "$@" ;;
+        set-current) set_current "$@" ;;
+        help|-h|--help) usage ;;
+        *)
+            printf 'Unknown command: %s\n' "$command" >&2
+            usage >&2
+            return 2
+            ;;
+    esac
+}
+
+main "$@"

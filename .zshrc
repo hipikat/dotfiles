@@ -54,10 +54,11 @@ export SAVEHIST=16384           # Number of commands to save in the history file
 
 ### Set environment
 export EDITOR='vim'
-export COPYFILE_DISABLE=true    # Prevent mystery ._* files appearing in tarballs on MacOS
-export LESS='-iRMXF'            # Ignore case, raw characters, detailed status, no
-                                # alternate screen (keep content), quit if <1 screen
-export GOPATH="${GOPATH:-$HOME/go}"  # Default Go workspace for user-installed tools
+export COPYFILE_DISABLE=true          # Prevent mystery ._* files appearing in tarballs on MacOS
+export LESS='-iRMXF'                  # Ignore case, raw characters, detailed status, no
+                                      # alternate screen (keep content), quit if <1 screen
+export GOPATH="${GOPATH:-$HOME/go}"                       # Default Go workspace for user-installed tools
+export ZOMBOID_BACKUP_DIR="${HOME}/Local/Zomboid Saves"   # Default Zomboid backup directory
 
 # Rustup's Cargo path setup
 if [ -f "$HOME/.cargo/env" ]; then
