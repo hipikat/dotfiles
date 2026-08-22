@@ -4,12 +4,15 @@ readonly ZOMBOID_SAVES_DIR="${ZOMBOID_SAVES_DIR:-$HOME/Zomboid/Saves}"
 readonly ZOMBOID_BACKUP_DIR="${ZOMBOID_BACKUP_DIR:-$HOME/Zomboid/Backups}"
 readonly BACKUP_COUNT=10
 readonly LAST_GENERATION=$((BACKUP_COUNT - 1))
-readonly CURRENT_LINK="$ZOMBOID_SAVES_DIR/current"
+readonly ZOMBOID_DIR="${ZOMBOID_SAVES_DIR%/*}"
+readonly ZOMBOID_SAVES_NAME="${ZOMBOID_SAVES_DIR##*/}"
+readonly CURRENT_LINK="$ZOMBOID_DIR/current"
 
 usage() {
     cat <<EOF
 Usage:
   ${0##*/} backup
+  ${0##*/} list
   ${0##*/} restore [latest|1-$LAST_GENERATION]
   ${0##*/} set-current SAVE_PATH
 
@@ -17,7 +20,7 @@ Environment:
   ZOMBOID_SAVES_DIR   Zomboid Saves directory
                       (default: $HOME/Zomboid/Saves)
   ZOMBOID_BACKUP_DIR  Backup destination directory
-                      (default: $HOME/Local/Zomboid/Saves)
+                      (default: $HOME/Zomboid/Backups)
 EOF
 }
 
@@ -110,6 +113,46 @@ backup() {
     mv "$staging" "$latest"
 }
 
+snapshot_timestamp() {
+    local entity_data="$1/entity_data.bin"
+
+    if [[ ! -f "$entity_data" ]]; then
+        printf 'Zomboid snapshot has no entity_data.bin: %s\n' "$1" >&2
+        return 1
+    fi
+
+    /usr/bin/stat -f '%Sm' -t '%Y-%m-%d %H:%M' "$entity_data"
+}
+
+list_backups() {
+    local current_target live_dir save_name latest generation snapshot timestamp
+
+    current_target=$(readlink "$CURRENT_LINK") || {
+        printf 'Could not read Zomboid save symlink: %s\n' "$CURRENT_LINK" >&2
+        return 1
+    }
+    if [[ "$current_target" == "$ZOMBOID_SAVES_NAME/"* ]]; then
+        current_target=${current_target#"$ZOMBOID_SAVES_NAME"/}
+    fi
+    live_dir=$(current_save) || return 1
+    save_name=${live_dir##*/}
+    latest="$ZOMBOID_BACKUP_DIR/$save_name"
+    if [[ ! -d "$latest" ]]; then
+        printf 'Zomboid backup does not exist: %s\n' "$latest" >&2
+        return 1
+    fi
+
+    printf 'Current save: %s\n\n' "$current_target"
+    timestamp=$(snapshot_timestamp "$latest") || return 1
+    printf '%-6s  %s\n' latest "$timestamp"
+    for ((generation = 1; generation <= LAST_GENERATION; generation++)); do
+        snapshot="$latest.$generation"
+        [[ -d "$snapshot" ]] || break
+        timestamp=$(snapshot_timestamp "$snapshot") || return 1
+        printf '%-6s  %s\n' "$generation" "$timestamp"
+    done
+}
+
 restore() {
     local generation="${1:-latest}"
     local live_dir save_name snapshot
@@ -140,7 +183,7 @@ restore() {
 
 set_current() {
     local target=${1:-}
-    local saves_dir target_dir
+    local saves_dir target_dir link_target
 
     if [[ "$#" -ne 1 ]] || [[ -z "$target" ]] || [[ "$target" == /* ]]; then
         printf 'Usage: %s set-current SAVE_PATH\n' "${0##*/}" >&2
@@ -168,8 +211,9 @@ set_current() {
     if [[ -L "$CURRENT_LINK" ]]; then
         rm "$CURRENT_LINK" || return 1
     fi
-    ln -s "$target" "$CURRENT_LINK" || return 1
-    printf '%s -> %s\n' "$CURRENT_LINK" "$target"
+    link_target="$ZOMBOID_SAVES_NAME/$target"
+    ln -s "$link_target" "$CURRENT_LINK" || return 1
+    printf '%s -> %s\n' "$CURRENT_LINK" "$link_target"
 }
 
 main() {
@@ -188,6 +232,13 @@ main() {
                 return 2
             fi
             backup
+            ;;
+        list)
+            if [[ "$#" -ne 0 ]]; then
+                printf 'Usage: %s list\n' "${0##*/}" >&2
+                return 2
+            fi
+            list_backups
             ;;
         restore) restore "$@" ;;
         set-current) set_current "$@" ;;
