@@ -215,4 +215,10 @@ if [[ -r "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
+### Activate iTerm2 shell integration if available
+if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
+    # shellcheck disable=SC1091  # iTerm2 creates this file when installing Shell Integration.
+    . "${HOME}/.iterm2_shell_integration.zsh"
+fi
+
 unset _config_home

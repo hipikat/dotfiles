@@ -7,8 +7,11 @@ docstrings
 esac
 hipikat
 initialised
+itemise
+iterm
 Justfile
 kwargs
+mtimes
 picata
 pilcrow
 pipefail
