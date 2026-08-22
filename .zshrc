@@ -1,3 +1,4 @@
+### Zsh config, with a Pure prompt, bells, whistles, and Ada's particular preferences.
 
 # `sush` keeps the target account's HOME while loading trusted configuration
 # and user-managed tools from the invoking account's home.
@@ -135,7 +136,7 @@ preexec() {
 }
 
 
-## Set PATH
+### Set PATH
 paths=(
     # User-managed bins
     "$_config_home/.bin"
@@ -215,10 +216,13 @@ if [[ -r "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source "$_config_home/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
+
 ### Activate iTerm2 shell integration if available
 if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
     # shellcheck disable=SC1091  # iTerm2 creates this file when installing Shell Integration.
     . "${HOME}/.iterm2_shell_integration.zsh"
 fi
 
+
+### Unset temporary, local variables used to set up config
 unset _config_home
