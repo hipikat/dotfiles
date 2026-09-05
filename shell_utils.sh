@@ -1166,6 +1166,15 @@ alias uva='uv add'
 alias uva.d='uv add --dev'
 alias uvr='uv run'
 alias uvre='uv remove'
+alias uvtl.a='uv tool audit'
+alias uvtl.i='uv tool install'
+alias uvtl.ie='uv tool install --editable'
+alias uvtl.ief='uv tool install --editable --force'
+alias uvtl.r='uv tool run'
+alias uvtl.l='uv tool list'
+alias uvtl.un='uv tool uninstall'
+alias uvtl.up='uv tool upgrade'
+
 
 
 ### 1.30. Vagrant
