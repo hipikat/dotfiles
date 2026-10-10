@@ -144,7 +144,9 @@ paths=(
     "$_config_home/Dropbox/bin"
     "$_config_home/go/bin"
 
-    # GNU tools from Homebrew; gnubin exposes unprefixed command names
+    # GNU tools from MacPorts or Homebrew; gnubin exposes unprefixed command
+    # names without replacing macOS system files.
+    /opt/local/libexec/gnubin
     /opt/homebrew/opt/coreutils/libexec/gnubin
     /opt/homebrew/opt/findutils/libexec/gnubin
     /opt/homebrew/opt/grep/libexec/gnubin

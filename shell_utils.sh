@@ -1196,6 +1196,12 @@ alias vim='vim -p'      # Open files in tabs
 
 
 ### 2.2. Emulate missing GNU Coreutils
+if ! type shuf >/dev/null 2>&1 && type gshuf >/dev/null 2>&1; then
+    # MacPorts and Homebrew install GNU shuf with a 'g' prefix unless their
+    # gnubin directory is on PATH.
+    function shuf() { gshuf "$@"; }
+fi
+
 # Tacocat is a palindrome. Tac is cat, reversed.
 if ! type tac >/dev/null 2>&1; then
     # Homebrew installs Gnu Coreutils with a 'g' prefix by default
