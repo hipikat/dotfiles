@@ -21,21 +21,22 @@
 # 1.14. JSON
 # 1.15. Just
 # 1.16. Listing and finding
-# 1.17. Neovim
-# 1.18. Node.js
-# 1.19. Nodenv
-# 1.20. Ownership
-# 1.21. Python and Django
-# 1.22. Salt
-# 1.23. SSH
-# 1.24. Sudo and system services
-# 1.25. Supervisor
-# 1.26. Terraform
-# 1.27. Tmux
-# 1.28. Tree
-# 1.29. uv
-# 1.30. Vagrant
-# 1.31. Project Zomboid saves
+# 1.17. MacPorts
+# 1.18. Neovim
+# 1.19. Node.js
+# 1.20. Nodenv
+# 1.21. Ownership
+# 1.22. Python and Django
+# 1.23. Salt
+# 1.24. SSH
+# 1.25. Sudo and system services
+# 1.26. Supervisor
+# 1.27. Terraform
+# 1.28. Tmux
+# 1.29. Tree
+# 1.30. uv
+# 1.31. Vagrant
+# 1.32. Project Zomboid saves
 # 2.    Command behaviour and compatibility
 # 2.1.  Default program behaviour
 # 2.2.  Emulate missing GNU Coreutils
@@ -821,14 +822,62 @@ function grepl() {
 }
 
 
-### 1.17. Neovim
+### 1.17. MacPorts (equivalents to Homebrew)
+# Unlike Homebrew, MacPorts needs root to change /opt/local and never syncs its ports tree implicitly.
+alias po.ar='_run sudo port uninstall rleaves'      # aka 'autoremove'
+alias po.c='_run sudo port uninstall inactive'      # aka 'cleanup'
+alias po.c!='_run sudo port reclaim'                # kills ports, rleaves, distfiles & builds
+alias po.d='_run port diagnose'                     # aka 'doctor', but 'diagnose' works…
+alias po.l='_run port installed'                    # aka 'list'
+alias po.i='_run sudo port install'
+alias po.info='_run port info'
+function po.lg() {
+    _runsh 'port -q installed | grep -i "$@"' "$@"
+}
+alias po.s='_run port search'
+alias po.u='_run sudo port selfupdate ; _run sudo port upgrade outdated ; _run sudo port -N reclaim --keep-build-deps ; _run port diagnose'
+alias po.ud='_run sudo port selfupdate ; _run port -y upgrade outdated'
+alias po.un='_run sudo port uninstall'
+# Report requested dependents, distinguishing requested ports from orphaned dependencies.
+# NB: MacPorts' `leaves` are unrequested ports, unlike `brew leaves`; `requested` is the analogue.
+function po.uses() {
+    [ "$#" -gt 0 ] || return 1
+
+    local name
+    local dependents
+    local orphaned=0
+    local multiple="$#"
+
+    for name; do
+        dependents="$(port -q echo requested and "rdependentof:$name")" || return
+
+        if [ -z "$dependents" ]; then
+            if [ -n "$(port -q echo requested and "$name")" ]; then
+                printf '%s: [requested]\n' "$name"
+            else
+                printf '%s: [orphan]\n' "$name"
+                orphaned=1
+            fi
+        elif [ "$multiple" -gt 1 ]; then
+            printf '%s:\n' "$name"
+            printf '%s\n' "$dependents" | sed 's/^/  /'
+        else
+            printf '%s\n' "$dependents"
+        fi
+    done
+
+    return "$orphaned"
+}
+
+
+### 1.18. Neovim
 alias nv='nvim -p'        # Open files in tabs
 # shellcheck disable=SC2139  # Expand the file list into separate alias words when defined
 alias nv.dotfiles="nvim -n -p $VOLATILE_DOTFILES"
 alias nv.n='nvim -n -p'   # Disable swap files
 
 
-### 1.18. Node.js
+### 1.19. Node.js
 alias np.i='npm install -P'
 alias np.ia='npm install -PD'
 alias np.id='npm install -D'
@@ -845,7 +894,7 @@ alias np.uad='npm --depth=9999 update --dev'
 alias np.ud='npm --depth=9999 update'
 
 
-### 1.19. Nodenv
+### 1.20. Nodenv
 alias ne.g='nodenv global'
 alias ne.l='nodenv local'
 alias ne.s='nodenv shell'
@@ -861,7 +910,7 @@ alias ne.we='nodenv whence'
 alias ne.wi='nodenv which'
 
 
-### 1.20. Ownership
+### 1.21. Ownership
 function _own() {
     local ch_name ch_owners
     local -a ch_ops ch_targets
@@ -913,7 +962,7 @@ alias own.u='_own u'             # Own user flag on files
 alias own.ur='_own ur'           # Own user flag on files, recursively
 
 
-### 1.21. Python and Django
+### 1.22. Python and Django
 function cover() {
     # shellcheck disable=SC2086  # D is an optional command fragment and may be empty
     coverage run --source="$1" $D test "$1"
@@ -956,7 +1005,7 @@ alias pye.v='pyenv version'
 alias pye.vs='pyenv versions'
 
 
-### 1.22. Salt
+### 1.23. Salt
 alias slt='salt --force-color'
 function slt.() {
     salt --force-color "${HOSTNAME:-`hostname`}" "${@:1}"
@@ -1011,7 +1060,7 @@ function slt.run() {
 }
 
 
-### 1.23. SSH
+### 1.24. SSH
 alias scp.r='scp -r'
 ssh-keygen-cloud() {
   comment="(ephemeral)-$(date +%F)"
@@ -1038,7 +1087,7 @@ unknow_host() {
 }
 
 
-### 1.24. Sudo and system services
+### 1.25. Sudo and system services
 _sujctl-fu() {
     args=()
     for service in "$@"; do
@@ -1078,14 +1127,14 @@ sush() {
 }
 
 
-### 1.25. Supervisor
+### 1.26. Supervisor
 alias sup='supervisorctl'
 alias sup.t='supervisorctl tail'
 alias sup.tf='supervisorctl tail -F'
 alias sv='sudo supervisorctl'
 
 
-### 1.26. Terraform
+### 1.27. Terraform
 alias trf='_run terraform'
 alias trf.a='_run terraform apply'
 alias trf.i='_run terraform init'
@@ -1093,7 +1142,7 @@ alias trf.P='_run terraform plan -out'
 alias trf.p='_run terraform plan'
 
 
-### 1.27. Tmux
+### 1.28. Tmux
 _tmux__safe_kill_session() {
   session_name=$(tmux display-message -p '#S')
   session_count=$(tmux list-sessions | wc -l)
@@ -1146,7 +1195,7 @@ tx() {
 alias tx.ls='tmux ls'
 
 
-### 1.28. Tree
+### 1.29. Tree
 function tre() {
     tree -C "$@" | grep -v '\.pyc$' | less
 }
@@ -1161,7 +1210,7 @@ alias tre.n4='tre -L 4 -I node_modules'
 alias tre.n5='tre -L 5 -I node_modules'
 
 
-### 1.29. uv
+### 1.30. uv
 alias uva='uv add'
 alias uva.d='uv add --dev'
 alias uvr='uv run'
@@ -1177,7 +1226,7 @@ alias uvtl.up='uv tool upgrade'
 
 
 
-### 1.30. Vagrant
+### 1.31. Vagrant
 alias vg='vagrant'
 alias vg.c='vagrant config'
 alias vg.d='vagrant destroy'
@@ -1191,7 +1240,7 @@ alias vg.sh='vagrant ssh'
 alias vg.u='vagrant up'
 
 
-### 1.31. Project Zomboid saves
+### 1.32. Project Zomboid saves
 alias bak.zomboid='_run zombie-saver backup'
 alias res.zomboid='_run zombie-saver restore'
 
