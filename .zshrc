@@ -68,8 +68,8 @@ if [ -f "$HOME/.cargo/env" ]; then
 fi
 
 ### Zsh Line Editor (ZLE) setup
-bindkey -v
-bindkey "^?" backward-delete-char
+bindkey -v                            # Enable Vim mode
+bindkey "^?" backward-delete-char     # Fix backspace flexibility w/ Vim mode
 
 
 ### Completion setup
