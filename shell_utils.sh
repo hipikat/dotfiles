@@ -694,7 +694,7 @@ function br.lg() {
     _runsh 'brew list | grep -i "$@"' "$@"
 }
 alias br.s='_run brew search'
-alias br.u='_run brew upgrade ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
+alias br.u='_run brew upgrade && _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.ud='_run brew upgrade --dry-run'
 alias br.un='_run brew uninstall'
 # Report leaf dependents, distinguishing top-level leaves from orphaned dependencies.
