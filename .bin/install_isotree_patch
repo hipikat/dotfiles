@@ -1,0 +1,70 @@
+#!/bin/sh
+# Install only Minidoracat's IsoTree fix for Project Zomboid 42.21.0.
+# Quit the game first. Optional argument: an already downloaded release ZIP.
+# Override the default Steam location with PZ_GAME_DIR (the Contents/Java folder).
+set -eu
+
+die() { printf '%s\n' "$*" >&2; exit 1; }
+sha256() {
+    digest=$(shasum -a 256 "$1") || die "Cannot hash: $1"
+    printf '%s\n' "${digest%% *}"
+}
+check_hash() {
+    [ "$(sha256 "$1")" = "$2" ] || die "SHA-256 mismatch; stopping: $1"
+}
+check_destination() {
+    target=$game/$1
+    [ ! -L "$target" ] || die "Refusing symbolic link: $target"
+    if [ -e "$target" ]; then
+        [ -f "$target" ] || die "Not a regular file: $target"
+        check_hash "$target" "$2"
+    fi
+}
+
+case ${1-} in
+    -h|--help)
+        printf '%s\n' 'Usage: install_isotree_patch [release.zip]' \
+            'Quit Zomboid first. Set PZ_GAME_DIR for a non-default Contents/Java folder.'
+        exit 0 ;;
+esac
+[ "$#" -le 1 ] || die 'Usage: install_isotree_patch [release.zip]'
+
+game=${PZ_GAME_DIR:-"$HOME/Library/Application Support/Steam/steamapps/common/ProjectZomboid/Project Zomboid.app/Contents/Java"}
+tree=zombie/iso/objects/IsoTree.class
+guard=zombie/mdc/TreeRoomGuard.class
+tree_hash=3272ba895cf5939a8769cf7ce1e034874c4e1b01df2b3f94068b5f99cc3d455d
+guard_hash=87cf4d19e93abce324d7964cf4c8476728d2a8e42ff42ed5661d775d61c59094
+
+# Match the precise upstream JAR, not merely the displayed version string.
+check_hash "$game/projectzomboid.jar" \
+    e1a69eb743ede60b213a0fe7f8b83d4fcab773036d256cc4543a336f3b058a33
+check_destination "$tree" "$tree_hash"
+check_destination "$guard" "$guard_hash"
+if [ -f "$game/$tree" ] && [ -f "$game/$guard" ]; then
+    printf '%s\n' 'IsoTree patch is already installed.'
+    exit 0
+fi
+
+temporary=$(mktemp -d)
+trap 'rm -rf "$temporary"' 0
+trap 'exit 1' HUP INT TERM
+archive=${1:-"$temporary/release.zip"}
+if [ "$#" -eq 0 ]; then
+    curl -fL --connect-timeout 15 --max-time 180 \
+        -o "$archive" \
+        'https://github.com/Minidoracat/MinidoracatJavaPatchFor42/releases/download/client-v0.2.3/MinidoracatClientPatches-42.21.0-0.2.3.zip'
+fi
+check_hash "$archive" \
+    75e2100292dd5ff55abf90a3d6d7d67319b20f568130fe88e371743af46767a3
+
+# These two files are identical in the standard and low-memory variants.
+unzip -p "$archive" "payload/client-fixes-lowmem/$guard" > "$temporary/guard.class"
+unzip -p "$archive" "payload/client-fixes-lowmem/$tree" > "$temporary/tree.class"
+check_hash "$temporary/guard.class" "$guard_hash"
+check_hash "$temporary/tree.class" "$tree_hash"
+
+mkdir -p "$game/zombie/mdc" "$game/zombie/iso/objects"
+# Install the helper first; the replacement IsoTree calls it.
+cp "$temporary/guard.class" "$game/$guard"
+cp "$temporary/tree.class" "$game/$tree"
+printf '%s\n' 'IsoTree patch installed. Run uninstall_isotree_patch before updating Zomboid.'

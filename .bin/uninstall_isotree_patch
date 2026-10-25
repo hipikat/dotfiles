@@ -1,0 +1,49 @@
+#!/bin/sh
+# Remove only the two known files from the 42.21.0 IsoTree patch.
+# Quit the game first. This also works AFTER Steam has updated the game JAR.
+# Override the default Steam location with PZ_GAME_DIR (the Contents/Java folder).
+set -eu
+
+die() { printf '%s\n' "$*" >&2; exit 1; }
+sha256() {
+    digest=$(shasum -a 256 "$1") || die "Cannot hash: $1"
+    printf '%s\n' "${digest%% *}"
+}
+check_removal() {
+    target=$game/$1
+    [ ! -L "$target" ] || die "Refusing symbolic link: $target"
+    if [ -e "$target" ]; then
+        [ -f "$target" ] || die "Not a regular file: $target"
+        [ "$(sha256 "$target")" = "$2" ] ||
+            die "Unknown or modified override; leaving both files untouched: $target"
+    fi
+}
+
+case ${1-} in
+    -h|--help)
+        printf '%s\n' 'Usage: uninstall_isotree_patch' \
+            'Quit Zomboid first. Set PZ_GAME_DIR for a non-default Contents/Java folder.'
+        exit 0 ;;
+esac
+[ "$#" -eq 0 ] || die 'Usage: uninstall_isotree_patch'
+
+game=${PZ_GAME_DIR:-"$HOME/Library/Application Support/Steam/steamapps/common/ProjectZomboid/Project Zomboid.app/Contents/Java"}
+tree=zombie/iso/objects/IsoTree.class
+guard=zombie/mdc/TreeRoomGuard.class
+
+# Validate BOTH files before removing either. No JAR/version check here:
+# removing an obsolete patch after a Steam update must remain possible.
+check_removal "$tree" \
+    3272ba895cf5939a8769cf7ce1e034874c4e1b01df2b3f94068b5f99cc3d455d
+check_removal "$guard" \
+    87cf4d19e93abce324d7964cf4c8476728d2a8e42ff42ed5661d775d61c59094
+
+if [ ! -e "$game/$tree" ] && [ ! -e "$game/$guard" ]; then
+    printf '%s\n' 'IsoTree patch is not installed.'
+    exit 0
+fi
+
+# Remove the calling class first, then its helper. Leave other files alone.
+rm -f "$game/$tree"
+rm -f "$game/$guard"
+printf '%s\n' 'IsoTree patch removed; the game will use its original classes.'
