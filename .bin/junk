@@ -1,0 +1,74 @@
+#!/bin/sh
+# Move files/dirs into ~/Local/Junk, mirroring their path relative to $HOME
+# (or to / for anything outside $HOME), as a lightweight alternative to Trash.
+
+JUNK_DIR="${JUNK_DIR:-$HOME/Local/Junk}"
+status=0
+
+if [ $# -eq 0 ]; then
+    echo "Usage: ${0##*/} FILE_OR_DIR..." >&2
+    exit 2
+fi
+
+for arg in "$@"; do
+    if [ ! -e "$arg" ] && [ ! -L "$arg" ]; then
+        echo "${0##*/}: $arg: no such file or directory" >&2
+        status=1
+        continue
+    fi
+
+    # Split into parent directory and name. Resolve symlinks in the parent
+    # only, to get a canonical path to mirror under $JUNK_DIR. Leave the name
+    # alone, so that junking a symlink moves the link, not what it points to.
+    base=${arg%"${arg##*[!/]}"}     # Strip trailing slashes
+    [ -n "$base" ] || base=/        # Set base to / if arg is zero-length
+    name=${base##*/}
+    case $base in
+        */*) parent=${base%/*}; [ -n "$parent" ] || parent=/ ;;
+        *) parent=. ;;
+    esac
+    if [ "$base" = / ] || ! parent=$(cd -P -- "$parent" 2>/dev/null && pwd -P); then
+        echo "${0##*/}: $arg: cannot resolve path" >&2
+        status=1
+        continue
+    fi
+
+    home=$(cd -P -- "$HOME" && pwd -P)
+    case $parent in
+        "$home") rel_parent= ;;
+        "$home"/*) rel_parent=${parent#"$home"/} ;;
+        /) rel_parent= ;;
+        *) rel_parent=${parent#/} ;;
+    esac
+
+    junk_real=$(cd -P -- "$JUNK_DIR" 2>/dev/null && pwd -P) || junk_real=$JUNK_DIR
+    case $parent/$name in
+        "$junk_real"|"$junk_real"/*)
+            echo "${0##*/}: $arg: already in junk" >&2
+            status=1
+            continue
+            ;;
+    esac
+
+    dest_dir=$JUNK_DIR${rel_parent:+/$rel_parent}
+    dest=$dest_dir/$name
+
+    # Don't clobber earlier junk: suffix with a timestamp (and counter if needed).
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+        stamp=$(date +%Y%m%d-%H%M%S)
+        dest=$dest_dir/$name.$stamp
+        n=1
+        while [ -e "$dest" ] || [ -L "$dest" ]; do
+            dest=$dest_dir/$name.$stamp.$n
+            n=$((n + 1))
+        done
+    fi
+
+    if mkdir -p -- "$dest_dir" && mv -- "$parent/$name" "$dest"; then
+        echo "$arg -> $dest"
+    else
+        status=1
+    fi
+done
+
+exit $status
