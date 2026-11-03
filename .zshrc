@@ -18,6 +18,8 @@ zstyle :prompt:pure:git:dirty detailed yes              # More than just 'dirty'
 zstyle :prompt:pure:environment:node_version show yes   # Show package.json node version
 zstyle :prompt:pure:path:separator dim yes              # Dim path separators
 zstyle :prompt:pure:prompt:success color 14             # ansiBrightCyan
+zstyle :prompt:pure:user color green                    # Make remote user@host obvious (green)
+zstyle :prompt:pure:host color green
 
 # Don't asynchronously perform git fetches for elevated or agentic shells.
 if [[ -n "${SUSH_CONFIG_HOME}${AI_AGENT}${CLAUDECODE}${CURSOR_AGENT}${GEMINI_CLI}${OPENCODE}${CODEX}" ]]; then
