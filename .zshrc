@@ -33,6 +33,7 @@ prompt pure
 
 ### Shell options
 setopt GLOB_DOTS                # Include hidden files in pathname expansion
+setopt RMSTARSILENT             # Don't warn about rm * or rm -rf *
 setopt EXTENDED_GLOB            # Treat the ‘#’, ‘~’ and ‘^’ characters as part of patterns
 setopt NO_CASE_GLOB             # Make globbing case-insensitive
 
