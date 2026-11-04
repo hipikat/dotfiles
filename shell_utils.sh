@@ -695,6 +695,7 @@ function br.lg() {
 }
 alias br.s='_run brew search'
 alias br.u='_run brew upgrade || return ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
+alias br.uy='_run brew upgrade --yes || return ; _run brew autoremove ; _run brew cleanup --prune=all ; _run brew doctor'
 alias br.ud='_run brew upgrade --dry-run'
 alias br.un='_run brew uninstall'
 # Report leaf dependents, distinguishing top-level leaves from orphaned dependencies.
