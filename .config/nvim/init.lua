@@ -97,8 +97,10 @@ vim.opt.clipboard = "unnamedplus"
 -- Use both the unnamed and the + and * registers for all yank, delete, change and put operations which would normally go to the clipboard.
 -- vim.opt.clipboard = "unnamed,unnamedplus"
 
--- GUI font settings
-vim.opt.guifont = 'Fira Code:h13, Menlo:h13, Monospace:h13'
+-- GUI font settings (VimR manages its own font)
+if vim.fn.exists('g:gui_vimr') == 0 then
+  vim.opt.guifont = 'Fira Code:h13, Menlo:h13, Monospace:h13'
+end
 
 -- Visual bell instead of an auditory bell
 vim.opt.visualbell = true
@@ -124,6 +126,9 @@ vim.api.nvim_set_keymap('n', '<leader>s', ':set spell!<CR>', { noremap = true, s
 vim.api.nvim_set_keymap('n', '<leader>r', ':set wrap!<CR>:set linebreak!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>,', ':set hlsearch!<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>l', ':set syntax=', {noremap = true, silent = false})
+
+-- Show diagnostics for the current line (comma, then d)
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show line diagnostics' })
 
 -- Function to toggle paste mode and restore tab settings
 function TogglePasteMode()
@@ -167,4 +172,11 @@ end
 -- Restructured Text Headline Mappings
 for i, char in ipairs({'#', '*', '=', '-', '^'}) do
     vim.api.nvim_set_keymap('n', '<leader>'..i, 'yyPVr'..char..'yyjp', { noremap = true, silent = true })
+end
+
+-- Move to the next/previous tab with standard Mac keybindings
+if vim.fn.exists('g:gui_vimr') == 1 then
+    local modes = { 'n', 'i', 'x' }
+    vim.keymap.set(modes, '<D-S-{>', '<Cmd>tabprevious<CR>')
+    vim.keymap.set(modes, '<D-S-}>', '<Cmd>tabnext<CR>')
 end
