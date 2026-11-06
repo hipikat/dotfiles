@@ -519,6 +519,10 @@ function git.get_remote_branches() {
     git remote set-branches "$remote" '*'
     git fetch -vvv
 }
+function gsh.() {
+    # Show the last N commits (default 1); further arguments go to git show
+    _run git show "-${1:-1}" "${@:2}"
+}
 function gwt.a() {
     # Check out a git worktree in a sibling directory
     # Usage: gwt.a BRANCH [DIR_NAME]
@@ -1252,6 +1256,8 @@ alias res.zomboid='_run zombie-saver restore'
 
 ### 2.1. Default program behaviour
 alias vim='vim -p'      # Open files in tabs
+alias vir='vimr -p'
+alias virn='vimr --nvim -p --'
 
 
 ### 2.2. Emulate missing GNU Coreutils
