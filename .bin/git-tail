@@ -1,0 +1,69 @@
+#!/bin/sh
+# Follow a Git ref like `tail -f`, printing `git log --stat` for each new commit
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/} [-n COUNT] [-i SECONDS] [REF] [GIT_LOG_ARGS...]
+
+Print the last COUNT commits on REF, then poll REF and print each new
+commit (oldest first) as it arrives. Extra arguments go to git log.
+
+Options:
+  -n COUNT    Commits to show at startup (default: 1; 0 shows none)
+  -i SECONDS  Polling interval (default: 2)
+  -h          Show this help
+
+Examples:
+  ${0##*/}
+  ${0##*/} -n 5 origin/main
+  ${0##*/} HEAD --format='%C(auto)%h %s %C(dim)(%an, %ar)'
+EOF
+}
+
+count=1
+interval=2
+while getopts hi:n: opt; do
+    case $opt in
+        h) usage; exit 0 ;;
+        i) interval=$OPTARG ;;
+        n) count=$OPTARG ;;
+        *) usage >&2; exit 2 ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+ref=HEAD
+case ${1-} in
+    ''|-*) ;;
+    *) ref=$1; shift ;;
+esac
+
+git rev-parse --git-dir >/dev/null || exit
+
+resolve() {
+    git rev-parse -q --verify "$ref^{commit}" 2>/dev/null
+}
+
+show() {
+    git --no-pager log --stat --reverse "$@" || exit
+}
+
+last=$(resolve)
+if [ -n "$last" ] && [ "$count" -gt 0 ]; then
+    show -n "$count" "$last" "$@"
+fi
+
+while sleep "$interval"; do
+    current=$(resolve)
+    [ "$current" = "$last" ] && continue
+
+    if [ -z "$current" ]; then
+        printf '%s: %s no longer resolves to a commit\n' "${0##*/}" "$ref" >&2
+    elif [ -z "$last" ]; then
+        show -n "$count" "$current" "$@"
+    else
+        # Covers rebases and resets too: anything reachable now but not before
+        show "$last..$current" "$@"
+    fi
+    last=$current
+done
