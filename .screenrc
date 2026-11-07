@@ -1,135 +1,82 @@
+# Shell and terminal basics
 shell -$SHELL
-#shell /bin/bash
-# ------------------------------------------------------------------------------
-# SCREEN SETTINGS
-# ------------------------------------------------------------------------------
-
-# Make new windows 'login' windows
-#deflogin on
-
-# Enable truecolor support
-truecolor on
-
-# Default encoding to UTF-8
-defutf8 on
-encoding UTF-8
-
-# define a bigger scrollback, default is 100 lines
-defscrollback 512
-
-ignorecase yes
-
-# Ignore case in searches
-ignorecase on
-
-
-# ------------------------------------------------------------------------------
-# SCREEN KEYBINDINGS
-# ------------------------------------------------------------------------------
-
-# Remove some stupid / dangerous key bindings
-#bind ^k
-#bind L
-#bind ^\
-# Make them better
-#bind \\ quit
-#bind K kill
-#bind I login on
-#bind O login off
-#bind } history
-
-
-
-# ------------------------------------------------------------------------------
-# TERMINAL SETTINGS
-# ------------------------------------------------------------------------------
-
-#term screen-256color
-#term xterm-256color
-
-# The vt100 description does not mention "dl". *sigh*
-#termcapinfo vt100 dl=5\E[M
-
-# turn sending of screen messages to hardstatus off
-#hardstatus off
-
-# Set the hardstatus prop on gui terms to set the titlebar/icon title
-#termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
-
-# An alternative hardstatus to display a bar at the bottom listing the
-# windownames and highlighting the current windowname in blue. (This is only
-# enabled if there is no hardstatus setting for your terminal)
-#
-#hardstatus lastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
-
-# set these terminals up to be 'optimal' instead of vt100
-#termcapinfo xterm*|linux*|rxvt*|Eterm* OP
-
-# Change the xterm initialization string from is2=\E[!p\E[?3;4l\E[4l\E>
-# (This fixes the "Aborted because of window size change" konsole symptoms found
-#  in bug #134198)
-#termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
-
-# 2013-06-06 - got these off https://wiki.archlinux.org/index.php/GNU_Screen#Use_256_colors
-#term screen-256color
-
-
-# Allow bold colors - necessary for some reason
-attrcolor b ".I"
-# Tell screen how to set colors. AB = background, AF=foreground
-termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-
-# Make xterm scrolling work properly with screen.
-termcapinfo xterm-color|xterm|xterms|xs|rxvt ti@:te@
-
-# Use current bg color for erased chars
-defbce "on"
-# Set TERM
-term screen-256color
-#term screen-256color-bce
-#term xterm-256color
-
-
-# Turn the welcome message off
 startup_message off
+truecolor on
+utf8 on
+encoding UTF-8
+term screen-256color
+bce "on"
+altscreen on
+scrollback 10000
+ignorecase on
+mousetrack on
 
-# Turn visual bell off
-#vbell off
+# Ctrl-a is the prefix, as in .tmux.conf.
+# Ctrl-a Ctrl-a switches to the previous window; Ctrl-a a sends a literal Ctrl-a.
+escape ^Aa
+bind ^A other
+bind a meta
 
+# Split, focus the new region, and start a shell in it.
+bind s eval "split" "focus down" "screen"
+bind | eval "split -v" "focus right" "screen"
 
+# Vim-style movement between regions
+bind h focus left
+bind j focus down
+bind k focus up
+bind l focus right
 
-# Custom command to swap current window with a specified window and update the WINDOW variable
-command -c swapwith "eval 'number %1' 'at #%1 number $WINDOW' 'at #$WINDOW exec bash -c \"export WINDOW=%1\"' 'exec bash -c \"export WINDOW=$WINDOW\"'"
+# Resize by five cells: +/- grows/shrinks height, >/< grows/shrinks width.
+bind + resize -v +5
+bind - resize -v -5
+bind > resize -h +5
+bind < resize -h -5
+bind = resize -b =
 
-# Bind the commands to specific keys (for example, Ctrl-a 1, Ctrl-a 5, etc.)
-bind 1 swapwith 1
-bind 2 swapwith 2
-bind 3 swapwith 3
-# Add bindings for other numbers as needed
+# Clear the former resize keys on reload, including their Screen defaults.
+bind H
+bind J
+bind K
+bind L
+bind _ silence
+bind r wrap
+bind R fit
 
+# Kill the shell and remove its region after confirmation. Bare Ctrl-d only
+# exits the shell; Screen does not automatically remove its region.
+bind x eval 'echo "Kill this pane? (y/n)"' 'command -c close-pane'
+bind -c close-pane y eval "kill" "remove"
+bind -c close-pane n redisplay
+bind -c close-pane ^[ redisplay
 
+# Screen windows already exist independently of regions: hide this region
+# without killing its shell, then select the window elsewhere with Ctrl-a ".
+bind b remove
 
-# — Command: backtick id lifespan autorefresh command [args]
-#backtick 1 5 5 echo -n "foo-$WINDOW-"
+# Quit the whole session after confirmation, as in .tmux.conf.
+bind X eval 'echo "Kill all windows in this session? (y/n)"' 'command -c close-session'
+bind ^\ eval 'echo "Kill all windows in this session? (y/n)"' 'command -c close-session'
+bind -c close-session y quit
+bind -c close-session n redisplay
+bind -c close-session ^[ redisplay
 
-#backtick 1 1 1 sh -c 'ps -o cmd= -p $(screen -ls | grep $(screen -Q windows | head -n 1 | cut -f1) | awk "{print \$1}" | cut -d"." -f1)'
-#backtick 1 60 0 echo -n "§"
-##backtick 1 60 0 echo -n "foo"
-#backtick 1 1 1 bash -c 'ps -o cmd= -p $$'
-#backtick 1 1 1 bash -c 'ps -o cmd= -p $(pgrep -f "^SCREEN")'
-#backtick 1 1 1 bash -c 'echo $(pwd | sed "s|^$HOME|~|")'
-#backtick 2 1 1 bash -c 'ps -o cmd= -p $(pgrep -f "^SCREEN")'
+# Window selection, copy mode, renaming, and scrollback size
+# The default c, n, p, and digit bindings still create/select windows.
+bind '"' windowlist -b
+bind ^[ copy
+bind , title
+bind y colon "scrollback "
 
+# Keep the session and window list visible, plus the existing window chooser.
+hardstatus alwayslastline '[%S] %w'
 windowlist title '     %{G}%H %{d}: %{C}%S%{d}%=CPU averages [1m 5m 15m] [%l]'
-#windowlist string '%?%F%{.R.}%?%3n %`%t`%? [%h]%?'
-#windowlist string "%{b}%3n)%{6} %1` > %h %=%f"
 windowlist string "%{b}%3n)%{6} %h %=%f"
-
-
 
 silencewait 600
 
 rendition monitor =s
 rendition bell =
 rendition silence =u
-rendition so =b
+# Reverse video makes the otherwise blank separator cells visible.
+rendition so =r

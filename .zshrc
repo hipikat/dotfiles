@@ -223,7 +223,8 @@ fi
 
 
 ### Activate iTerm2 shell integration if available
-if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
+# Screen turns iTerm2's unsupported prompt notifications into terminal bells.
+if [[ -z ${STY:-} && -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
     # shellcheck disable=SC1091  # iTerm2 creates this file when installing Shell Integration.
     . "${HOME}/.iterm2_shell_integration.zsh"
 fi
