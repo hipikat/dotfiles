@@ -535,6 +535,23 @@ function gwt.a() {
     fi
     git worktree add "${track[@]}" "$dir" "$branch"
 }
+function sgit() {
+    # Run git against the current checkout's shadow repository of agent guides
+    # Usage: sgit GIT_ARGS... (e.g. sgit status --short; sgit add -- AGENTS.md)
+    local toplevel shadow
+    toplevel=$(git rev-parse --show-toplevel) || return
+    shadow="$HOME/.local/share/shadow-repositories/${toplevel##*/}.git"
+    if [ ! -d "$shadow" ]; then
+        printf 'sgit: no shadow repository at %s\n' "$shadow" 1>&2
+        return 1
+    fi
+    # A same-named clone elsewhere must not snapshot into this shadow
+    if [ "$(git --git-dir="$shadow" config --get core.worktree)" != "$toplevel" ]; then
+        printf 'sgit: %s belongs to another checkout\n' "$shadow" 1>&2
+        return 1
+    fi
+    _run git --git-dir="$shadow" --work-tree="$toplevel" "$@"
+}
 
 alias gbl='_run git blame'
 alias gbr='_run git branch --color=always'
@@ -636,6 +653,7 @@ if type __git_complete &>/dev/null; then
     __git_complete gst _git_status
     __git_complete gst.sh _git_stash
     __git_complete gta _git_tag
+    __git_complete sgit __git_main
 fi
 
 
