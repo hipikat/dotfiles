@@ -36,11 +36,13 @@ destination file already exists, a warning is given and no action is taken.
 import argparse
 import os
 from os import path
+import filecmp
 import fnmatch
 import json
 import logging
 import sys
 import shutil
+import time
 
 
 MODULE_DIR, MODULE_NAME = path.split(path.abspath(__file__))
@@ -73,7 +75,14 @@ dest_group.add_argument('-U', '--current-user', default=False, action='store_tru
 arg_parser.add_argument('-p', '--policy_file', type=str,
                         help="Policy config file associating patterns with actions.")
 arg_parser.add_argument('-f', '--force', default=False, action='store_true',
-                        help="Overwrite existing files and links.")
+                        help="Move existing files, directories and links that are in "
+                        "the way aside (to NAME.plumb-backup-TIMESTAMP). Nothing is "
+                        "ever deleted.")
+arg_parser.add_argument('-n', '--dry-run', default=False, action='store_true',
+                        help="Show what would be done without changing anything.")
+arg_parser.add_argument('--list-conflicts', default=False, action='store_true',
+                        help="Print destination paths that exist but don't already match "
+                        "the plan (what --force would move aside), then exit.")
 arg_parser.add_argument('-V', '--verbose', default=False, action='store_true',
                         help="Print info when existing files are deleted or prevent actions.")
 
@@ -156,6 +165,33 @@ class FilePlumber(object):
         action_list = self._get_action_list()
         self._execute_action_list(action_list, dry_run)
 
+    def conflicts(self):
+        """
+        Return destination paths which exist but don't already match the plan,
+        i.e. the items `--force` would move aside.
+        """
+        found = []
+        for rel_item, action in self._get_action_list():
+            if action == 'ignore':
+                continue
+            abs_dest = path.join(self.dest, rel_item)
+            if path.lexists(abs_dest) and not self._is_satisfied(action, rel_item):
+                found.append(abs_dest)
+        return found
+
+    def _is_satisfied(self, action, rel_path):
+        """True when the destination already holds what `action` would produce."""
+        from_path = path.join(self.source, rel_path)
+        to_path = path.join(self.dest, rel_path)
+        if action == 'link':
+            return path.islink(to_path) and \
+                path.realpath(to_path) == path.realpath(from_path)
+        if action == 'copy' and not path.islink(to_path):
+            if path.isdir(from_path):
+                return path.isdir(to_path)
+            return path.isfile(to_path) and filecmp.cmp(from_path, to_path, shallow=False)
+        return False
+
     def _get_action_list(self, rel_dir='', plan_so_far=None):
         """
         Return a flat-list of 2-tuples of the form `('relative/file/location', 'operation')`
@@ -194,27 +230,32 @@ class FilePlumber(object):
             self._log_run(action, rel_path=rel_path)
             return
         if dest_exists:
+            abs_dest = path.join(self.dest, rel_path)
+            if self._is_satisfied(action, rel_path):
+                logging.info("{0} is already in place.".format(abs_dest))
+                return
             if not force:
-                logging.info("Skipping {0} of {1} because destination exists.".format(
+                logging.warning("Skipping {0} of {1} because destination exists.".format(
                     action, rel_path))
                 return
+            # Nothing is ever deleted: --force moves whatever is in the way aside.
+            if dry_run:
+                logging.warning("Would move {0} aside before {1} operation.".format(
+                    abs_dest, action))
             else:
-                logging.info("Deleting existing {0} before {1} operation.".format(
-                    rel_path, action))
-                if not dry_run:
-                    self._remove_item(path.join(self.dest, rel_path))
+                logging.warning("Moved {0} to {1}".format(abs_dest, self._set_aside(abs_dest)))
         self._log_run(action, rel_path=rel_path)
         if not dry_run:
             # Call one of the _run_[copy|link|move|ignore] methods defined below.
             getattr(self, '_run_' + action)(rel_path=rel_path)
 
-    def _remove_item(self, abs_path):
-        if path.isfile(abs_path) or path.islink(abs_path):
-            os.remove(abs_path)
-        elif path.isdir(abs_path):
-            shutil.rmtree(abs_path)
-        else:
-            raise NotImplementedError("Unknown file type: " + abs_path)
+    def _set_aside(self, abs_path):
+        """Rename `abs_path` to a timestamped sibling and return the new path."""
+        backup = "{0}.plumb-backup-{1}".format(abs_path, time.strftime("%Y%m%d-%H%M%S"))
+        if path.lexists(backup):
+            raise FileExistsError("Backup path already exists: " + backup)
+        os.rename(abs_path, backup)
+        return backup
 
     def _get_abs_paths(fn):
         """
@@ -294,7 +335,7 @@ def get_options_from_args(**kwargs):
         opts['policy_file'] = DEFAULT_POLICY_FILE
 
     # Get options which are correctly set by argparse
-    for opt in ('source', 'force', 'verbose'):
+    for opt in ('source', 'force', 'verbose', 'dry_run', 'list_conflicts'):
         opts[opt] = getattr(args, opt)
 
     return opts
@@ -307,7 +348,11 @@ def main(*argv, **kwargs):
     if opts['verbose']:
         logging.getLogger().setLevel(logging.INFO)
     plumber = FilePlumber(**opts)
-    plumber.plumb()
+    if opts['list_conflicts']:
+        for conflict in plumber.conflicts():
+            print(conflict)
+        return
+    plumber.plumb(dry_run=opts['dry_run'])
 
 if __name__ == '__main__':
     main(sys.argv)
