@@ -190,6 +190,9 @@ class FilePlumber(object):
         E.g. _run('copy', 'foo/bar.baz', ...). The real, atomic operations get
         called from here if not dry_run.
         """
+        if action == 'ignore':
+            self._log_run(action, rel_path=rel_path)
+            return
         if dest_exists:
             if not force:
                 logging.info("Skipping {0} of {1} because destination exists.".format(

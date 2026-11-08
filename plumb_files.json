@@ -8,6 +8,7 @@
         "*.example",
         ".git",
         ".gitignore",
+        ".vscode",
         "CONFIG",
         "plumb_files.*",
         "LICENSE.rst",

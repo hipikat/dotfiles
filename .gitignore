@@ -19,3 +19,7 @@ nohup.out
 
 .bin/just
 .bin/rt.*
+
+# Keep only the repository's VS Code workspace settings.
+/.vscode/*
+!/.vscode/settings.json
